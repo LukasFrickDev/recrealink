@@ -1,0 +1,3 @@
+Demanda á fazer após finalização dos dashboards.
+
+- Unificar Shells para não ter repetição de código entre os módulos (Recreador, Hotelaria, etc)
