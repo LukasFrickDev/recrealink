@@ -14,7 +14,7 @@ export const recreadorAgendaBasicaMock = {
   title: "Agenda básica",
   description: "Organização semanal de compromissos para manter previsibilidade da operação gratuita.",
   stats: [
-    { title: "Eventos no mes", value: "08", helper: "2 pendentes de retorno" },
+    { title: "Eventos no mês", value: "08", helper: "2 pendentes de retorno" },
     { title: "Horas planejadas", value: "42h", helper: "Semana atual" },
     { title: "Pessoas atendidas", value: "100", helper: "Estimativa semanal" },
     { title: "Locais", value: "03", helper: "Rotas ativas" },
@@ -67,7 +67,7 @@ export const recreadorAgendaBasicaMock = {
     },
     {
       dia: "Sex",
-      eventos: ["Preparacao de kits"],
+      eventos: ["Preparação de kits"],
     },
     {
       dia: "Sab",

@@ -268,7 +268,7 @@ const historicoEventosDomainList: HistoricoEventoDomainEntity[] = [
     rating: 4,
     amount: "R$ 2.400",
     photos: 58,
-    notes: "Boa organizacao geral, com necessidade de reforco na comunicação final.",
+    notes: "Boa organizacao geral, com necessidade de reforço na comunicação final.",
     locationOverride: "Campinas - SP",
   },
   {
@@ -316,7 +316,7 @@ export const paisHistoricoHighlightsDomainMock = [
     helper: "12 meses de histórico consolidado",
   },
   {
-    title: "Média de satisfacao",
+    title: "Média de satisfação",
     value: "4,8",
     helper: "Com base nas últimas avaliações",
   },
@@ -366,7 +366,7 @@ const avaliacoesPublicadasDomainList: AvaliacaoPublicadaDomainEntity[] = [
     status: "Publicado",
     date: "16 jan 2026",
     score: 5,
-    comment: "Equipe muito atenciosa, atividades dinamicas e excelente organizacao do tempo.",
+    comment: "Equipe muito atenciosa, atividades dinâmicas e excelente organizacao do tempo.",
     likes: 23,
     helpfulCount: 18,
   },
@@ -450,7 +450,7 @@ const agendaEventosDomainList: AgendaEventoDomainEntity[] = [
     attendees: "Pais + recreador",
     budget: "Sem custo",
     status: "Confirmado",
-    note: "Definir dinamicas por faixa etária e materiais necessarios.",
+    note: "Definir dinâmicas por faixa etária e materiais necessários.",
   },
 ];
 

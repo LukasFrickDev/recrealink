@@ -24,7 +24,7 @@ export const hotelariaMeuHotelFeatureMock: HotelariaFeatureMock = {
     type: "meu-hotel",
     hotelName: hotelMaresias?.name ?? "Hotel Maresias Resort e Spa",
     category: hotelMaresiasProfile?.categoryLabel ?? "Resort 4 estrelas",
-    capacity: hotelMaresiasProfile?.capacityLabel ?? "250 hospedes",
+    capacity: hotelMaresiasProfile?.capacityLabel ?? "250 hóspedes",
     location: hotelMaresiasProfile?.address ?? "Rua das Palmeiras, 123 - Centro, Maresias - SP",
     phone: hotelMaresiasProfile?.phone ?? "(12) 3865-4321",
     email: hotelMaresiasProfile?.email ?? "contato@maresiasresort.com.br",

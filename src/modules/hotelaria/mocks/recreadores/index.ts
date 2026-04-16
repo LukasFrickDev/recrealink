@@ -10,7 +10,7 @@ export const hotelariaRecreadoresFeatureMock: HotelariaFeatureMock = {
   statusLabel: "Ativo",
   statusDetail: "Lista estruturada com avatar, rating, funções, especialidades e ações operacionais.",
   stats: [
-    { title: "Ativos no mes", value: "24", helper: "Com escala registrada" },
+    { title: "Ativos no mês", value: "24", helper: "Com escala registrada" },
     { title: "Disponíveis", value: "16", helper: "Prontos para nova escala" },
     { title: "Histórico", value: "71", helper: "Perfis com contratação previa" },
     { title: "Avaliação média", value: "4.8", helper: "Escala de 1 a 5" },

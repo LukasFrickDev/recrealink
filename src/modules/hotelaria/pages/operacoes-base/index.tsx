@@ -73,7 +73,7 @@ const ocorrenciaStatusToneMap = {
 
 const occurrenceSeverityToneMap = {
   Alta: "danger",
-  Media: "warning",
+  "Média": "warning",
   Baixa: "success",
 } as const;
 
@@ -126,8 +126,8 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
   const [programacoesTab, setProgramacoesTab] = useState<"minhas" | "templates" | "sugestoes" | "calendario">("minhas");
   const [feedbackSearch, setFeedbackSearch] = useState("");
   const [feedbackType, setFeedbackType] = useState<"todos" | "positivo" | "neutro" | "negativo">("todos");
-  const [indicadoresPeriod, setIndicadoresPeriod] = useState("Este mes");
-  const [relatoriosPeriod, setRelatoriosPeriod] = useState("Este mes");
+  const [indicadoresPeriod, setIndicadoresPeriod] = useState("Este mês");
+  const [relatoriosPeriod, setRelatoriosPeriod] = useState("Este mês");
   const [orcamentoTab, setOrcamentoTab] = useState<"gastos" | "materiais">("gastos");
   const [isHotelEditing, setIsHotelEditing] = useState(false);
   const [hotelProfileState, setHotelProfileState] = useState<HotelariaMeuHotelLayout | null>(initialMeuHotelLayout);
@@ -473,11 +473,11 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
               </S.ToolbarGroup>
 
               <S.ToolbarGroup>
-                <S.IconSquare type="button" aria-label="Mes anterior">
+                <S.IconSquare type="button" aria-label="Mês anterior">
                   <ArrowLeft size={14} />
                 </S.IconSquare>
                 <S.MonthLabel>{layout.currentMonth}</S.MonthLabel>
-                <S.IconSquare type="button" aria-label="Próximo mes">
+                <S.IconSquare type="button" aria-label="Próximo mês">
                   <ArrowRight size={14} />
                 </S.IconSquare>
               </S.ToolbarGroup>
@@ -768,8 +768,8 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
         return (
           <S.SectionStack>
             <SectionHeader
-              title="Programacoes"
-              subtitle="Estrutura em quatro abas: minhas programacoes, templates, sugestoes e calendario."
+              title="Programações"
+              subtitle="Estrutura em quatro abas: minhas programações, templates, sugestoes e calendario."
             />
 
             <S.MiniStatGrid>
@@ -1085,7 +1085,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
                     <tr>
                       <td>Total</td>
                       <td>{total.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</td>
-                      <td colSpan={2}>Fechamento do periodo {relatoriosPeriod.toLowerCase()}</td>
+                      <td colSpan={2}>Fechamento do período {relatoriosPeriod.toLowerCase()}</td>
                     </tr>
                   </tfoot>
                 </S.DataTable>
@@ -1140,7 +1140,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
                 $active={orcamentoTab === "materiais"}
                 onClick={() => setOrcamentoTab("materiais")}
               >
-                Solicitacao de materiais
+                Solicitação de materiais
               </S.TabButton>
             </S.TabRow>
 
@@ -1217,17 +1217,17 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
         return (
           <S.SectionStack>
             <SectionHeader
-              title="Controle de ocorrencias"
-              subtitle="Registro de incidentes com severidade, status e ação de contencao."
+              title="Controle de ocorrências"
+              subtitle="Registro de incidentes com severidade, status e ação de contenção."
               action={
                 <S.ReportActions>
                   <S.InlineActionButton type="button">
                     <FileDown size={14} />
-                    Exportar relatorio
+                    Exportar relatório
                   </S.InlineActionButton>
                   <S.InlineActionButton type="button">
                     <Plus size={14} />
-                    Registrar ocorrencia
+                    Registrar ocorrência
                   </S.InlineActionButton>
                 </S.ReportActions>
               }

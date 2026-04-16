@@ -51,7 +51,7 @@ const depoimentos = [
   {
     id: "dep-familia-rodriguez",
     autor: "Família Rodriguez",
-    cargo: "Hospedes",
+    cargo: "Hóspedes",
     texto: "As criancas adoraram as atividades e pediram para repetir no dia seguinte.",
     avaliacao: 5,
     data: "12 Jan 2026",

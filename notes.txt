@@ -1,3 +1,34 @@
 Demanda á fazer após finalização dos dashboards.
 
-- Unificar Shells para não ter repetição de código entre os módulos (Recreador, Hotelaria, etc)
+Sobre Redux agora
+
+Minha visão:
+não colocaria Redux agora no produto inteiro de uma vez só porque a base cresceu.
+
+Eu faria isso com critério.
+
+Entraria Redux quando?
+
+Quando você começar a consolidar:
+
+auth/session
+perfil ativo
+preferências de navegação
+estados compartilhados entre páginas do mesmo módulo
+filtros persistentes
+informações-resumo de notificações
+dados temporários que precisam atravessar múltiplas telas
+O que eu não faria
+jogar todos os mocks no Redux
+usar Redux como substituto de organização de domínio
+colocar Redux antes de definir bem o contrato de dados e a função das páginas
+
+Então:
+Redux sim, mas não como próximo primeiro passo.
+
+O primeiro passo ainda é:
+
+versionar
+estabilizar
+entender
+refinar arquitetura de páginas

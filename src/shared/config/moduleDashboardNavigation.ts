@@ -285,7 +285,7 @@ export const hotelariaSidebarGroups: ModuleSidebarGroupDefinition[] = [
       },
       {
         to: "/app/hotelaria/programacoes",
-        label: "Programacoes",
+        label: "Programações",
         description: "Crie e organize atividades",
         icon: Gamepad2,
       },
@@ -350,7 +350,7 @@ const hotelariaTopbarContextMap: Record<string, ModuleTopbarContext> = {
     helper: "Visão executiva da operação de recreação",
   },
   "/app/hotelaria/eventos": {
-    title: "Eventos e programacoes",
+    title: "Eventos e programações",
     helper: "Agenda semanal, formatos e execucao",
   },
   "/app/hotelaria/equipe": {
@@ -382,7 +382,7 @@ const hotelariaTopbarContextMap: Record<string, ModuleTopbarContext> = {
     helper: "Abertura e acompanhamento de oportunidades",
   },
   "/app/hotelaria/programacoes": {
-    title: "Programacoes",
+    title: "Programações",
     helper: "Grade de atividades por temporada",
   },
   "/app/hotelaria/indicadores": {
@@ -411,11 +411,11 @@ const hotelariaTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/hotelaria/comunidade": {
     title: "Comunidade",
-    helper: "Espaco colaborativo compartilhado entre módulos",
+    helper: "Espaço colaborativo compartilhado entre módulos",
   },
   "/app/hotelaria/community": {
     title: "Comunidade",
-    helper: "Espaco colaborativo compartilhado entre módulos",
+    helper: "Espaço colaborativo compartilhado entre módulos",
   },
   "/app/hotelaria/chat": {
     title: "Chat",
@@ -736,7 +736,7 @@ export const empresarioSidebarGroups: ModuleSidebarGroupDefinition[] = [
     items: [
       {
         to: "/app/empresa/servicos",
-        label: "Cadastro de servicos",
+        label: "Cadastro de serviços",
         description: "Pacotes e escopos da empresa",
         icon: Package,
       },

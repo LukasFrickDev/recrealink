@@ -47,7 +47,7 @@ export const empresarioRecreadorPageMock = {
     coverage: recreador?.coverageLabel ?? "Atuacao em ate 30 km",
     about:
       recreador?.bio ??
-      "Profissional com foco em recreação infantil, conducao de dinamicas em grupo e atividades tematicas.",
+      "Profissional com foco em recreação infantil, conducao de dinâmicas em grupo e atividades tematicas.",
     specialties: recreador?.specialties ?? [],
     availability: [
       "Segunda a sexta: 14h às 22h",

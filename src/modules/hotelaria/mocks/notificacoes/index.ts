@@ -7,27 +7,27 @@ export const hotelariaNotificacoesFeatureMock: HotelariaFeatureMock = {
   description: "Fila de alertas com prioridade e ação recomendada por origem operacional.",
   status: "planned",
   statusLabel: "Planejado",
-  statusDetail: "Estrutura de alertas pronta para consolidar ocorrencias, escala e comunicação.",
+  statusDetail: "Estrutura de alertas pronta para consolidar ocorrências, escala e comunicação.",
   stats: [
     { title: "Urgentes", value: "3", helper: "Ação imediata" },
-    { title: "Importantes", value: "8", helper: "Acompanhamento diario" },
+    { title: "Importantes", value: "8", helper: "Acompanhamento diário" },
     { title: "Informativas", value: "14", helper: "Histórico recente" },
     { title: "Resolvidas", value: "64", helper: "Últimos 7 dias" },
   ],
   checkpoints: [
     "Classificar prioridade no momento do disparo.",
-    "Vincular alerta a responsavel e prazo.",
+    "Vincular alerta a responsável e prazo.",
     "Arquivar automaticamente alertas resolvidos.",
   ],
   layout: {
     type: "notifications",
     items: [
       {
-        title: "Cobertura de sabado abaixo da meta",
+        title: "Cobertura de sábado abaixo da meta",
         source: "Escalas",
         priority: "Urgente",
         time: "Agora",
-        action: "Reforcar lider kids para turno da tarde",
+        action: "Reforçar líder kids para turno da tarde",
       },
       {
         title: "Feedback com nota abaixo de 4.0",

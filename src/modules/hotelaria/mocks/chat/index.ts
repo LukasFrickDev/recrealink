@@ -24,7 +24,7 @@ export const hotelariaChatFeatureMock: HotelariaFeatureMock = {
     channels: [
       { name: "Operação geral", members: 26, unread: 5 },
       { name: "Escalas weekend", members: 18, unread: 2 },
-      { name: "Programacoes kids", members: 12, unread: 0 },
+      { name: "Programações kids", members: 12, unread: 0 },
       { name: "Ocorrências", members: 9, unread: 1 },
     ],
     onlineCount: 14,

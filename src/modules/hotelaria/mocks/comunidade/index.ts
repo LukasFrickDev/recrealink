@@ -26,7 +26,7 @@ export const hotelariaComunidadeFeatureMock: HotelariaFeatureMock = {
         author: "Carla Menezes",
         location: "Hotel Maresias Resort - SP",
         timeAgo: "2h",
-        category: "Programacao",
+        category: "Programação",
         content:
           "Testamos uma abertura de noite tropical com briefing em duas etapas e o engajamento subiu 18%.",
         likes: 24,
@@ -47,7 +47,7 @@ export const hotelariaComunidadeFeatureMock: HotelariaFeatureMock = {
     ],
     rooms: [
       { name: "Geral", members: 38, unread: 3 },
-      { name: "Programacoes", members: 21, unread: 1 },
+      { name: "Programações", members: 21, unread: 1 },
       { name: "Dicas", members: 17, unread: 0 },
       { name: "Parcerias", members: 12, unread: 2 },
     ],

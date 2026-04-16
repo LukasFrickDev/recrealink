@@ -179,7 +179,7 @@ export const candidaturasDomainMock: CandidaturaDomainEntity[] = [
     recreadorId: "rec-fernanda-lopes",
     status: "Entrevista",
     score: 4.7,
-    highlight: "Experiência com festas premium e excelente avaliação em dinamicas infantis.",
+    highlight: "Experiência com festas premium e excelente avaliação em dinâmicas infantis.",
   },
   {
     id: "cand-rafael-matos-1",

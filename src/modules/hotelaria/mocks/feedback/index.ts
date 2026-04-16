@@ -10,7 +10,7 @@ export const hotelariaFeedbackFeatureMock: HotelariaFeatureMock = {
   statusLabel: "Ativo",
   statusDetail: "Componente focado em registro rápido, filtro por tipo e histórico por profissional.",
   stats: [
-    { title: "Feedbacks no mes", value: "48", helper: "Registros concluidos" },
+    { title: "Feedbacks no mês", value: "48", helper: "Registros concluidos" },
     { title: "Nota média", value: "4.7", helper: "Escala de 1 a 5" },
     { title: "Positivos", value: "92%", helper: "Performance geral" },
     { title: "Planos de ação", value: "6", helper: "Acompanhamentos abertos" },

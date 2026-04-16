@@ -2,14 +2,14 @@ import type { HotelariaFeatureMock } from "@/modules/hotelaria/mocks/shared";
 
 export const hotelariaProgramacoesFeatureMock: HotelariaFeatureMock = {
   featureId: "programacoes",
-  menuLabel: "Programacoes",
-  title: "Programacoes do hotel",
+  menuLabel: "Programações",
+  title: "Programações do hotel",
   description: "Planejamento de atividades com abas para templates, sugestoes e calendario.",
   status: "active",
   statusLabel: "Ativo",
   statusDetail: "Composicao em quatro abas para diferenciar criacao, reaproveitamento e agenda.",
   stats: [
-    { title: "Programacoes criadas", value: "19", helper: "Mes atual" },
+    { title: "Programações criadas", value: "19", helper: "Mês atual" },
     { title: "Horas planejadas", value: "124h", helper: "Volume mensal" },
     { title: "Participantes medios", value: "53", helper: "Por atividade" },
     { title: "Templates em uso", value: "8", helper: "Base recorrente" },
@@ -22,7 +22,7 @@ export const hotelariaProgramacoesFeatureMock: HotelariaFeatureMock = {
   layout: {
     type: "programacoes",
     summary: [
-      { title: "Criadas no mes", value: "19", helper: "Fluxo regular" },
+      { title: "Criadas no mês", value: "19", helper: "Fluxo regular" },
       { title: "Horas programadas", value: "124h", helper: "Carga total" },
       { title: "Participantes", value: "53", helper: "Média por ação" },
       { title: "Templates", value: "8", helper: "Modelos prontos" },

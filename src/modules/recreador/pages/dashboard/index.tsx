@@ -304,7 +304,7 @@ export const RecreadorDashboardPage = () => {
                   </S.CommunityAuthorWrap>
                 </S.CommunityTop>
                 <S.CommunityActivity>{post.activity}</S.CommunityActivity>
-                <S.CommunityAgeGroup>Faixa etaria: {post.ageGroup}</S.CommunityAgeGroup>
+                <S.CommunityAgeGroup>Faixa etária: {post.ageGroup}</S.CommunityAgeGroup>
                 <S.CommunityMeta>
                   <S.MetaItem>
                     <Heart size={12} />

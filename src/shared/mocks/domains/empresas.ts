@@ -73,7 +73,7 @@ const empresasDomainList: EmpresaDomainEntity[] = [
     verified: true,
     priceRange: "A partir de R$ 780",
     description: "Operação para aniversarios premium, eventos corporativos familiares e feriados prolongados.",
-    specialties: ["Eventos premium", "Programacao em resorts", "Pacotes de temporada"],
+    specialties: ["Eventos premium", "Programação em resorts", "Pacotes de temporada"],
     nextSlots: ["Domingo manha", "Segunda tarde"],
     coverageLabel: "Campinas e regiao",
     contactPhone: "(19) 3777-2233",

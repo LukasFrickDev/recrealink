@@ -4,24 +4,24 @@ export const hotelariaIndicadoresFeatureMock: HotelariaFeatureMock = {
   featureId: "indicadores",
   menuLabel: "Indicadores",
   title: "Indicadores da operação",
-  description: "Painel de performance com períodos, tendencias e watchlist operacional.",
+  description: "Painel de performance com períodos, tendências e watchlist operacional.",
   status: "active",
   statusLabel: "Ativo",
-  statusDetail: "Estrutura focada em leitura executiva: KPI, tendencia e responsavel por frente.",
+  statusDetail: "Estrutura focada em leitura executiva: KPI, tendência e responsável por frente.",
   stats: [
     { title: "KPIs monitorados", value: "12", helper: "Painel principal" },
     { title: "Metas atingidas", value: "9", helper: "Ciclo atual" },
-    { title: "Satisfacao geral", value: "98%", helper: "Feedback de hospedes" },
-    { title: "Efetividade", value: "94%", helper: "Execucao de programacoes" },
+    { title: "Satisfação geral", value: "98%", helper: "Feedback de hóspedes" },
+    { title: "Efetividade", value: "94%", helper: "Execução de programações" },
   ],
   checkpoints: [
-    "Atualizar indicadores no mesmo horario todos os dias.",
-    "Sinalizar tendencia negativa acima de 5% no período.",
-    "Definir responsavel para cada KPI em risco.",
+    "Atualizar indicadores no mesmo horário todos os dias.",
+    "Sinalizar tendência negativa acima de 5% no período.",
+    "Definir responsável para cada KPI em risco.",
   ],
   layout: {
     type: "indicadores",
-    periods: ["Esta semana", "Este mes", "Trimestre", "Ano"],
+    periods: ["Esta semana", "Este mês", "Trimestre", "Ano"],
     kpis: [
       {
         title: "Cobertura de escalas",
@@ -36,13 +36,13 @@ export const hotelariaIndicadoresFeatureMock: HotelariaFeatureMock = {
         tone: "brand",
       },
       {
-        title: "Atividades no horario",
+        title: "Atividades no horário",
         value: "89%",
-        trend: "-3% em relacao ao último ciclo",
+        trend: "-3% em relação ao último ciclo",
         tone: "warning",
       },
       {
-        title: "Incidentes criticos",
+        title: "Incidentes críticos",
         value: "1",
         trend: "Redução após revisão de protocolo",
         tone: "danger",
@@ -51,17 +51,17 @@ export const hotelariaIndicadoresFeatureMock: HotelariaFeatureMock = {
     watchlist: [
       {
         title: "Briefing de teens",
-        detail: "Oscilacao de pontualidade no turno noturno de sexta.",
-        owner: "Coordenacao de programacoes",
+        detail: "Oscilação de pontualidade no turno noturno de sexta.",
+        owner: "Coordenação de programações",
       },
       {
-        title: "Reposicao de lider kids",
+        title: "Reposição de líder kids",
         detail: "Cobertura parcial para o próximo feriado prolongado.",
         owner: "Time de recrutamento",
       },
       {
         title: "Checklist de materiais",
-        detail: "Ajuste necessario para atividades aquaticas.",
+        detail: "Ajuste necessário para atividades aquáticas.",
         owner: "Operação de apoio",
       },
     ],

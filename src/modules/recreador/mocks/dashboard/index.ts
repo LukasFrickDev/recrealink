@@ -203,7 +203,7 @@ export const recreadorDashboardMock = {
         icon: "building",
       },
       {
-        title: "Vagas este mes",
+        title: "Vagas este mês",
         value: "1.234",
         helper: "oportunidades atualizadas diariamente",
         tone: "rose",

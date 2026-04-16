@@ -66,7 +66,7 @@ export const unifiedNotificationsPageByModule: Record<
           id: "n-4",
           type: "comunidade",
           title: "Comunidade em evolução",
-          description: "A área colaborativa esta em desenvolvimento para a próxima iteracao.",
+          description: "A área colaborativa esta em desenvolvimento para a próxima iteração.",
           time: "Ontem",
           read: false,
         },

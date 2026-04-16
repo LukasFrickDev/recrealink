@@ -18,7 +18,7 @@ export const hotelariaVagasFeatureMock: HotelariaFeatureMock = {
   checkpoints: [
     "Revisar descrição da vaga antes da públicação.",
     "Acompanhar status de candidatos por etapa do funil.",
-    "Garantir clareza em salário, período e perfil tecnico.",
+    "Garantir clareza em salário, período e perfil técnico.",
   ],
   layout: {
     type: "vagas",
@@ -26,7 +26,7 @@ export const hotelariaVagasFeatureMock: HotelariaFeatureMock = {
       { title: "Abertas", value: "8", helper: "Publicadas e visiveis" },
       { title: "Em análise", value: "5", helper: "Com shortlist pronta" },
       { title: "Total de candidatos", value: "62", helper: "Fila atual" },
-      { title: "Fechadas no período", value: "11", helper: "Último mes" },
+      { title: "Fechadas no período", value: "11", helper: "Último mês" },
     ],
     statusFilters: ["Aberta", "Em análise", "Preenchida", "Encerrada"],
     vacancies: hotelariaVacancies,

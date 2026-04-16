@@ -158,8 +158,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           online: true,
         },
         {
-          id: "Programacoes kids",
-          name: "Programacoes kids",
+          id: "Programações kids",
+          name: "Programações kids",
           subtitle: "12 membros",
           detail: "Online agora: 14",
           lastMessage: "Troca confirmada com Ana e Marina, escala atualizada.",
@@ -182,8 +182,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
         "Operação geral": [
           {
             id: "hotel-chat-1",
-            author: "Coordenacao",
-            content: "Confirmar troca do turno da piscina ate 17h.",
+            author: "Coordenação",
+            content: "Confirmar troca do turno da piscina até 17h.",
             time: "16:20",
             mine: false,
           },
@@ -198,8 +198,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
         "Escalas weekend": [
           {
             id: "hotel-chat-3",
-            author: "Coordenacao",
-            content: "Confirmar troca do turno da piscina ate 17h.",
+            author: "Coordenação",
+            content: "Confirmar troca do turno da piscina até 17h.",
             time: "16:20",
             mine: false,
           },
@@ -211,11 +211,11 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
             mine: true,
           },
         ],
-        "Programacoes kids": [
+        "Programações kids": [
           {
             id: "hotel-chat-5",
-            author: "Coordenacao",
-            content: "Confirmar troca do turno da piscina ate 17h.",
+            author: "Coordenação",
+            content: "Confirmar troca do turno da piscina até 17h.",
             time: "16:20",
             mine: false,
           },
@@ -227,11 +227,11 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
             mine: true,
           },
         ],
-        Ocorrencias: [
+        Ocorrências: [
           {
             id: "hotel-chat-7",
-            author: "Coordenacao",
-            content: "Confirmar troca do turno da piscina ate 17h.",
+            author: "Coordenação",
+            content: "Confirmar troca do turno da piscina até 17h.",
             time: "16:20",
             mine: false,
           },
@@ -355,7 +355,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           id: "conv-1",
           name: "Clube Estacao Kids",
           subtitle: "Evento de sabado",
-          detail: "Responsavel: Ana Ribeiro",
+          detail: "Responsável: Ana Ribeiro",
           lastMessage: "Podemos ajustar o início para 14h?",
           lastTime: "09:12",
           unread: 2,

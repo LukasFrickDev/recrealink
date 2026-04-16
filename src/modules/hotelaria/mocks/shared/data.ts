@@ -76,7 +76,7 @@ export const hotelariaVacancies = getOportunidadesByOwner("hotel", "hotel-maresi
       title: opportunity.title,
       description: opportunity.title.includes("Lider")
         ? "Coordenacao de equipe para pacote família de sexta a domingo."
-        : "Reforco completo para programacao especial de fim de ano.",
+        : "Reforço completo para programação especial de fim de ano.",
       location: opportunity.locationLabel,
       startDate: extra.startDate,
       endDate: extra.endDate,

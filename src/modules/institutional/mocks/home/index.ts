@@ -117,7 +117,7 @@ export const personalizedCta = {
     stats: [
       { value: "200+", label: "Eventos mensais" },
       { value: "100%", label: "Profissionais verificados" },
-      { value: "4.9", label: "Satisfacao das famílias" },
+      { value: "4.9", label: "Satisfação das famílias" },
     ],
   },
 };

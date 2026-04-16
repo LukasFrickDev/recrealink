@@ -7,9 +7,9 @@ export const hotelariaEscalasFeatureMock: HotelariaFeatureMock = {
   description: "Planejamento mensal com visão semanal, histórico e ações de compartilhamento.",
   status: "active",
   statusLabel: "Ativo",
-  statusDetail: "Composicao fiel da frente de escala com navegação de mes e distribuicao por tipo.",
+  statusDetail: "Composicao fiel da frente de escala com navegação de mês e distribuicao por tipo.",
   stats: [
-    { title: "Escalas no mes", value: "18", helper: "Inclui weekdays e finais de semana" },
+    { title: "Escalas no mês", value: "18", helper: "Inclui weekdays e finais de semana" },
     { title: "Cobertura", value: "96%", helper: "Meta operacional da semana" },
     { title: "Trocas pendentes", value: "2", helper: "Aguardando validacao" },
     { title: "Compartilhamentos", value: "11", helper: "Links enviados para lideranca" },
@@ -100,6 +100,6 @@ export const hotelariaEscalasFeatureMock: HotelariaFeatureMock = {
       { period: "Outubro/2026", coverage: "92%", status: "Concluido" },
       { period: "Setembro/2026", coverage: "88%", status: "Concluido" },
     ],
-    quickActions: ["Criar escala do dia", "Criar weekend", "Compartilhar mes"],
+    quickActions: ["Criar escala do dia", "Criar weekend", "Compartilhar mês"],
   },
 };

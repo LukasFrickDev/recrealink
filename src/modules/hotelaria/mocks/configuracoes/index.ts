@@ -72,12 +72,12 @@ export const hotelariaConfiguracoesFeatureMock: HotelariaFeatureMock = {
       {
         id: "dados-administrador",
         title: "Dados do administrador",
-        helper: "Responsavel da conta",
-        description: "Cadastro principal do contratante responsavel pela operação.",
+        helper: "Responsável da conta",
+        description: "Cadastro principal do contratante responsável pela operação.",
         editable: false,
         restrictedNotice: "Apenas o administrador da conta pode editar estes dados.",
         options: [
-          { label: "Responsavel", value: "Carla Menezes", helper: "Contratante principal" },
+          { label: "Responsável", value: "Carla Menezes", helper: "Contratante principal" },
           { label: "Email", value: "carla.menezes@maresiasresort.com.br", helper: "Recebe alertas criticos" },
           { label: "Telefone", value: "(12) 99741-8802", helper: "Canal direto" },
           { label: "Cargo", value: "Gerente de lazer e entretenimento", helper: "Aprovador de escalas" },
