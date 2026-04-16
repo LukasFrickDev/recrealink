@@ -60,7 +60,7 @@ const recommendationIconMap: Record<RecommendationIconKey, LucideIcon> = {
 
 const opportunityUrgencyLabel = {
   alta: "Urgente",
-  media: "Medio prazo",
+  media: "Médio prazo",
   baixa: "Flexivel",
 } as const;
 

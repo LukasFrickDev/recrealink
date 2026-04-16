@@ -4,10 +4,10 @@ export const hotelariaComunidadeFeatureMock: HotelariaFeatureMock = {
   featureId: "comunidade",
   menuLabel: "Comunidade",
   title: "Comunidade da hotelaria",
-  description: "Feed colaborativo e salas de conversa para troca de boas praticas entre equipes.",
+  description: "Feed colaborativo e salas de conversa para troca de boas práticas entre equipes.",
   status: "planned",
   statusLabel: "Planejado",
-  statusDetail: "Fluxo pronto para evolucao completa, mantendo estrutura de feed e chat em paralelo.",
+  statusDetail: "Fluxo pronto para evolução completa, mantendo estrutura de feed e chat em paralelo.",
   stats: [
     { title: "Topicos na semana", value: "17", helper: "Públicações em alta" },
     { title: "Participantes ativos", value: "42", helper: "Gestores e lideres" },
@@ -39,7 +39,7 @@ export const hotelariaComunidadeFeatureMock: HotelariaFeatureMock = {
         timeAgo: "5h",
         category: "Dica",
         content:
-          "Padrao de checklist em cartao fisico ajudou no turno noturno. Posso compartilhar modelo.",
+          "Padrão de checklist em cartao fisico ajudou no turno noturno. Posso compartilhar modelo.",
         likes: 19,
         comments: 11,
         shares: 3,

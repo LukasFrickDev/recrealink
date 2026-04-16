@@ -5,7 +5,7 @@ export const hotelariaVagasFeatureMock: HotelariaFeatureMock = {
   featureId: "vagas",
   menuLabel: "Vagas",
   title: "Vagas da hotelaria",
-  description: "Gestao de oportunidades com funil de candidatos e distribuicao por função.",
+  description: "Gestão de oportunidades com funil de candidatos e distribuicao por função.",
   status: "active",
   statusLabel: "Ativo",
   statusDetail: "Página de vagas com resumo, filtros de status e cards com breakdown de posições.",
@@ -18,7 +18,7 @@ export const hotelariaVagasFeatureMock: HotelariaFeatureMock = {
   checkpoints: [
     "Revisar descrição da vaga antes da públicação.",
     "Acompanhar status de candidatos por etapa do funil.",
-    "Garantir clareza em salario, período e perfil tecnico.",
+    "Garantir clareza em salário, período e perfil tecnico.",
   ],
   layout: {
     type: "vagas",

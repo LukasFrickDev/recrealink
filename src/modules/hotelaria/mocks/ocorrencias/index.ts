@@ -3,17 +3,17 @@ import type { HotelariaFeatureMock } from "@/modules/hotelaria/mocks/shared";
 
 export const hotelariaOcorrenciasFeatureMock: HotelariaFeatureMock = {
   featureId: "ocorrencias",
-  menuLabel: "Ocorrencias",
+  menuLabel: "Ocorrências",
   title: "Controle de ocorrencias",
   description: "Registro de incidentes com severidade, status e plano de tratativa.",
   status: "active",
   statusLabel: "Ativo",
   statusDetail: "Componente de compliance operacional com codificacao por risco e ação recomendada.",
   stats: [
-    { title: "Ocorrencias no mes", value: "3", helper: "Total registrado" },
+    { title: "Ocorrências no mes", value: "3", helper: "Total registrado" },
     { title: "Incidentes menores", value: "2", helper: "Sem impacto critico" },
     { title: "Pendentes", value: "1", helper: "Em acompanhamento" },
-    { title: "Tempo medio de resposta", value: "35 min", helper: "SLA da equipe" },
+    { title: "Tempo médio de resposta", value: "35 min", helper: "SLA da equipe" },
   ],
   checkpoints: [
     "Classificar severidade no momento do registro.",
@@ -23,7 +23,7 @@ export const hotelariaOcorrenciasFeatureMock: HotelariaFeatureMock = {
   layout: {
     type: "ocorrencias",
     summary: [
-      { title: "Ocorrencias no mes", value: "3", helper: "Em acompanhamento" },
+      { title: "Ocorrências no mes", value: "3", helper: "Em acompanhamento" },
       { title: "Incidentes menores", value: "2", helper: "Sem gravidade" },
       { title: "Última ocorrencia", value: "Hoje", helper: "15h40" },
     ],
@@ -34,7 +34,7 @@ export const hotelariaOcorrenciasFeatureMock: HotelariaFeatureMock = {
         type: "Operacional",
         recreador: hotelariaCurrentTeamEntries[0]?.name ?? "Ana Silva",
         status: "Resolvido",
-        severity: "Media",
+        severity: "Média",
         action: "Checklist de transicao atualizado e repassado ao turno noturno.",
       },
       {
@@ -44,7 +44,7 @@ export const hotelariaOcorrenciasFeatureMock: HotelariaFeatureMock = {
         recreador: hotelariaCurrentTeamEntries[2]?.name ?? "Marina Costa",
         status: "Pendente",
         severity: "Baixa",
-        action: "Solicitacao enviada para almoxarifado com prioridade media.",
+        action: "Solicitacao enviada para almoxarifado com prioridade média.",
       },
       {
         description: "Comunicação incompleta sobre alteracao de escala do domingo.",

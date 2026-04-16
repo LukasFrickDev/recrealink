@@ -24,7 +24,7 @@ export const hotelariaProgramacoesFeatureMock: HotelariaFeatureMock = {
     summary: [
       { title: "Criadas no mes", value: "19", helper: "Fluxo regular" },
       { title: "Horas programadas", value: "124h", helper: "Carga total" },
-      { title: "Participantes", value: "53", helper: "Media por ação" },
+      { title: "Participantes", value: "53", helper: "Média por ação" },
       { title: "Templates", value: "8", helper: "Modelos prontos" },
     ],
     plans: [

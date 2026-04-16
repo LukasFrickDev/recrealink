@@ -12,7 +12,7 @@ export const FinalCTASection = ({ stats }: FinalCTASectionProps) => {
       <S.Container>
         <h2>Conecta Recreadores, Contratantes e Empresas</h2>
         <p>
-          A plataforma que conecta e profissionaliza o mercado de recreacao no Brasil para quem
+          A plataforma que conecta e profissionaliza o mercado de recreação no Brasil para quem
           contrata, executa e acompanha resultados.
         </p>
 

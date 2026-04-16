@@ -18,11 +18,11 @@ interface UnifiedChatModuleConfig {
 export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleConfig> = {
   recreador: {
     pageTitle: "Chat do recreador",
-    pageDescription: "Conversas visuais do módulo para comunicação com hoteis e equipe.",
+    pageDescription: "Conversas visuais do módulo para comunicação com hotéis e equipe.",
     stats: [
       { title: "Conversas", value: "04", helper: "2 ativas agora" },
       { title: "Não lidas", value: "05", helper: "Priorize respostas" },
-      { title: "Tempo medio", value: "7 min", helper: "Últimas 24h" },
+      { title: "Tempo médio", value: "7 min", helper: "Últimas 24h" },
       { title: "Status", value: "Visual", helper: "Sem backend nesta etapa" },
     ],
     templateData: {
@@ -55,7 +55,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
         {
           id: "conv-3",
           name: "Marina Costa",
-          subtitle: "Recreadora senior",
+          subtitle: "Recreadora sênior",
           detail: "Equipe interna",
           lastMessage: "Vamos alinhar a dinamica da gincana aquatica.",
           lastTime: "Ontem",
@@ -127,7 +127,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
     stats: [
       { title: "Canais ativos", value: "6", helper: "Frentes de operação" },
       { title: "Não lidas", value: "29", helper: "Pendências atuais" },
-      { title: "Tempo de resposta", value: "7 min", helper: "Media de retorno" },
+      { title: "Tempo de resposta", value: "7 min", helper: "Média de retorno" },
       { title: "Online agora", value: "14", helper: "Equipe conectada" },
     ],
     templateData: {
@@ -168,8 +168,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           online: true,
         },
         {
-          id: "Ocorrencias",
-          name: "Ocorrencias",
+          id: "Ocorrências",
+          name: "Ocorrências",
           subtitle: "9 membros",
           detail: "Online agora: 14",
           lastMessage: "Troca confirmada com Ana e Marina, escala atualizada.",
@@ -341,7 +341,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
     stats: [
       { title: "Conversas ativas", value: "18", helper: "Últimas 24h" },
       { title: "Não lidas", value: "06", helper: "Prioridade alta" },
-      { title: "Tempo de resposta", value: "9 min", helper: "Media semanal" },
+      { title: "Tempo de resposta", value: "9 min", helper: "Média semanal" },
       { title: "Clientes online", value: "11", helper: "No momento" },
     ],
     templateData: {
@@ -412,7 +412,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           {
             id: "m-4",
             author: "Julia Prado",
-            content: "Conseguimos uma versao com duas opcoes de pacote?",
+            content: "Conseguimos uma versão com duas opções de pacote?",
             time: "17:12",
             mine: false,
           },
@@ -421,7 +421,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
       quickReplies: [
         "Recebido, vou validar com a equipe.",
         "Consigo te retornar ainda hoje.",
-        "Vamos seguir com essa atualizacao.",
+        "Vamos seguir com essa atualização.",
       ],
     },
   },

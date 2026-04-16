@@ -187,7 +187,7 @@ export const candidaturasDomainMock: CandidaturaDomainEntity[] = [
     recreadorId: "rec-rafael-matos",
     status: "Triagem",
     score: 4.3,
-    highlight: "Perfil forte em coordenacao de equipe e operação de eventos de medio porte.",
+    highlight: "Perfil forte em coordenacao de equipe e operação de eventos de médio porte.",
   },
   {
     id: "cand-bianca-souza-1",

@@ -247,7 +247,7 @@ export const recreadorDashboardMock = {
     {
       id: "checklists",
       title: "Checklists Simples",
-      description: "Garanta padrao de execucao no pre-evento.",
+      description: "Garanta padrão de execucao no pre-evento.",
       route: "/app/recreador/ferramentas/checklists-simples",
       badge: "FREE",
       icon: "checklist",

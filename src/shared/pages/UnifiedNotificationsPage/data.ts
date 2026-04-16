@@ -65,8 +65,8 @@ export const unifiedNotificationsPageByModule: Record<
         {
           id: "n-4",
           type: "comunidade",
-          title: "Comunidade em evolucao",
-          description: "A area colaborativa esta em desenvolvimento para a próxima iteracao.",
+          title: "Comunidade em evolução",
+          description: "A área colaborativa esta em desenvolvimento para a próxima iteracao.",
           time: "Ontem",
           read: false,
         },
@@ -187,7 +187,7 @@ export const unifiedNotificationsPageByModule: Record<
     stats: [
       { title: "Alertas totais", value: "23", helper: "Últimos 7 dias" },
       { title: "Não lidas", value: "08", helper: "Requer atenção" },
-      { title: "Comerciais", value: "11", helper: "Orcamentos e leads" },
+      { title: "Comerciais", value: "11", helper: "Orçamentos e leads" },
       { title: "Operacionais", value: "09", helper: "Agenda e equipe" },
     ],
     templateData: {
@@ -200,7 +200,7 @@ export const unifiedNotificationsPageByModule: Record<
       filters: [
         { id: "todas", label: "Todas" },
         { id: "nao-lidas", label: "Não lidas" },
-        { id: "orcamentos", label: "Orcamentos" },
+        { id: "orcamentos", label: "Orçamentos" },
         { id: "agenda", label: "Agenda" },
         { id: "equipe", label: "Equipe" },
         { id: "sistema", label: "Sistema" },
@@ -209,7 +209,7 @@ export const unifiedNotificationsPageByModule: Record<
         {
           id: "n-1",
           type: "orcamentos",
-          title: "Proposta aguardando aprovacao",
+          title: "Proposta aguardando aprovação",
           description: "Clube Estacao Kids solicitou ajustes no pacote premium.",
           time: "Agora",
           read: false,
@@ -226,7 +226,7 @@ export const unifiedNotificationsPageByModule: Record<
           id: "n-3",
           type: "equipe",
           title: "Disponibilidade atualizada",
-          description: "Lucas Nunes confirmou presenca para sabado.",
+          description: "Lucas Nunes confirmou presença para sabado.",
           time: "Hoje",
           read: true,
         },
@@ -234,7 +234,7 @@ export const unifiedNotificationsPageByModule: Record<
           id: "n-4",
           type: "sistema",
           title: "Revisão de segurança",
-          description: "Recomendacao de atualizacao de senha da conta principal.",
+          description: "Recomendacao de atualização de senha da conta principal.",
           time: "Ontem",
           read: true,
         },

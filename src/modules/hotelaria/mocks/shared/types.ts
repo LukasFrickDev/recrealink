@@ -93,7 +93,7 @@ export interface HotelariaRecreadorEntry {
   bio: string;
   functions: string[];
   specialties: string[];
-  availability: "Disponivel" | "Ocupada";
+  availability: "Disponível" | "Ocupada";
   lastWork: string;
 }
 
@@ -217,13 +217,13 @@ export interface HotelariaOrcamentoLayout {
     quantity: string;
     date: string;
     status: HotelariaOrcamentoStatus;
-    priority: "Alta" | "Media" | "Baixa";
+    priority: "Alta" | "Média" | "Baixa";
   }>;
 }
 
 export type HotelariaOcorrenciaStatus = "Aberto" | "Resolvido" | "Pendente";
 
-export type HotelariaOcorrenciaSeverity = "Alta" | "Media" | "Baixa";
+export type HotelariaOcorrenciaSeverity = "Alta" | "Média" | "Baixa";
 
 export interface HotelariaOcorrenciasLayout {
   type: "ocorrencias";

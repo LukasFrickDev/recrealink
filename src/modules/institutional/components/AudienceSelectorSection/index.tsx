@@ -16,9 +16,9 @@ export const AudienceSelectorSection = ({
     <S.Section>
       <S.Container>
         <S.Header>
-          <h2>Para quem e a RecreaLink?</h2>
+          <h2>Para quem é a RecreaLink?</h2>
           <p>
-            Nossa plataforma conecta diferentes publicos no universo da recreacao. Escolha seu perfil e
+            Nossa plataforma conecta diferentes públicos no universo da recreação. Escolha seu perfil e
             descubra como podemos ajudar.
           </p>
         </S.Header>

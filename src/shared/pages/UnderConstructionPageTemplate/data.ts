@@ -11,5 +11,5 @@ export const underConstructionDefaultHighlights = [
 export const underConstructionDefaultNextSteps = [
 	"Conectar fonte de dados consolidada na etapa de backend.",
 	"Ativar fluxos reais com moderacao e trilhas de interacao.",
-	"Validar métricas de uso para evolucao por módulo.",
+	"Validar métricas de uso para evolução por módulo.",
 ];

@@ -228,7 +228,7 @@ export const RecreadorHoteisPage = () => {
                             <Star size={11} /> Hotel {hotel.avaliacaoHotel.toFixed(1)}
                           </S.TextBadge>
                           <S.TextBadge $tone="green">
-                            Avaliacao {hotel.avaliacaoRecreador.toFixed(1)}
+                            Avaliação {hotel.avaliacaoRecreador.toFixed(1)}
                           </S.TextBadge>
                           <S.TextBadge $tone={hotel.status === "ativo" ? "green" : "neutral"}>
                             {hotel.status === "ativo" ? "Ativo" : "Inativo"}

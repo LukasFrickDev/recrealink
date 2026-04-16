@@ -19,7 +19,7 @@ export const unifiedCommunityPageByModule: Record<SharedModuleKey, UnifiedCommun
     pageTitle: "Comunidade",
     pageDescription: "Espaco colaborativo em preparacao para conexao entre recreadores.",
     subtitle: "Comunidade do recreador em desenvolvimento",
-    message: "Esta area sera compartilhada entre os módulos para conexao entre recreadores, empresas e hotelaria em base unica.",
+    message: "Esta área sera compartilhada entre os módulos para conexao entre recreadores, empresas e hotelaria em base unica.",
     statusLabel: "Base em preparacao",
     highlights: [
       "Diretrizes de troca entre recreadores já validadas.",
@@ -28,7 +28,7 @@ export const unifiedCommunityPageByModule: Record<SharedModuleKey, UnifiedCommun
     ],
     nextSteps: [
       "Conectar públicações a dados reais do perfil.",
-      "Adicionar filtros por tema e faixa etaria.",
+      "Adicionar filtros por tema e faixa etária.",
       "Ativar moderacao por regras da comunidade.",
     ],
     stats: [],
@@ -39,16 +39,16 @@ export const unifiedCommunityPageByModule: Record<SharedModuleKey, UnifiedCommun
     pageTitle: "Comunidade",
     pageDescription: "Espaco colaborativo em preparacao para conexao entre equipes da hotelaria.",
     subtitle: "Comunidade da hotelaria em desenvolvimento",
-    message: "Esta area sera compartilhada entre os módulos para troca de boas praticas e operação integrada.",
+    message: "Esta área sera compartilhada entre os módulos para troca de boas práticas e operação integrada.",
     statusLabel: "Estrutura definida",
     highlights: [
       "Formato pronto para troca de playbooks operacionais.",
-      "Fluxo visual alinhado com gestao e alertas da hotelaria.",
+      "Fluxo visual alinhado com gestão e alertas da hotelaria.",
       "Base preparada para comunicação entre unidades.",
     ],
     nextSteps: [
       "Conectar topicos por tipo de operação.",
-      "Ativar trilhas por area: escalas, qualidade e eventos.",
+      "Ativar trilhas por área: escalas, qualidade e eventos.",
       "Sincronizar atividade com notificações reais.",
     ],
     stats: [],
@@ -59,7 +59,7 @@ export const unifiedCommunityPageByModule: Record<SharedModuleKey, UnifiedCommun
     pageTitle: "Comunidade",
     pageDescription: "Espaco colaborativo em preparacao para trocas entre famílias.",
     subtitle: "Comunidade das famílias em desenvolvimento",
-    message: "Esta area sera compartilhada entre módulos para recomendacoes, dicas e experiências de contratação.",
+    message: "Esta área sera compartilhada entre módulos para recomendacoes, dicas e experiências de contratação.",
     statusLabel: "Planejamento ativo",
     highlights: [
       "Jornada de troca entre famílias já mapeada.",
@@ -77,14 +77,14 @@ export const unifiedCommunityPageByModule: Record<SharedModuleKey, UnifiedCommun
   },
   empresa: {
     pageTitle: "Comunidade",
-    pageDescription: "Area colaborativa em desenvolvimento para integracao entre empresa, recreador e hotelaria.",
+    pageDescription: "Área colaborativa em desenvolvimento para integracao entre empresa, recreador e hotelaria.",
     subtitle: "Comunidade empresarial em desenvolvimento",
-    message: "Esta area sera compartilhada entre os módulos para conexao entre empresas, recreadores e hotelaria em uma base unica.",
+    message: "Esta área sera compartilhada entre os módulos para conexao entre empresas, recreadores e hotelaria em uma base unica.",
     statusLabel: "Base refinada",
     highlights: [
       "Estrutura compartilhada entre os módulos concluida.",
       "Direcao de conteúdo para networking profissional definida.",
-      "Area pronta para evolucao com dados de negócio.",
+      "Área pronta para evolução com dados de negócio.",
     ],
     nextSteps: [
       "Conectar interacoes a eventos e oportunidades.",
@@ -94,7 +94,7 @@ export const unifiedCommunityPageByModule: Record<SharedModuleKey, UnifiedCommun
     stats: [
       { title: "Status", value: "Refinada", helper: "Base compartilhada do sistema" },
       { title: "Integracoes planejadas", value: "03", helper: "Empresa, recreador e hotelaria" },
-      { title: "Fase", value: "4", helper: "Revisão final de consistencia" },
+      { title: "Fase", value: "4", helper: "Revisão final de consistência" },
       { title: "Próximo passo", value: "Conectar dados", helper: "Sem backend nesta etapa" },
     ],
     homeRoute: "/app/empresa",

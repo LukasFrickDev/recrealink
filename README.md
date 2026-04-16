@@ -8,18 +8,18 @@ Projeto React + TypeScript + Vite com styled-components, React Router DOM e Redu
 - `npm run dev`
 - `npm run build`
 
-## Padrao Arquitetural Compartilhado (Obrigatorio)
+## Padrão Arquitetural Compartilhado (Obrigatório)
 
-Este projeto segue uma regra global de consolidacao de base compartilhada.
+Este projeto segue uma regra global de consolidação de base compartilhada.
 
-1. Antes de criar qualquer estrutura nova, analise o que ja existe.
-2. Reutilize, adapte ou estenda antes de criar uma nova versao.
-3. Tudo que for comum entre modulos deve ficar em `src/shared`.
-4. Cada modulo deve manter apenas o que for realmente especifico:
-   - labels, icones e rotas
-   - configuracao de sidebar/topbar/tabs
-   - campos e conteudos de dominio
-5. Evite duplicacao estrutural e visual entre dashboards.
+1. Antes de criar qualquer estrutura nova, analise o que já existe.
+2. Reutilize, adapte ou estenda antes de criar uma nova versão.
+3. Tudo que for comum entre módulos deve ficar em `src/shared`.
+4. Cada módulo deve manter apenas o que for realmente específico:
+  - labels, ícones e rotas
+  - configuração de sidebar/topbar/tabs
+  - campos e conteúdos de domínio
+5. Evite duplicação estrutural e visual entre dashboards.
 
 ## Bases Compartilhadas Atuais
 
@@ -28,13 +28,13 @@ Este projeto segue uma regra global de consolidacao de base compartilhada.
 - Base de settings compartilhada:
   - `src/shared/layouts/SettingsLayoutBase`
   - `src/shared/pages/SettingsPageTemplate`
-- Templates de paginas compartilhadas:
+- Templates de páginas compartilhadas:
   - `src/shared/pages/ChatPageTemplate`
   - `src/shared/pages/NotificationsPageTemplate`
   - `src/shared/pages/UnderConstructionPageTemplate`
 
 ## Regra de Settings
 
-As abas `Notificacoes`, `Usuarios` e `Seguranca` devem usar o mesmo template compartilhado entre os modulos.
+As abas `Notificações`, `Usuários` e `Segurança` devem usar o mesmo template compartilhado entre os módulos.
 
-As diferencas devem ficar apenas nas abas de dados especificas de dominio.
+As diferenças devem ficar apenas nas abas de dados específicas de domínio.

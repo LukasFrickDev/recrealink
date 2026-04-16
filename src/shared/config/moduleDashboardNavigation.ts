@@ -146,15 +146,15 @@ const recreadorTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/recreador/comunidade": {
     title: "Comunidade",
-    helper: "Area colaborativa em evolucao",
+    helper: "Área colaborativa em evolução",
   },
   "/app/recreador/community": {
     title: "Comunidade",
-    helper: "Area colaborativa em evolucao",
+    helper: "Área colaborativa em evolução",
   },
   "/app/recreador/chat": {
     title: "Chat",
-    helper: "Conversas com hoteis e equipe",
+    helper: "Conversas com hotéis e equipe",
   },
   "/app/recreador/notificacoes": {
     title: "Notificações",
@@ -166,15 +166,15 @@ const recreadorTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/recreador/configuracoes": {
     title: "Configurações",
-    helper: "Preferencias de perfil, usuario e segurança",
+    helper: "Preferências de perfil, usuário e segurança",
   },
   "/app/recreador/settings": {
     title: "Configurações",
-    helper: "Preferencias de perfil, usuario e segurança",
+    helper: "Preferências de perfil, usuário e segurança",
   },
   "/app/recreador/em-desenvolvimento": {
     title: "Em desenvolvimento",
-    helper: "Area preparada para entregas futuras",
+    helper: "Área preparada para entregas futuras",
   },
   "/app/recreador/ferramentas/perfil-basico": {
     title: "Perfil público",
@@ -190,7 +190,7 @@ const recreadorTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/recreador/ferramentas/checklists-simples": {
     title: "Checklists operacionais",
-    helper: "Rotina antes, durante e apos eventos",
+    helper: "Rotina antes, durante e após eventos",
   },
   "/app/recreador/ferramentas/registro-experiencias": {
     title: "Registro de experiências",
@@ -202,7 +202,7 @@ const recreadorTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/recreador/ferramentas/editar-perfil": {
     title: "Editar perfil",
-    helper: "Atualize dados, foto e portfolio",
+    helper: "Atualize dados, foto e portfólio",
   },
 };
 
@@ -297,19 +297,19 @@ export const hotelariaSidebarGroups: ModuleSidebarGroupDefinition[] = [
       },
       {
         to: "/app/hotelaria/relatorios",
-        label: "Relatorios",
-        description: "Analises e métricas",
+        label: "Relatórios",
+        description: "Análises e métricas",
         icon: BarChart3,
       },
       {
         to: "/app/hotelaria/orcamento",
-        label: "Orcamentos",
+        label: "Orçamentos",
         description: "Controle financeiro",
         icon: DollarSign,
       },
       {
         to: "/app/hotelaria/ocorrencias",
-        label: "Ocorrencias",
+        label: "Ocorrências",
         description: "Registre eventos importantes",
         icon: AlertTriangle,
       },
@@ -398,15 +398,15 @@ const hotelariaTopbarContextMap: Record<string, ModuleTopbarContext> = {
     helper: "Avaliação de desempenho e qualidade",
   },
   "/app/hotelaria/relatorios": {
-    title: "Relatorios",
+    title: "Relatórios",
     helper: "Indicadores operacionais e insights",
   },
   "/app/hotelaria/orcamento": {
-    title: "Orcamentos",
+    title: "Orçamentos",
     helper: "Frente financeira planejada para etapa futura",
   },
   "/app/hotelaria/ocorrencias": {
-    title: "Ocorrencias",
+    title: "Ocorrências",
     helper: "Registro de incidentes e tratativas",
   },
   "/app/hotelaria/comunidade": {
@@ -423,19 +423,19 @@ const hotelariaTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/hotelaria/notificacoes": {
     title: "Notificações",
-    helper: "Alertas e atualizacoes prioritarias",
+    helper: "Alertas e atualizações prioritárias",
   },
   "/app/hotelaria/notifications": {
     title: "Notificações",
-    helper: "Alertas e atualizacoes prioritarias",
+    helper: "Alertas e atualizações prioritárias",
   },
   "/app/hotelaria/configuracoes": {
     title: "Configurações",
-    helper: "Preferencias da area da hotelaria",
+    helper: "Preferências da área da hotelaria",
   },
   "/app/hotelaria/settings": {
     title: "Configurações",
-    helper: "Preferencias da area da hotelaria",
+    helper: "Preferências da área da hotelaria",
   },
 };
 
@@ -696,7 +696,7 @@ export const empresarioSidebarGroups: ModuleSidebarGroupDefinition[] = [
   },
   {
     id: "gestao",
-    title: "Gestao da empresa",
+    title: "Gestão da empresa",
     items: [
       {
         to: "/app/empresa",
@@ -706,8 +706,8 @@ export const empresarioSidebarGroups: ModuleSidebarGroupDefinition[] = [
       },
       {
         to: "/app/empresa/orcamentos",
-        label: "Gestao de orcamentos",
-        description: "Propostas e negociacoes",
+        label: "Gestão de orçamentos",
+        description: "Propostas e negociações",
         icon: Calculator,
       },
       {
@@ -732,7 +732,7 @@ export const empresarioSidebarGroups: ModuleSidebarGroupDefinition[] = [
   },
   {
     id: "servicos",
-    title: "Servicos e marketing",
+    title: "Serviços e marketing",
     items: [
       {
         to: "/app/empresa/servicos",
@@ -773,7 +773,7 @@ export const empresarioSidebarGroups: ModuleSidebarGroupDefinition[] = [
       {
         to: "/app/empresa/configuracoes",
         label: "Configurações",
-        description: "Preferencias do negócio",
+        description: "Preferências do negócio",
         icon: Settings,
       },
     ],
@@ -806,8 +806,8 @@ const empresarioTopbarContextMap: Record<string, ModuleTopbarContext> = {
     helper: "Portfolio profissional do recreador da empresa",
   },
   "/app/empresa/orcamentos": {
-    title: "Gestao de orcamentos",
-    helper: "Propostas, negociacoes e follow-up comercial",
+    title: "Gestão de orçamentos",
+    helper: "Propostas, negociações e follow-up comercial",
   },
   "/app/empresa/agenda": {
     title: "Agenda de eventos",
@@ -815,23 +815,23 @@ const empresarioTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/empresa/equipe": {
     title: "Equipe da empresa",
-    helper: "Recreadores, alocacoes e acompanhamento do time",
+    helper: "Recreadores, alocações e acompanhamento do time",
   },
   "/app/empresa/vagas": {
     title: "Vagas",
-    helper: "Abertura, triagem e evolucao de candidaturas",
+    helper: "Abertura, triagem e evolução de candidaturas",
   },
   "/app/empresa/servicos": {
-    title: "Cadastro de servicos",
+    title: "Cadastro de serviços",
     helper: "Pacotes e escopos comerciais oferecidos",
   },
   "/app/empresa/galeria": {
     title: "Galeria da empresa",
-    helper: "Portifolio visual e registros de eventos",
+    helper: "Portfólio visual e registros de eventos",
   },
   "/app/empresa/depoimentos": {
     title: "Depoimentos",
-    helper: "Prova social e percepcao dos clientes",
+    helper: "Prova social e percepção dos clientes",
   },
   "/app/empresa/financas": {
     title: "Financas e pagamentos",
@@ -839,11 +839,11 @@ const empresarioTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/empresa/comunidade": {
     title: "Comunidade",
-    helper: "Espaco compartilhado entre módulos",
+    helper: "Espaço compartilhado entre módulos",
   },
   "/app/empresa/community": {
     title: "Comunidade",
-    helper: "Espaco compartilhado entre módulos",
+    helper: "Espaço compartilhado entre módulos",
   },
   "/app/empresa/chat": {
     title: "Chat empresarial",
@@ -859,11 +859,11 @@ const empresarioTopbarContextMap: Record<string, ModuleTopbarContext> = {
   },
   "/app/empresa/configuracoes": {
     title: "Configurações",
-    helper: "Preferencias de perfil, usuarios e segurança",
+    helper: "Preferências de perfil, usuários e segurança",
   },
   "/app/empresa/settings": {
     title: "Configurações",
-    helper: "Preferencias de perfil, usuarios e segurança",
+    helper: "Preferências de perfil, usuários e segurança",
   },
 };
 

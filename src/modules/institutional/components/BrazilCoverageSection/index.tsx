@@ -11,7 +11,7 @@ export const BrazilCoverageSection = ({ content }: BrazilCoverageSectionProps) =
       <S.Container>
         <S.Header>
           <h2>Oportunidades em todo Brasil</h2>
-          <p>Descubra vagas disponiveis em resorts e hoteis nas melhores regioes turisticas.</p>
+          <p>Descubra vagas disponíveis em resorts e hotéis nas melhores regioes turisticas.</p>
         </S.Header>
 
         <S.MapCard>

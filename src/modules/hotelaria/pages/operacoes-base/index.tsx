@@ -583,7 +583,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
 
           const matchesStatus =
             recreadoresStatus === "todos" ||
-            (recreadoresStatus === "disponivel" && item.availability === "Disponivel") ||
+            (recreadoresStatus === "disponivel" && item.availability === "Disponível") ||
             (recreadoresStatus === "ocupada" && item.availability === "Ocupada");
 
           return matchesSearch && matchesStatus;
@@ -592,7 +592,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
         return (
           <S.SectionStack>
             <SectionHeader
-              title="Gestao de recreadores"
+              title="Gestão de recreadores"
               subtitle="Pesquisa por nome e filtros de disponibilidade com duas abas de histórico."
             />
 
@@ -605,7 +605,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
                 $active={recreadoresTab === "historico"}
                 onClick={() => setRecreadoresTab("historico")}
               >
-                Historico de contratacoes
+                Histórico de contratações
               </S.TabButton>
             </S.TabRow>
 
@@ -620,7 +620,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
                 onChange={(event) => setRecreadoresStatus(event.target.value as "todos" | "disponivel" | "ocupada")}
                 options={[
                   { value: "todos", label: "Todos" },
-                  { value: "disponivel", label: "Disponiveis" },
+                  { value: "disponivel", label: "Disponíveis" },
                   { value: "ocupada", label: "Ocupadas" },
                 ]}
               />
@@ -635,7 +635,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
                       <strong>{item.name}</strong>
                       <p>{item.artisticName}</p>
                     </div>
-                    <Badge tone={item.availability === "Disponivel" ? "success" : "danger"}>{item.availability}</Badge>
+                    <Badge tone={item.availability === "Disponível" ? "success" : "danger"}>{item.availability}</Badge>
                   </S.RosterHead>
 
                   <S.RosterInfo>
@@ -662,7 +662,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
                   </S.ChipRow>
 
                   <S.ListItemMeta>
-                    <span>Ultimo trabalho: {item.lastWork}</span>
+                    <span>Último trabalho: {item.lastWork}</span>
                   </S.ListItemMeta>
 
                   <S.ActionRow>
@@ -1009,7 +1009,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
         return (
           <S.SectionStack>
             <SectionHeader
-              title="Relatorios e resultados"
+              title="Relatórios e resultados"
               subtitle="Componente de análise com impacto, métricas, períodos e histórico financeiro."
               action={
                 <S.ReportActions>
@@ -1196,7 +1196,7 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
                             <Badge tone={orcamentoStatusToneMap[item.status]}>{item.status}</Badge>
                           </td>
                           <td>
-                            <Badge tone={item.priority === "Alta" ? "danger" : item.priority === "Media" ? "warning" : "success"}>
+                            <Badge tone={item.priority === "Alta" ? "danger" : item.priority === "Média" ? "warning" : "success"}>
                               {item.priority}
                             </Badge>
                           </td>

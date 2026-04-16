@@ -21,7 +21,7 @@ export const heroData = {
       role: "Recreador Infantil",
       company: "Resort Paradise - São Paulo",
       type: "Temporada",
-      date: "Inicio em 15/06/2024",
+      date: "Início em 15/06/2024",
     },
     {
       role: "Coordenador de Recreação",
@@ -36,7 +36,7 @@ export const audienceOptions: { id: AudienceKey; title: string; description: str
   {
     id: "recreador",
     title: "Recreador",
-    description: "Encontre vagas e organize sua carreira com ferramentas praticas.",
+    description: "Encontre vagas e organize sua carreira com ferramentas práticas.",
     icon: "🎯",
   },
   {
@@ -48,7 +48,7 @@ export const audienceOptions: { id: AudienceKey; title: string; description: str
   {
     id: "eventos",
     title: "Eventos",
-    description: "Estruture equipe, servicos e agenda da sua empresa de recreação.",
+    description: "Estruture equipe, serviços e agenda da sua empresa de recreação.",
     icon: "🎉",
   },
   {
@@ -62,25 +62,25 @@ export const audienceOptions: { id: AudienceKey; title: string; description: str
 export const personalizedCta = {
   default: {
     title: "Transforme sua carreira ou negócio na recreação",
-    subtitle: "Junte-se a maior plataforma especializada em recreação do Brasil.",
-    primary: "Comecar Gratuitamente",
+    subtitle: "Junte-se à maior plataforma especializada em recreação do Brasil.",
+    primary: "Começar Gratuitamente",
     secondary: "Explorar Recursos",
     badge: "Cadastro 100% gratuito",
     stats: [
-      { value: "1.200+", label: "Usuarios ativos" },
+      { value: "1.200+", label: "Usuários ativos" },
       { value: "22+", label: "Ferramentas" },
-      { value: "98%", label: "Satisfacao" },
+      { value: "98%", label: "Satisfação" },
     ],
   },
   recreador: {
     title: "Encontre seu próximo trabalho em recreação",
-    subtitle: "Vagas exclusivas em hoteis, resorts e empresas de todo o Brasil.",
-    primary: "Ver Vagas Disponiveis",
-    secondary: "Criar Perfil Gratis",
+    subtitle: "Vagas exclusivas em hotéis, resorts e empresas de todo o Brasil.",
+    primary: "Ver Vagas Disponíveis",
+    secondary: "Criar Perfil Grátis",
     badge: "23 novas vagas hoje",
     stats: [
       { value: "1.200+", label: "Recreadores ativos" },
-      { value: "R$ 2.800", label: "Salario medio" },
+      { value: "R$ 2.800", label: "Salário médio" },
       { value: "95%", label: "Taxa de contratação" },
     ],
   },
@@ -91,20 +91,20 @@ export const personalizedCta = {
     secondary: "Publicar Vaga",
     badge: "Reduz 60% do tempo de recrutamento",
     stats: [
-      { value: "48h", label: "Tempo medio de contratação" },
-      { value: "4.8", label: "Avaliação media" },
-      { value: "300+", label: "Hoteis parceiros" },
+      { value: "48h", label: "Tempo médio de contratação" },
+      { value: "4.8", label: "Avaliação média" },
+      { value: "300+", label: "Hotéis parceiros" },
     ],
   },
   eventos: {
     title: "Expanda seus negócios na recreação",
     subtitle: "Ferramentas profissionais para crescer e gerenciar sua empresa.",
     primary: "Cadastrar Empresa",
-    secondary: "Ver Demonstracao",
+    secondary: "Ver Demonstração",
     badge: "40% de aumento em produtividade",
     stats: [
-      { value: "22+", label: "Ferramentas incluidas" },
-      { value: "150%", label: "ROI medio" },
+      { value: "22+", label: "Ferramentas incluídas" },
+      { value: "150%", label: "ROI médio" },
       { value: "500+", label: "Empresas ativas" },
     ],
   },
@@ -129,7 +129,7 @@ export const featuresByAudience = {
     cards: [
       {
         title: "Perfil Profissional Completo",
-        description: "Cadastro visual com competências, experiência e portfolio organizado.",
+        description: "Cadastro visual com competências, experiência e portfólio organizado.",
       },
       {
         title: "Agenda Basica",
@@ -141,10 +141,10 @@ export const featuresByAudience = {
       },
       {
         title: "Registro de Experiências",
-        description: "Linha de histórico para consolidar resultados e reputacao profissional.",
+        description: "Linha de histórico para consolidar resultados e reputação profissional.",
       },
       {
-        title: "Perfil dos Hoteis",
+        title: "Perfil dos Hotéis",
         description: "Vitrine de oportunidades com contexto de estrutura e público-alvo.",
       },
       {
@@ -154,8 +154,8 @@ export const featuresByAudience = {
     ],
   },
   hotelaria: {
-    title: "Para hoteis e resorts: contrate recreadores qualificados",
-    subtitle: "Busca avancada, gestao de equipes e planejamento de eventos em um unico painel.",
+    title: "Para hotéis e resorts: contrate recreadores qualificados",
+    subtitle: "Busca avançada, gestão de equipes e planejamento de eventos em um único painel.",
     cards: [
       {
         title: "Painel de Escalas",
@@ -166,41 +166,41 @@ export const featuresByAudience = {
         description: "Filtre perfis por especialidade, experiência e disponibilidade.",
       },
       {
-        title: "Programacoes",
-        description: "Monte cronogramas de atividades por faixa etaria e temporada.",
+        title: "Programações",
+        description: "Monte cronogramas de atividades por faixa etária e temporada.",
       },
       {
         title: "Feedback e Qualidade",
-        description: "Consolide avaliações para melhoria continua da entrega.",
+        description: "Consolide avaliações para melhoria contínua da entrega.",
       },
       {
-        title: "Relatorios Visuais",
-        description: "Indicadores de desempenho para tomada de decisao executiva.",
+        title: "Relatórios Visuais",
+        description: "Indicadores de desempenho para tomada de decisão executiva.",
       },
       {
-        title: "Orcamento",
+        title: "Orçamento",
         description: "Controle de custos e previsão de operação da recreação.",
       },
     ],
   },
   eventos: {
     title: "Impulsione sua empresa de recreação",
-    subtitle: "Ferramentas para agenda, equipe, servicos e relacionamento com clientes.",
+    subtitle: "Ferramentas para agenda, equipe, serviços e relacionamento com clientes.",
     cards: [
       {
-        title: "Gestao de Orcamentos",
+        title: "Gestão de Orçamentos",
         description: "Pipeline de propostas com prioridade por chance de fechamento.",
       },
       {
         title: "Equipe da Empresa",
-        description: "Alocacao operacional por evento e nivel de especialidade.",
+        description: "Alocação operacional por evento e nível de especialidade.",
       },
       {
         title: "Agenda Corporativa",
-        description: "Cronograma integrado para producao, comercial e atendimento.",
+        description: "Cronograma integrado para produção, comercial e atendimento.",
       },
       {
-        title: "Cadastro de Servicos",
+        title: "Cadastro de Serviços",
         description: "Pacotes claros para apresentar escopo e valor de cada entrega.",
       },
       {
@@ -208,18 +208,18 @@ export const featuresByAudience = {
         description: "Prova social para fortalecer negociações com novos clientes.",
       },
       {
-        title: "Financas e Relatorios",
+        title: "Financas e Relatórios",
         description: "Resumo de resultado por evento para previsibilidade de caixa.",
       },
     ],
   },
   pais: {
     title: "Encontre as melhores atividades para sua família",
-    subtitle: "Descubra opcoes seguras e educativas para cada momento.",
+    subtitle: "Descubra opções seguras e educativas para cada momento.",
     cards: [
       {
         title: "Busca de Empresas",
-        description: "Compare opcoes por cidade, faixa etaria e perfil de atividade.",
+        description: "Compare opções por cidade, faixa etária e perfil de atividade.",
       },
       {
         title: "Favoritos",
@@ -235,7 +235,7 @@ export const featuresByAudience = {
       },
       {
         title: "Chat e Histórico",
-        description: "Converse com empresas e mantenha registro das combinacoes.",
+        description: "Converse com empresas e mantenha registro das combinações.",
       },
       {
         title: "Avaliações Reais",
@@ -249,12 +249,12 @@ export const howItWorks = [
   {
     step: "01",
     title: "Escolha seu perfil",
-    description: "Defina se você e recreador, hotelaria, eventos ou família.",
+    description: "Defina se você é recreador, hotelaria, eventos ou família.",
   },
   {
     step: "02",
     title: "Acesse seu painel",
-    description: "Cada perfil recebe um dashboard visual com fluxo proprio.",
+    description: "Cada perfil recebe um dashboard visual com fluxo próprio.",
   },
   {
     step: "03",
@@ -263,8 +263,8 @@ export const howItWorks = [
   },
   {
     step: "04",
-    title: "Cresca com consistencia",
-    description: "Acompanhe desempenho e evolua sua presenca na plataforma.",
+    title: "Cresça com consistência",
+    description: "Acompanhe desempenho e evolua sua presença na plataforma.",
   },
 ];
 
@@ -273,13 +273,13 @@ export const brazilCoverage = [
   { city: "Fortaleza, CE", vagas: 1 },
   { city: "Rio de Janeiro, RJ", vagas: 2 },
   { city: "São Paulo, SP", vagas: 4 },
-  { city: "Foz do Iguacu, PR", vagas: 1 },
+  { city: "Foz do Iguaçu, PR", vagas: 1 },
   { city: "Manaus, AM", vagas: 6 },
 ];
 
 export const dashboardPreview = {
-  welcome: "Ola, Rafael!",
-  highlight: "Você tem 3 novas notificações e 5 vagas compativeis com seu perfil.",
+  welcome: "Olá, Rafael!",
+  highlight: "Você tem 3 novas notificações e 5 vagas compatíveis com seu perfil.",
   opportunities: [
     {
       title: "Recreador para Resort de Luxo",
@@ -289,7 +289,7 @@ export const dashboardPreview = {
     },
     {
       title: "Coordenador de Recreação",
-      company: "Hotel Paradise - Florianopolis",
+      company: "Hotel Paradise - Florianópolis",
       amount: "R$ 4.800,00",
       score: "Compatibilidade: 87%",
     },
@@ -299,7 +299,7 @@ export const dashboardPreview = {
 export const testimonials = [
   {
     name: "Ana Costa",
-    role: "Recreadora Senior",
+    role: "Recreadora Sênior",
     content:
       "Com a agenda semanal aumentei minha produtividade em 40% e organizei toda minha rotina de eventos.",
   },
@@ -319,13 +319,13 @@ export const testimonials = [
 
 export const finalStats = [
   { value: "1.200+", label: "Recreadores conectados" },
-  { value: "300+", label: "Hoteis e contratantes" },
-  { value: "98%", label: "Satisfacao dos usuarios" },
+  { value: "300+", label: "Hotéis e contratantes" },
+  { value: "98%", label: "Satisfação dos usuários" },
   { value: "22+", label: "Ferramentas profissionais" },
 ];
 
 export const footerColumns = {
   plataforma: ["22+ Ferramentas", "Recursos gratuitos", "Depoimentos", "Vagas"],
-  suporte: ["Central de ajuda", "Termos de uso", "Politica de privacidade", "LGPD"],
+  suporte: ["Central de ajuda", "Termos de uso", "Política de privacidade", "LGPD"],
   contato: ["contato@recrealink.com.br", "Instagram", "YouTube", "LinkedIn"],
 };

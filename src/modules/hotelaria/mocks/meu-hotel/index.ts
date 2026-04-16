@@ -77,7 +77,7 @@ export const hotelariaMeuHotelMock: HotelariaMeuHotelProfile = {
   heroDescription:
     hotelProfile?.heroDescription ??
     hotel?.description ??
-    "Um dos resorts mais tradicionais do interior de São Paulo. Com ampla area de lazer e foco em recreação familiar.",
+    "Um dos resorts mais tradicionais do interior de São Paulo. Com ampla área de lazer e foco em recreação familiar.",
   workingConditions: hotelProfile?.workingConditions ?? [],
   dailyRate: hotelProfile?.dailyRateLabel ?? "R$ 250,00",
   compensationBenefits: hotelProfile?.benefits ?? [],

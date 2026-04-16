@@ -1491,7 +1491,7 @@ export const IncidentList = styled.div`
   gap: 10px;
 `;
 
-export const IncidentCard = styled.article<{ $severity: "Alta" | "Media" | "Baixa" }>`
+export const IncidentCard = styled.article<{ $severity: "Alta" | "Média" | "Baixa" }>`
   border-radius: ${({ theme }) => theme.radii.md};
   border: 1px solid ${({ theme }) => theme.colors.border};
   background: #fff;
@@ -1505,7 +1505,7 @@ export const IncidentCard = styled.article<{ $severity: "Alta" | "Media" | "Baix
           border-color: rgba(211, 77, 98, 0.4);
           background: rgba(211, 77, 98, 0.07);
         `
-      : $severity === "Media"
+      : $severity === "Média"
         ? css`
             border-color: rgba(249, 111, 38, 0.4);
             background: rgba(249, 111, 38, 0.07);

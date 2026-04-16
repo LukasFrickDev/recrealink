@@ -1,4 +1,4 @@
-export type RecreadorAvailabilityStatus = "Disponivel" | "Ocupada";
+export type RecreadorAvailabilityStatus = "Disponível" | "Ocupada";
 
 export interface RecreadorDomainEntity {
   id: string;
@@ -63,7 +63,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     state: "SP",
     locationLabel: "São Paulo - SP",
     coverageLabel: "Atuacao em ate 30 km",
-    bio: "Recreador com experiência em resorts e hoteis familiares, com foco em segurança, acolhimento e alta energia nas atividades.",
+    bio: "Recreador com experiência em resorts e hotéis familiares, com foco em segurança, acolhimento e alta energia nas atividades.",
     specialties: [
       "Recreação infantil",
       "Recreação aquatica",
@@ -74,7 +74,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     email: "rafael.santos@email.com",
     phone: "(11) 99999-1234",
     rating: 4.8,
-    availability: "Disponivel",
+    availability: "Disponível",
     lastWorkDate: "15 Jan 2026",
   },
   {
@@ -98,14 +98,14 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     email: "carlos.eduardo@email.com",
     phone: "(19) 98888-4455",
     rating: 4.9,
-    availability: "Disponivel",
+    availability: "Disponível",
     lastWorkDate: "09 Fev 2026",
   },
   {
     id: "rec-ana-silva",
     fullName: "Ana Silva",
     artisticName: "Ana S",
-    role: "Recreadora senior",
+    role: "Recreadora sênior",
     experienceLabel: "5 anos de experiência",
     city: "São Paulo",
     state: "SP",
@@ -116,7 +116,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     email: "ana.silva@email.com",
     phone: "(11) 97777-3300",
     rating: 4.9,
-    availability: "Disponivel",
+    availability: "Disponível",
     lastWorkDate: "03 Mar 2026",
   },
   {
@@ -130,7 +130,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     locationLabel: "São Paulo - SP",
     coverageLabel: "Interior e capital",
     bio: "Atua com planejamento de escala, suporte em campo e lideranca operacional.",
-    specialties: ["Gestao de equipe", "Eventos corporativos", "Escalas"],
+    specialties: ["Gestão de equipe", "Eventos corporativos", "Escalas"],
     email: "carlos.santos@email.com",
     phone: "(11) 96666-2211",
     rating: 4.7,
@@ -152,7 +152,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     email: "marina.costa@email.com",
     phone: "(19) 95555-1444",
     rating: 4.6,
-    availability: "Disponivel",
+    availability: "Disponível",
     lastWorkDate: "16 Fev 2026",
   },
   {
@@ -170,7 +170,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     email: "pedro.lima@email.com",
     phone: "(13) 94444-7788",
     rating: 4.5,
-    availability: "Disponivel",
+    availability: "Disponível",
     lastWorkDate: "20 Fev 2026",
   },
   {
@@ -188,7 +188,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     email: "juliana.rocha@email.com",
     phone: "(13) 93333-5566",
     rating: 4.9,
-    availability: "Disponivel",
+    availability: "Disponível",
     lastWorkDate: "25 Fev 2026",
   },
   {
@@ -206,7 +206,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     email: "fernanda.lopes@email.com",
     phone: "(11) 92222-3344",
     rating: 4.8,
-    availability: "Disponivel",
+    availability: "Disponível",
     lastWorkDate: "12 Fev 2026",
   },
   {
@@ -219,7 +219,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     state: "SP",
     locationLabel: "Campinas - SP",
     coverageLabel: "Campinas e interior",
-    bio: "Conduz escalas em eventos de medio porte e integra times de alta temporada.",
+    bio: "Conduz escalas em eventos de médio porte e integra times de alta temporada.",
     specialties: ["Lideranca de equipe", "Operação em resort", "Programacao mista"],
     email: "rafael.matos@email.com",
     phone: "(19) 91111-2233",
@@ -242,7 +242,7 @@ const recreadoresDomainList: RecreadorDomainEntity[] = [
     email: "bianca.souza@email.com",
     phone: "(13) 90000-7788",
     rating: 4.6,
-    availability: "Disponivel",
+    availability: "Disponível",
     lastWorkDate: "27 Fev 2026",
   },
 ];
@@ -266,7 +266,7 @@ export const recreadorCertificationsDomainMock: RecreadorCertificationDomainEnti
   {
     id: "cert-gestao-equipes-rafael",
     recreadorId: "rec-rafael-santos",
-    title: "Gestao de Equipes de Lazer",
+    title: "Gestão de Equipes de Lazer",
     institution: "SENAC",
     year: 2023,
     status: "Valido",
@@ -320,7 +320,7 @@ export const recreadorFeedbackDomainMock: RecreadorFeedbackDomainEntity[] = [
     author: "Renata Gomes",
     role: "Gerente de operações",
     rating: 5,
-    message: "Excelente lideranca em campo e alta aderência ao padrao operacional.",
+    message: "Excelente lideranca em campo e alta aderência ao padrão operacional.",
     dateLabel: "22 Jan 2026",
   },
   {

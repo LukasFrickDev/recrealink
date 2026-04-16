@@ -15,8 +15,8 @@ export const LandingFooter = ({ columns }: LandingFooterProps) => {
         <S.BrandColumn>
           <h2>RecreaLink</h2>
           <p>
-            22+ ferramentas profissionais para recreadores, hoteis e empresas. Transforme sua carreira ou
-            negocio na recreacao.
+            22+ ferramentas profissionais para recreadores, hotéis e empresas. Transforme sua carreira ou
+            negócio na recreação.
           </p>
         </S.BrandColumn>
 

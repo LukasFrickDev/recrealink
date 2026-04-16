@@ -17,7 +17,7 @@ export const hotelariaOrcamentoFeatureMock: HotelariaFeatureMock = {
   checkpoints: [
     "Classificar todo gasto por categoria e data.",
     "Registrar prioridade em pedidos de material.",
-    "Conferir status de aprovacao antes do fechamento mensal.",
+    "Conferir status de aprovação antes do fechamento mensal.",
   ],
   layout: {
     type: "orcamento",
@@ -62,7 +62,7 @@ export const hotelariaOrcamentoFeatureMock: HotelariaFeatureMock = {
         quantity: "24 kits",
         date: "03/12/2026",
         status: "Pendente",
-        priority: "Media",
+        priority: "Média",
       },
       {
         material: "Bolas inflaveis",

@@ -316,7 +316,7 @@ export const paisHistoricoHighlightsDomainMock = [
     helper: "12 meses de histórico consolidado",
   },
   {
-    title: "Media de satisfacao",
+    title: "Média de satisfacao",
     value: "4,8",
     helper: "Com base nas últimas avaliações",
   },
@@ -426,7 +426,7 @@ const agendaEventosDomainList: AgendaEventoDomainEntity[] = [
     attendees: "Pais + coordenacao",
     budget: "Faixa R$ 1.800 - R$ 2.500",
     status: "Confirmado",
-    note: "Revisar cronograma, equipe e plano de contingencia antes da aprovacao final.",
+    note: "Revisar cronograma, equipe e plano de contingencia antes da aprovação final.",
   },
   {
     id: "agenda-visita-tecnica",
@@ -450,7 +450,7 @@ const agendaEventosDomainList: AgendaEventoDomainEntity[] = [
     attendees: "Pais + recreador",
     budget: "Sem custo",
     status: "Confirmado",
-    note: "Definir dinamicas por faixa etaria e materiais necessarios.",
+    note: "Definir dinamicas por faixa etária e materiais necessarios.",
   },
 ];
 

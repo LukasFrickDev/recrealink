@@ -44,7 +44,7 @@ export const hotelariaIndicadoresFeatureMock: HotelariaFeatureMock = {
       {
         title: "Incidentes criticos",
         value: "1",
-        trend: "Redução apos revisão de protocolo",
+        trend: "Redução após revisão de protocolo",
         tone: "danger",
       },
     ],

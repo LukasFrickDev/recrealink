@@ -77,7 +77,7 @@ const hotelProfilesDomainById: Record<string, HotelProfileDomainEntity> = {
     email: "contato@hotel.com",
     website: "www.hotel.com.br",
     heroDescription:
-      "Um dos resorts mais tradicionais do interior de São Paulo. Com ampla area de lazer e foco em recreação familiar.",
+      "Um dos resorts mais tradicionais do interior de São Paulo. Com ampla área de lazer e foco em recreação familiar.",
     ratingLabel: "4,8 (366 avaliações)",
     partnerSince: "Parceiro desde 2024",
     dailyRateLabel: "R$ 250,00",
@@ -413,12 +413,12 @@ const hotelProfilesDomainById: Record<string, HotelProfileDomainEntity> = {
         details: [
           "Camiseta azul-marinho com logo oficial e calça ou bermuda bege.",
           "Tênis fechado obrigatório para atividades externas.",
-          "Colete refletivo para operações noturnas em area externa.",
+          "Colete refletivo para operações noturnas em área externa.",
         ],
       },
       {
         title: "Pagamentos",
-        subtitle: "Politicas e repasses",
+        subtitle: "Políticas e repasses",
         details: [
           "Pagamento mensal no dia 5 via PIX ou conta corrente.",
           "Adicional noturno para escalas com encerramento após 22h.",

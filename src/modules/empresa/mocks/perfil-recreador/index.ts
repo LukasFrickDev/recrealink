@@ -33,7 +33,7 @@ export const empresarioRecreadorPageMock = {
     { title: "Eventos realizados", value: "234", helper: "Últimos 24 meses" },
     {
       title: "Disponibilidade",
-      value: recreador?.availability === "Disponivel" ? "Alta" : "Parcial",
+      value: recreador?.availability === "Disponível" ? "Alta" : "Parcial",
       helper: "Próximos 30 dias",
     },
     { title: "Certificações", value: String(certifications.length), helper: "Validadas no sistema" },
@@ -41,7 +41,7 @@ export const empresarioRecreadorPageMock = {
   profile: {
     fullName: recreador?.fullName ?? "Carlos Eduardo Nunes",
     artisticName: recreador?.artisticName ?? "Tio Carlos",
-    role: recreador?.role ?? "Recreador senior",
+    role: recreador?.role ?? "Recreador sênior",
     experience: recreador?.experienceLabel ?? "8 anos de experiência",
     location: recreador?.locationLabel ?? "São Paulo - SP",
     coverage: recreador?.coverageLabel ?? "Atuacao em ate 30 km",

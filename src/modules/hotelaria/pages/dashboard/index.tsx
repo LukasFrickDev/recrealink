@@ -26,7 +26,7 @@ export const HotelariaDashboardPage = () => {
   ).length;
   const readyShiftCount = hotelariaDashboardMock.upcomingShifts.length - pendingShiftCount;
   const urgentAlertCount = hotelariaDashboardMock.alerts.filter((item) => item.tone === "warning").length;
-  const nextShiftDate = hotelariaDashboardMock.upcomingShifts[0]?.date ?? "Agenda em atualizacao";
+  const nextShiftDate = hotelariaDashboardMock.upcomingShifts[0]?.date ?? "Agenda em atualização";
 
   const statIconMap = {
     users: Users,

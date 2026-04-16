@@ -59,7 +59,7 @@ export const recreadorAgendaBasicaMock = {
     },
     {
       dia: "Qua",
-      eventos: ["Disponivel"],
+      eventos: ["Disponível"],
     },
     {
       dia: "Qui",

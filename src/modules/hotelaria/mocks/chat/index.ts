@@ -11,7 +11,7 @@ export const hotelariaChatFeatureMock: HotelariaFeatureMock = {
   stats: [
     { title: "Canais ativos", value: "6", helper: "Frentes de operação" },
     { title: "Não lidas", value: "29", helper: "Pendências atuais" },
-    { title: "Tempo de resposta", value: "7 min", helper: "Media de retorno" },
+    { title: "Tempo de resposta", value: "7 min", helper: "Média de retorno" },
     { title: "Online agora", value: "14", helper: "Equipe conectada" },
   ],
   checkpoints: [
@@ -25,7 +25,7 @@ export const hotelariaChatFeatureMock: HotelariaFeatureMock = {
       { name: "Operação geral", members: 26, unread: 5 },
       { name: "Escalas weekend", members: 18, unread: 2 },
       { name: "Programacoes kids", members: 12, unread: 0 },
-      { name: "Ocorrencias", members: 9, unread: 1 },
+      { name: "Ocorrências", members: 9, unread: 1 },
     ],
     onlineCount: 14,
     messages: [
