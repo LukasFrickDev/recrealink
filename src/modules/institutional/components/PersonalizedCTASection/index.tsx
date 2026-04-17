@@ -1,53 +1,12 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Button, Badge } from "@/shared/ui";
-import type { AudienceKey } from "@/modules/institutional/mocks/home";
+import type { AudienceKey, PersonalizedCtaItem } from "@/modules/institutional/mocks/home";
 import * as S from "./styles";
 
 interface PersonalizedCTASectionProps {
   selectedAudience: AudienceKey | null;
-  content: {
-    default: {
-      title: string;
-      subtitle: string;
-      primary: string;
-      secondary: string;
-      badge: string;
-      stats: Array<{ value: string; label: string }>;
-    };
-    recreador: {
-      title: string;
-      subtitle: string;
-      primary: string;
-      secondary: string;
-      badge: string;
-      stats: Array<{ value: string; label: string }>;
-    };
-    hotelaria: {
-      title: string;
-      subtitle: string;
-      primary: string;
-      secondary: string;
-      badge: string;
-      stats: Array<{ value: string; label: string }>;
-    };
-    eventos: {
-      title: string;
-      subtitle: string;
-      primary: string;
-      secondary: string;
-      badge: string;
-      stats: Array<{ value: string; label: string }>;
-    };
-    pais: {
-      title: string;
-      subtitle: string;
-      primary: string;
-      secondary: string;
-      badge: string;
-      stats: Array<{ value: string; label: string }>;
-    };
-  };
+  content: Record<"default" | AudienceKey, PersonalizedCtaItem>;
 }
 
 export const PersonalizedCTASection = ({
@@ -55,15 +14,23 @@ export const PersonalizedCTASection = ({
   content,
 }: PersonalizedCTASectionProps) => {
   const data = selectedAudience ? content[selectedAudience] : content.default;
+  const tone = selectedAudience ?? "default";
 
   return (
-    <S.Section>
+    <S.Section $tone={tone}>
       <S.Container>
         <S.Content>
-          <div>
+          <S.Copy>
+            <S.Eyebrow>{data.eyebrow}</S.Eyebrow>
             <Badge tone="warning">{data.badge}</Badge>
             <h2>{data.title}</h2>
             <p>{data.subtitle}</p>
+
+            <S.Checklist>
+              {data.checklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </S.Checklist>
 
             <S.Actions>
               <Link to="/acesso/cadastro">
@@ -77,16 +44,22 @@ export const PersonalizedCTASection = ({
                 </Button>
               </Link>
             </S.Actions>
-          </div>
+          </S.Copy>
 
-          <S.Stats>
-            {data.stats.map((item) => (
-              <article key={item.label}>
-                <strong>{item.value}</strong>
-                <span>{item.label}</span>
-              </article>
-            ))}
-          </S.Stats>
+          <S.Visual>
+            <S.VisualImage>
+              <img src={data.image} alt={data.imageAlt} loading="lazy" />
+            </S.VisualImage>
+
+            <S.Stats>
+              {data.stats.map((item) => (
+                <article key={item.label}>
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </article>
+              ))}
+            </S.Stats>
+          </S.Visual>
         </S.Content>
       </S.Container>
     </S.Section>

@@ -1,3 +1,4 @@
+import { Building2, Hotel, UserRound } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/shared/ui";
 import * as S from "./styles";
@@ -10,10 +11,11 @@ export const FinalCTASection = ({ stats }: FinalCTASectionProps) => {
   return (
     <S.Section>
       <S.Container>
-        <h2>Conecta Recreadores, Contratantes e Empresas</h2>
+        <S.Kicker>Conecte · Organize · Profissionalize</S.Kicker>
+        <h2>Feche o próximo ciclo da sua operação com mais clareza</h2>
         <p>
-          A plataforma que conecta e profissionaliza o mercado de recreação no Brasil para quem
-          contrata, executa e acompanha resultados.
+          Uma homepage institucional forte abre portas para contratação, gestão e confiança entre
+          recreadores, hotelaria, empresas e famílias.
         </p>
 
         <S.StatsGrid>
@@ -27,16 +29,18 @@ export const FinalCTASection = ({ stats }: FinalCTASectionProps) => {
 
         <S.Actions>
           <Link to="/acesso/cadastro">
-            <Button size="lg">Sou Recreador</Button>
-          </Link>
-          <Link to="/acesso/escolher-perfil">
-            <Button variant="outline" size="lg">
-              Sou Contratante
+            <Button size="lg">
+              <UserRound size={16} /> Sou Recreador
             </Button>
           </Link>
           <Link to="/acesso/escolher-perfil">
             <Button variant="outline" size="lg">
-              Tenho uma Empresa
+              <Hotel size={16} /> Sou Contratante
+            </Button>
+          </Link>
+          <Link to="/acesso/escolher-perfil">
+            <Button variant="outline" size="lg">
+              <Building2 size={16} /> Tenho uma Empresa
             </Button>
           </Link>
         </S.Actions>

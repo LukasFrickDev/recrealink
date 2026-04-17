@@ -1,9 +1,12 @@
 import styled from "styled-components";
 
 export const Footer = styled.footer`
-  background: linear-gradient(180deg, #1a2033 0%, #0f1422 100%);
+  background:
+    radial-gradient(circle at 12% 20%, rgba(46, 127, 240, 0.22) 0%, rgba(46, 127, 240, 0) 38%),
+    radial-gradient(circle at 86% 82%, rgba(249, 111, 38, 0.2) 0%, rgba(249, 111, 38, 0) 34%),
+    linear-gradient(180deg, #1a2033 0%, #0f1422 100%);
   color: #fff;
-  padding: 44px 0 16px;
+  padding: 46px 0 16px;
 `;
 
 export const Container = styled.div`
@@ -27,12 +30,25 @@ export const BrandColumn = styled.div`
   h2 {
     color: #fff;
     font-size: 28px;
+    line-height: 1;
   }
 
   p {
     margin-top: 10px;
     color: rgba(255, 255, 255, 0.72);
+    line-height: 1.6;
   }
+`;
+
+export const BrandHighlight = styled.div`
+  margin-top: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: rgba(255, 255, 255, 0.08);
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 13px;
+  line-height: 1.45;
 `;
 
 export const ListColumn = styled.div`
@@ -52,6 +68,11 @@ export const ListColumn = styled.div`
   li {
     color: rgba(255, 255, 255, 0.72);
     font-size: 14px;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.96);
+    }
   }
 `;
 

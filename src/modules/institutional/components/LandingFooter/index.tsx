@@ -18,6 +18,9 @@ export const LandingFooter = ({ columns }: LandingFooterProps) => {
             22+ ferramentas profissionais para recreadores, hotéis e empresas. Transforme sua carreira ou
             negócio na recreação.
           </p>
+          <S.BrandHighlight>
+            Plataforma institucional com foco em conexão real entre perfis e operação profissional.
+          </S.BrandHighlight>
         </S.BrandColumn>
 
         <S.ListColumn>
