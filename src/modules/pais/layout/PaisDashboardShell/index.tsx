@@ -7,7 +7,6 @@ import {
   type ModuleDashboardStatItem,
 } from "@/shared/layouts/ModuleDashboardShell";
 import {
-  getPaisTopbarContext,
   paisSidebarGroups,
   paisTopbarQuickLinks,
 } from "@/shared/config/moduleDashboardNavigation";
@@ -33,8 +32,6 @@ export const PaisDashboardShell = ({
 }: PaisDashboardShellProps) => {
   const location = useLocation();
   const [searchValue, setSearchValue] = useState("");
-
-  const topbarContext = getPaisTopbarContext(location.pathname);
 
   const searchPlaceholder = useMemo(() => {
     if (location.pathname.startsWith("/app/pais/empresas")) {
@@ -95,7 +92,6 @@ export const PaisDashboardShell = ({
       notificationsRoute="/app/pais/notificacoes"
       settingsRoute="/app/pais/configuracoes"
       logoutRoute="/acesso/escolher-perfil"
-      context={topbarContext}
       sidebarGroups={sidebarGroups}
       quickLinks={quickLinks}
       searchValue={searchValue}

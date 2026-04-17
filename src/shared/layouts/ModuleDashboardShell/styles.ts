@@ -462,14 +462,13 @@ export const TopbarLogoButton = styled.button`
   height: 36px;
   border-radius: 999px;
   padding: 0;
-  border: 1px solid var(--shell-accent-border);
+  border: 1px solid #fff;
   background: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 6px 14px rgba(28, 38, 64, 0.14);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 32px;

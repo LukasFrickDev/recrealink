@@ -1,34 +1,185 @@
-Demanda á fazer após finalização dos dashboards.
+ONBOARDING DE CADASTRO PARA PRIMEIRO ACESSO POR MODAL - FUTURAMENTE
 
-Sobre Redux agora
 
-Minha visão:
-não colocaria Redux agora no produto inteiro de uma vez só porque a base cresceu.
+---------- OBJETIVO DA FASE ATUAL-------------
+O objetivo agora não é “terminar o front” nem “começar o backend correndo”.
 
-Eu faria isso com critério.
+O objetivo é:
 
-Entraria Redux quando?
+arrumar a estrutura do front atual para que ele represente corretamente o MVP, com páginas/módulos/coerência de dados suficientes para depois conectar backend sem retrabalho.
 
-Quando você começar a consolidar:
+Em linguagem prática:
 
-auth/session
-perfil ativo
-preferências de navegação
-estados compartilhados entre páginas do mesmo módulo
-filtros persistentes
-informações-resumo de notificações
-dados temporários que precisam atravessar múltiplas telas
-O que eu não faria
-jogar todos os mocks no Redux
-usar Redux como substituto de organização de domínio
-colocar Redux antes de definir bem o contrato de dados e a função das páginas
+limpar excesso
+alinhar páginas ao MVP
+separar o que é núcleo, complementar e futuro
+preparar contratos de dados/mock
+organizar o módulo antes de implementar lógica real
+3. Fases que eu seguiria a partir de agora
+Fase A — Auditoria estrutural do front atual
 
-Então:
-Redux sim, mas não como próximo primeiro passo.
+Começar por um módulo de cada vez, sem mexer em tudo ao mesmo tempo.
 
-O primeiro passo ainda é:
+Ordem recomendada:
 
-versionar
-estabilizar
-entender
-refinar arquitetura de páginas
+Recreador
+Empresa Hotelaria
+Empresa Eventos
+Pais apenas como referência visual
+
+O repo já tem uma base compartilhada e uma regra clara de reutilizar o que for comum em src/shared, mantendo em cada módulo só o que for específico. Então essa auditoria deve aproveitar essa fundação, não recriar tudo de novo.
+
+Saída dessa fase
+
+lista de páginas que ficam
+páginas que saem do núcleo
+páginas que viram futura
+componentes compartilháveis
+contratos de dados/mock
+dependências futuras com backend
+ordem de implementação por módulo
+Fase B — Congelamento estrutural da Etapa 1
+
+Depois da auditoria, você congela:
+
+estrutura de módulos
+sitemap real da versão atual
+páginas núcleo
+contratos mockados principais
+estados principais de cada fluxo
+
+Aqui você para de polir detalhe visual sem impacto.
+
+Fase C — Descida para arquitetura funcional
+
+Só depois disso:
+
+entidades principais
+regras de negócio
+auth e permissões
+modelo de eventos/vagas/candidaturas/convites/bloqueios
+definição de serviços e APIs
+Fase D — Testes do núcleo
+
+Antes de sair ligando tudo:
+
+testes de regras de negócio
+testes de conflito
+testes de aceite/convite/candidatura
+testes de auth/perfis
+
+O Akita bate muito nessa tecla: sem testes úteis, cada evolução com IA vira roleta russa; com testes, você consegue refatorar e iterar em small releases com mais segurança.
+
+Fase E — Redux/estado global
+
+Redux só entra onde fizer sentido real:
+
+sessão/auth
+notificações globais
+estados compartilhados entre módulos
+filtros persistentes se realmente forem globais
+
+Não vale “colocar Redux em tudo” só porque está na stack. O seu próprio repo já usa Redux Toolkit, mas a decisão agora deve ser de necessidade, não de obrigação.
+
+Fase F — Primeiro fluxo vertical funcional
+
+Primeiro fluxo real recomendado:
+empresa cria evento → publica vaga → recreador vê → candidatura/convite → aceite → bloqueio automático
+
+Esse fluxo é basicamente a definição do MVP validado.
+
+4. O que entra AGORA, objetivamente
+Agora
+auditoria estrutural do módulo Recreador
+depois Hotelaria
+depois Empresa Eventos
+organização dos mocks com shape mais real
+definição do que é shared vs específico
+Ainda não agora
+aprofundar Pais
+mexer em monetização / premium / plano comercial
+implementar backend completo
+refinar visual de todas as telas
+sair espalhando Redux
+testes amplos de UI
+Testes que já fazem sentido logo após a auditoria
+
+Assim que a arquitetura funcional começar a nascer, já vale prever:
+
+conflito de horário
+bloqueio de agenda
+transição de candidatura/convite/aceite
+unicidade de CPF/CNPJ
+permissões mínimas por perfil
+5. Rota prática, sem sair do trilho
+Passo 1
+
+Mandar para o arquiteto técnico a missão de auditar o módulo Recreador com base:
+
+no repo atual
+no MVP oficial
+na proposta por etapas
+na filosofia de iteração curta / spec viva / small releases
+Passo 2
+
+Receber dele:
+
+o mapa do módulo
+páginas essenciais
+páginas futuras
+contratos mockados
+integrações futuras
+shared vs específico
+backlog curto de ajuste da estrutura
+Passo 3
+
+Executar essa limpeza no módulo Recreador.
+
+Passo 4
+
+Repetir para:
+
+Hotelaria
+Empresa Eventos
+Passo 5
+
+Congelar a estrutura dos 3 módulos.
+
+Passo 6
+
+Aí sim descer para:
+
+entidades
+backend
+testes do núcleo
+estado global
+primeiro fluxo funcional ponta a ponta
+
+
+
+
+
+
+
+ESTRUTURAÇÃO
+
+Fase 1 — mapa e renomeação estrutural
+definir páginas finais
+consolidar nomes
+remover ambiguidade
+Fase 2 — consolidar perfil
+separar onboarding de perfil
+unir páginas de perfil
+Fase 3 — oportunidades e convites
+substituir hoteis por oportunidades
+estruturar convites
+alinhar com candidatura/aceite
+Fase 4 — disponibilidade
+transformar agenda básica em base de disponibilidade operacional
+prever bloqueio e conflito
+Fase 5 — dashboard operacional
+refazer a lógica do dashboard com base nas entidades já definidas
+Fase 6 — complementares
+checklist
+notificações visuais
+refinamentos leves de suporte/configurações

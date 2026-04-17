@@ -8,7 +8,6 @@ import {
   type ModuleDashboardStatItem,
 } from "@/shared/layouts/ModuleDashboardShell";
 import {
-  getHotelariaTopbarContext,
   hotelariaSidebarGroups,
   hotelariaTopbarQuickLinks,
 } from "@/shared/config/moduleDashboardNavigation";
@@ -38,8 +37,6 @@ export const HotelariaDashboardShell = ({
 
   const [searchValue, setSearchValue] = useState("");
   const [profileMode, setProfileMode] = useState<"hotel" | "contratante">("contratante");
-
-  const topbarContext = getHotelariaTopbarContext(location.pathname);
 
   const searchPlaceholder = useMemo(() => {
     if (location.pathname.startsWith("/app/hotelaria/recreadores")) {
@@ -102,7 +99,6 @@ export const HotelariaDashboardShell = ({
       notificationsRoute="/app/hotelaria/notificacoes"
       settingsRoute="/app/hotelaria/configuracoes"
       logoutRoute="/acesso/escolher-perfil"
-      context={topbarContext}
       sidebarGroups={sidebarGroups}
       quickLinks={quickLinks}
       searchValue={searchValue}

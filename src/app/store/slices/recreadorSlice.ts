@@ -1,8 +1,4 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { HoteisTabId } from "@/modules/recreador/mocks/hoteis";
-
-type HotelStateFilter = "todos" | "sp" | "rj" | "sc";
-type HotelCategoryFilter = "todas" | "resort" | "hotel" | "pousada";
 
 interface RecreadorProfileState {
   fullName: string;
@@ -10,6 +6,8 @@ interface RecreadorProfileState {
   city: string;
   shortBio: string;
   portfolioHeadline: string;
+  experienceYears: number;
+  portfolioLinks: string[];
   email: string;
   phone: string;
   avatarPreview: string;
@@ -18,9 +16,6 @@ interface RecreadorProfileState {
 
 interface RecreadorUIState {
   topbarSearch: string;
-  hotelTab: HoteisTabId;
-  hotelStateFilter: HotelStateFilter;
-  hotelCategoryFilter: HotelCategoryFilter;
   lastVisualAction: string | null;
 }
 
@@ -37,6 +32,11 @@ const initialState: RecreadorState = {
     shortBio:
       "Especialista em recreação infantil e familiar com foco em atividades de engajamento, segurança e experiência positiva dos hóspedes.",
     portfolioHeadline: "Portfólio em construção com experiências recentes e evidências de campo.",
+    experienceYears: 6,
+    portfolioLinks: [
+      "https://instagram.com/recreador.exemplo",
+      "https://drive.google.com/recreador-portifolio",
+    ],
     email: "rafael.santos@recrealink.com",
     phone: "(11) 97777-9090",
     avatarPreview: "RS",
@@ -49,9 +49,6 @@ const initialState: RecreadorState = {
   },
   ui: {
     topbarSearch: "",
-    hotelTab: "atuados",
-    hotelStateFilter: "todos",
-    hotelCategoryFilter: "todas",
     lastVisualAction: null,
   },
 };
@@ -65,15 +62,6 @@ const recreadorSlice = createSlice({
     },
     clearTopbarSearch(state) {
       state.ui.topbarSearch = "";
-    },
-    setHotelTab(state, action: PayloadAction<HoteisTabId>) {
-      state.ui.hotelTab = action.payload;
-    },
-    setHotelStateFilter(state, action: PayloadAction<HotelStateFilter>) {
-      state.ui.hotelStateFilter = action.payload;
-    },
-    setHotelCategoryFilter(state, action: PayloadAction<HotelCategoryFilter>) {
-      state.ui.hotelCategoryFilter = action.payload;
     },
     setLastVisualAction(state, action: PayloadAction<string | null>) {
       state.ui.lastVisualAction = action.payload;
@@ -93,9 +81,6 @@ const recreadorSlice = createSlice({
 export const {
   setTopbarSearch,
   clearTopbarSearch,
-  setHotelTab,
-  setHotelStateFilter,
-  setHotelCategoryFilter,
   setLastVisualAction,
   updateProfile,
   setProfileSpecialties,

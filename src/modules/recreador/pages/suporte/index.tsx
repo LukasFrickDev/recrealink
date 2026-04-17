@@ -37,8 +37,14 @@ export const RecreadorSupportPage = () => {
     }
 
     if (canalId === "base") {
-      navigate("/app/recreador/ferramentas/checklists-simples");
+      navigate("/app/recreador/checklist");
       dispatch(setLastVisualAction("Redirecionado para checklist como base de apoio prático."));
+      return;
+    }
+
+    if (canalId === "notifications") {
+      navigate("/app/recreador/notificacoes");
+      dispatch(setLastVisualAction("Redirecionado para notificações visuais do módulo."));
       return;
     }
 

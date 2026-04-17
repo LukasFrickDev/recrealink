@@ -6,16 +6,14 @@ import { RegisterPage } from "@/modules/access/pages/cadastro/index";
 import { ForgotPasswordPage } from "@/modules/access/pages/recuperar-senha/index";
 import { ChooseProfilePage } from "@/modules/access/pages/escolher-perfil/index";
 import { RecreadorDashboardPage } from "@/modules/recreador/pages/dashboard/index";
-import { RecreadorHoteisPage } from "@/modules/recreador/pages/hoteis/index";
-import { RecreadorPerfilBasicoPage } from "@/modules/recreador/pages/perfil-basico/index";
-import { RecreadorCadastroRecreadorPage } from "@/modules/recreador/pages/cadastro-recreador/index";
-import { RecreadorAgendaBasicaPage } from "@/modules/recreador/pages/agenda-basica/index";
-import { RecreadorChecklistsSimplesPage } from "@/modules/recreador/pages/checklists-simples/index";
-import { RecreadorRegistroExperienciasPage } from "@/modules/recreador/pages/registro-experiencias/index";
 import { RecreadorSupportPage } from "@/modules/recreador/pages/suporte/index";
-import { RecreadorEditarPerfilPage } from "@/modules/recreador/pages/editar-perfil/index";
 import { RecreadorConfiguracoesPage } from "@/modules/recreador/pages/configuracoes/index";
-import { RecreadorEmDesenvolvimentoPage } from "@/modules/recreador/pages/em-desenvolvimento/index";
+import { RecreadorPerfilPage } from "@/modules/recreador/pages/perfil/index";
+import { RecreadorPerfilPublicoPage } from "@/modules/recreador/pages/perfil-publico/index";
+import { RecreadorDisponibilidadePage } from "@/modules/recreador/pages/disponibilidade/index";
+import { RecreadorOportunidadesPage } from "@/modules/recreador/pages/oportunidades/index";
+import { RecreadorConvitesPage } from "@/modules/recreador/pages/convites/index";
+import { RecreadorChecklistPage } from "@/modules/recreador/pages/checklist/index";
 import { HotelariaDashboardPage } from "@/modules/hotelaria/pages/dashboard/index";
 import { HotelariaPerfilPage } from "@/modules/hotelaria/pages/perfil/index";
 import { HotelariaHotelPage } from "@/modules/hotelaria/pages/hotel/index";
@@ -110,6 +108,13 @@ export const AppRouter = () => {
 
 				<Route path="/app/recreador" element={<RecreadorDashboardPage />} />
 				<Route path="/app/recreador/dashboard" element={<Navigate to="/app/recreador" replace />} />
+				<Route path="/app/recreador/perfil" element={<RecreadorPerfilPage />} />
+				<Route path="/app/recreador/perfil-publico" element={<RecreadorPerfilPublicoPage />} />
+				<Route path="/app/recreador/disponibilidade" element={<RecreadorDisponibilidadePage />} />
+				<Route path="/app/recreador/oportunidades" element={<RecreadorOportunidadesPage />} />
+				<Route path="/app/recreador/convites" element={<RecreadorConvitesPage />} />
+				<Route path="/app/recreador/checklist" element={<RecreadorChecklistPage />} />
+				<Route path="/app/recreador/suporte" element={<RecreadorSupportPage />} />
 		
 				<Route path="/app/recreador/comunidade" element={<UnifiedCommunityPage moduleKey="recreador" />} />
 				<Route path="/app/recreador/community" element={<Navigate to="/app/recreador/comunidade" replace />} />
@@ -118,16 +123,6 @@ export const AppRouter = () => {
 				<Route path="/app/recreador/notifications" element={<Navigate to="/app/recreador/notificacoes" replace />} />
 				<Route path="/app/recreador/configuracoes" element={<RecreadorConfiguracoesPage />} />
 				<Route path="/app/recreador/settings" element={<Navigate to="/app/recreador/configuracoes" replace />} />
-				<Route path="/app/recreador/em-desenvolvimento/:featureKey" element={<RecreadorEmDesenvolvimentoPage />} />
-				<Route path="/app/recreador/ferramentas/hoteis" element={<RecreadorHoteisPage />} />
-				<Route path="/app/recreador/ferramentas/perfil-basico" element={<RecreadorPerfilBasicoPage />} />
-				<Route path="/app/recreador/ferramentas/cadastro-recreador" element={<RecreadorCadastroRecreadorPage />} />
-				<Route path="/app/recreador/ferramentas/agenda-basica" element={<RecreadorAgendaBasicaPage />} />
-				<Route path="/app/recreador/ferramentas/checklists-simples" element={<RecreadorChecklistsSimplesPage />} />
-				<Route path="/app/recreador/ferramentas/registro-experiencias" element={<RecreadorRegistroExperienciasPage />} />
-				<Route path="/app/recreador/ferramentas/suporte" element={<RecreadorSupportPage />} />
-				<Route path="/app/recreador/ferramentas/support" element={<Navigate to="/app/recreador/ferramentas/suporte" replace />} />
-				<Route path="/app/recreador/ferramentas/editar-perfil" element={<RecreadorEditarPerfilPage />} />
 
 
 				<Route path="/app/hotelaria" element={<HotelariaDashboardPage />} />

@@ -52,7 +52,7 @@ export const recreadorConfiguracoesMock: ModuleSettingsMockBase = {
   notificationPreferences: buildModuleNotificationPreferences({
     oportunidades: "Avisos de vagas e convites alinhados ao seu perfil.",
     mensagens: "Receba alerta quando chegar uma nova conversa.",
-    comunidade: "Notificações sobre públicações e interações relevantes.",
+    comunidade: "Atualizações gerais da plataforma que impactam sua operação.",
     "resumo-semanal": "Resumo de desempenho e atividade da conta.",
     marketing: "Informativos e novidades da RecreaLink.",
   }) as NotificationPreferenceItem[],

@@ -22,7 +22,7 @@ export const unifiedNotificationsPageByModule: Record<
 > = {
   recreador: {
     pageTitle: "Notificações do recreador",
-    pageDescription: "Central visual de alertas para oportunidades, chat e atividade da conta.",
+    pageDescription: "Central visual leve para alertas de oportunidades, mensagens e status operacional.",
     stats: [
       { title: "Alertas", value: "12", helper: "Total na caixa" },
       { title: "Não lidas", value: "05", helper: "Exigem atenção" },
@@ -64,9 +64,9 @@ export const unifiedNotificationsPageByModule: Record<
         },
         {
           id: "n-4",
-          type: "comunidade",
-          title: "Comunidade em evolução",
-          description: "A área colaborativa esta em desenvolvimento para a próxima iteração.",
+          type: "sistema",
+          title: "Conflito visual na disponibilidade",
+          description: "Revisar bloqueios sobrepostos antes de aceitar novos convites.",
           time: "Ontem",
           read: false,
         },

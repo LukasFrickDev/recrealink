@@ -9,7 +9,7 @@ import {
   updateProfile,
 } from "@/app/store/slices/recreadorSlice";
 import { RecreadorDashboardShell } from "@/modules/recreador/layout/RecreadorDashboardShell/index";
-import { recreadorEditarPerfilMock } from "@/modules/recreador/mocks/editar-perfil";
+import { recreadorPerfilMock } from "@/modules/recreador/mocks/perfil";
 import { recreadorConfiguracoesMock } from "@/modules/recreador/mocks/configuracoes";
 import * as S from "./styles";
 
@@ -100,7 +100,7 @@ export const RecreadorConfiguracoesPage = () => {
                 <S.ProfileRole>{roleTitle}</S.ProfileRole>
                 <S.OutlineButton
                   type="button"
-                  onClick={() => navigate("/app/recreador/ferramentas/editar-perfil")}
+                  onClick={() => navigate("/app/recreador/perfil")}
                 >
                   Abrir edição detalhada
                 </S.OutlineButton>
@@ -152,7 +152,7 @@ export const RecreadorConfiguracoesPage = () => {
                 <S.Field>
                   <span>Especialidades ({selectedSpecialtiesCount})</span>
                   <S.ChipGrid>
-                    {recreadorEditarPerfilMock.specialtyOptions.map((option) => (
+                      {recreadorPerfilMock.specialtyOptions.map((option) => (
                       <S.Chip
                         key={option.id}
                         type="button"

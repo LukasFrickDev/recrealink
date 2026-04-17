@@ -3,7 +3,7 @@ export const recreadorSupportMock = {
   userName: "Rafael Santos",
   title: "Suporte",
   description:
-    "Central de ajuda para dúvidas técnicas, uso das ferramentas gratuitas e acompanhamento de chamados.",
+    "Central de apoio para dúvidas técnicas, fluxo operacional e acompanhamento de chamados do módulo.",
   stats: [
     { title: "Chamados abertos", value: "04", helper: "2 com retorno em andamento" },
     { title: "Tempo médio", value: "6h", helper: "Primeiro atendimento" },
@@ -30,7 +30,12 @@ export const recreadorSupportMock = {
     {
       id: "base",
       title: "Base de conhecimento",
-      description: "Perguntas frequentes sobre cadastro, agenda e candidaturas",
+      description: "Perguntas frequentes sobre perfil, convites, disponibilidade e checklist",
+    },
+    {
+      id: "notifications",
+      title: "Notificações visuais",
+      description: "Resumo leve de alertas de oportunidades, mensagens e sistema",
     },
   ],
 };

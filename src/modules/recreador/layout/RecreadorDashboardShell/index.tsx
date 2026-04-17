@@ -1,5 +1,4 @@
 import { useMemo, type ReactNode } from "react";
-import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { setLastVisualAction, setTopbarSearch } from "@/app/store/slices/recreadorSlice";
 import {
@@ -9,7 +8,6 @@ import {
   type ModuleDashboardStatItem,
 } from "@/shared/layouts/ModuleDashboardShell";
 import {
-  getRecreadorTopbarContext,
   recreadorSidebarGroups,
   recreadorTopbarQuickLinks,
 } from "@/shared/config/moduleDashboardNavigation";
@@ -32,11 +30,8 @@ export const RecreadorDashboardShell = ({
   children,
 }: RecreadorDashboardShellProps) => {
   const dispatch = useAppDispatch();
-  const location = useLocation();
 
   const { profile, ui } = useAppSelector((state) => state.recreador);
-
-  const topbarContext = getRecreadorTopbarContext(location.pathname);
 
   const sidebarGroups: ModuleDashboardNavGroup[] = useMemo(
     () =>
@@ -70,18 +65,17 @@ export const RecreadorDashboardShell = ({
       userName={profile.fullName}
       userRoleLabel={profile.roleTitle}
       profileActionLabel="Editar perfil"
-      profileActionRoute="/app/recreador/ferramentas/editar-perfil"
+      profileActionRoute="/app/recreador/perfil"
       profileActionTitle="Editar perfil"
       homeRoute="/app/recreador"
       chatRoute="/app/recreador/chat"
       notificationsRoute="/app/recreador/notificacoes"
       settingsRoute="/app/recreador/configuracoes"
       logoutRoute="/acesso/escolher-perfil"
-      context={topbarContext}
       sidebarGroups={sidebarGroups}
       quickLinks={quickLinks}
       searchValue={ui.topbarSearch}
-      searchPlaceholder="Buscar hotéis, eventos, tags e experiências..."
+      searchPlaceholder="Buscar oportunidades, convites e disponibilidade..."
       onSearchChange={(value) => dispatch(setTopbarSearch(value))}
       onChatNavigation={() => dispatch(setLastVisualAction("Chat visual aberto."))}
       onNotificationsNavigation={() =>

@@ -12,6 +12,7 @@ export const recreadorNotificationFilters: NotificationFilterOption[] = [
   ...baseNotificationFilters,
   { id: "oportunidade", label: "Oportunidades" },
   { id: "mensagem", label: "Mensagens" },
+  { id: "sistema", label: "Sistema" },
 ];
 
 export const hotelariaNotificationFilters: NotificationFilterOption[] = [

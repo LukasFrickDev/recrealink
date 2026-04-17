@@ -1,5 +1,4 @@
 import { useMemo, useState, type ReactNode } from "react";
-import { useLocation } from "react-router-dom";
 import {
   ModuleDashboardShell,
   type ModuleDashboardNavGroup,
@@ -9,7 +8,6 @@ import {
 import {
   empresarioSidebarGroups,
   empresarioTopbarQuickLinks,
-  getEmpresarioTopbarContext,
 } from "@/shared/config/moduleDashboardNavigation";
 
 interface EmpresarioDashboardShellProps {
@@ -29,10 +27,7 @@ export const EmpresarioDashboardShell = ({
   compactContent,
   children,
 }: EmpresarioDashboardShellProps) => {
-  const location = useLocation();
   const [searchValue, setSearchValue] = useState("");
-
-  const topbarContext = getEmpresarioTopbarContext(location.pathname);
 
   const sidebarGroups: ModuleDashboardNavGroup[] = useMemo(
     () =>
@@ -73,7 +68,6 @@ export const EmpresarioDashboardShell = ({
       notificationsRoute="/app/empresa/notificacoes"
       settingsRoute="/app/empresa/configuracoes"
       logoutRoute="/acesso/escolher-perfil"
-      context={topbarContext}
       sidebarGroups={sidebarGroups}
       quickLinks={quickLinks}
       searchValue={searchValue}

@@ -80,7 +80,6 @@ interface ModuleDashboardShellProps {
   notificationsRoute: string;
   settingsRoute: string;
   logoutRoute: string;
-  context: ModuleDashboardContext;
   sidebarGroups: ModuleDashboardNavGroup[];
   quickLinks: ModuleDashboardQuickLink[];
   searchValue: string;
@@ -116,7 +115,6 @@ export const ModuleDashboardShell = ({
   notificationsRoute,
   settingsRoute,
   logoutRoute,
-  context,
   sidebarGroups,
   quickLinks,
   searchValue,
@@ -287,11 +285,6 @@ export const ModuleDashboardShell = ({
             >
               <S.TopbarLogoImage src={logoColorida} alt="RecreaLink" />
             </S.TopbarLogoButton>
-
-            <S.ContextBlock>
-              <h2>{context.title}</h2>
-              <p>{context.helper}</p>
-            </S.ContextBlock>
 
             <S.SearchWrap>
               <Search size={16} />
