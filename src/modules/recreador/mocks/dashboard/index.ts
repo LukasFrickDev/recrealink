@@ -3,6 +3,7 @@ import { recreadorDisponibilidadeMock } from "@/modules/recreador/mocks/disponib
 import {
   recreadorOportunidadesMock,
   type OpportunityInviteStatus,
+  type OpportunityOriginKind,
 } from "@/modules/recreador/mocks/oportunidades";
 import { recreadorPerfilMock } from "@/modules/recreador/mocks/perfil";
 
@@ -36,7 +37,9 @@ export interface DashboardQuickAction {
 export interface PendingInviteSummary {
   id: string;
   code: string;
+  originKind: OpportunityOriginKind;
   originName: string;
+  roleLabel: string;
   periodLabel: string;
   deadlineLabel: string;
   route: string;
@@ -45,6 +48,7 @@ export interface PendingInviteSummary {
 export interface FeaturedOpportunitySummary {
   id: string;
   code: string;
+  originKind: OpportunityOriginKind;
   originLabel: string;
   originName: string;
   roleLabel: string;
@@ -149,7 +153,7 @@ const priorities = [
     id: "convites-pendentes",
     title: "Convites pendentes",
     value: String(pendingInvitesRaw.length),
-    helper: "Decisoes que exigem resposta imediata.",
+    helper: "Decisões que exigem resposta imediata.",
     tone: "warning",
     action: {
       label: "Responder convites",
@@ -160,7 +164,7 @@ const priorities = [
     id: "candidaturas-andamento",
     title: "Candidaturas em andamento",
     value: String(activeApplicationsRaw.length),
-    helper: "Itens enviados aguardando evolucao.",
+    helper: "Itens enviados aguardando evolução.",
     tone: "info",
     action: {
       label: "Abrir oportunidades",
@@ -169,9 +173,9 @@ const priorities = [
   },
   {
     id: "proximos-compromissos",
-    title: "Proximos compromissos",
+    title: "Próximos compromissos",
     value: String(futureCommitments.length),
-    helper: "Aceites e confirmacoes que impactam agenda.",
+    helper: "Aceites e confirmações que impactam a agenda.",
     tone: "success",
     action: {
       label: "Gerenciar disponibilidade",
@@ -182,7 +186,7 @@ const priorities = [
     id: "conflitos-disponibilidade",
     title: "Conflitos de disponibilidade",
     value: String(conflictSlotsCount),
-    helper: "Sobreposicoes para revisar antes de novos aceites.",
+    helper: "Sobreposições para revisar antes de novos aceites.",
     tone: conflictSlotsCount > 0 ? "danger" : "success",
     action: {
       label: "Revisar conflitos",
@@ -194,7 +198,9 @@ const priorities = [
 const pendingInvites = pendingInvitesRaw.slice(0, 3).map((item) => ({
   id: item.id,
   code: item.opportunityCode,
+  originKind: item.originKind,
   originName: item.originName,
+  roleLabel: item.roleLabel,
   periodLabel: item.periodLabel,
   deadlineLabel: item.responseDeadlineLabel,
   route: "/app/recreador/convites",
@@ -203,6 +209,7 @@ const pendingInvites = pendingInvitesRaw.slice(0, 3).map((item) => ({
 const featuredOpportunities = highlightedOpportunitiesRaw.slice(0, 3).map((item) => ({
   id: item.id,
   code: item.code,
+  originKind: item.originKind,
   originLabel: originLabelByKind[item.originKind],
   originName: item.originName,
   roleLabel: item.roleLabel,
@@ -220,7 +227,7 @@ const activeApplications = activeApplicationsRaw.slice(0, 3).map((item) => ({
   statusLabel: inviteStatusToLabel(item.inviteStatus),
   helper:
     item.inviteStatus === "convite-recebido"
-      ? "Convite recebido. Decisao fica em Convites."
+      ? "Convite recebido. A decisão fica em Convites."
       : "Candidatura enviada e aguardando retorno.",
   route: item.inviteStatus === "convite-recebido" ? "/app/recreador/convites" : "/app/recreador/oportunidades",
 })) satisfies ActiveApplicationSummary[];
@@ -239,9 +246,9 @@ const nextCommitments = futureCommitments.slice(0, 3).map((item) => ({
 const availabilitySummary = [
   {
     id: "disponiveis",
-    label: "Janelas disponiveis",
+    label: "Janelas disponíveis",
     value: String(availableSlotsCount),
-    helper: "Espacos livres para novas oportunidades.",
+    helper: "Espaços livres para novas oportunidades.",
     tone: "success",
   },
   {
@@ -255,21 +262,21 @@ const availabilitySummary = [
     id: "bloqueios-compromisso",
     label: "Bloqueios por compromisso",
     value: String(commitmentBlockedSlotsCount),
-    helper: "Aceites e confirmacoes ja reservados.",
+    helper: "Aceites e confirmações já reservados.",
     tone: "warning",
   },
   {
     id: "conflitos",
     label: "Conflitos detectados",
     value: String(conflictSlotsCount),
-    helper: "Revise sobreposicoes antes de assumir novos itens.",
+    helper: "Revise sobreposições antes de assumir novos itens.",
     tone: conflictSlotsCount > 0 ? "danger" : "success",
   },
   {
     id: "recorrencias",
-    label: "Recorrencias ativas",
+    label: "Recorrências ativas",
     value: String(activeRecurrenceCount),
-    helper: "Padroes semanais ligados para previsibilidade.",
+    helper: "Padrões semanais ligados para previsibilidade.",
     tone: "info",
   },
 ] satisfies AvailabilitySummaryItem[];
@@ -320,7 +327,7 @@ if (profileCompletionPercent < 100) {
   alerts.push({
     id: "alert-perfil",
     title: "Perfil ainda pode evoluir",
-    message: `Completude atual em ${profileCompletionPercent}%. Ajustes no perfil aumentam relevancia em oportunidades.`,
+    message: `Completude atual em ${profileCompletionPercent}%. Ajustes no perfil aumentam relevância em oportunidades.`,
     severity: "info",
     action: {
       label: "Atualizar perfil",
@@ -332,8 +339,8 @@ if (profileCompletionPercent < 100) {
 if (alerts.length === 0) {
   alerts.push({
     id: "alert-ok",
-    title: "Operacao sem pendencias imediatas",
-    message: "Dashboard sem alertas criticos no momento. Continue monitorando oportunidades e convites.",
+    title: "Operação sem pendências imediatas",
+    message: "Dashboard sem alertas críticos no momento. Continue monitorando oportunidades e convites.",
     severity: "info",
     action: {
       label: "Abrir oportunidades",
@@ -359,7 +366,7 @@ const quickActions = [
   {
     id: "perfil",
     label: "Perfil",
-    helper: "Atualizar reputacao e vitrine publica.",
+    helper: "Atualizar reputação e vitrine pública.",
     route: "/app/recreador/perfil",
   },
   {
@@ -383,7 +390,7 @@ const quickActions = [
   {
     id: "suporte",
     label: "Suporte",
-    helper: "Abrir canal para duvidas operacionais.",
+    helper: "Abrir canal para dúvidas operacionais.",
     route: "/app/recreador/suporte",
   },
 ] satisfies DashboardQuickAction[];
@@ -391,10 +398,10 @@ const quickActions = [
 export const recreadorDashboardMock = {
   title: "Dashboard operacional do recreador",
   description:
-    "Hub da operacao diaria com foco em pendencias, decisoes e proximos movimentos do modulo.",
+    "Hub da operação diária com foco em pendências, decisões e próximos movimentos do módulo.",
   stats: [
     {
-      title: "Pendencias agora",
+      title: "Pendências agora",
       value: String(pendingActionsCount),
       helper: "Convites pendentes + conflitos",
     },
@@ -406,19 +413,19 @@ export const recreadorDashboardMock = {
     {
       title: "Compromissos futuros",
       value: String(futureCommitments.length),
-      helper: "Aceites e confirmacoes",
+      helper: "Aceites e confirmações",
     },
     {
-      title: "Avaliacao media",
+      title: "Avaliação média",
       value: recreadorPerfilMock.dashboardReviewSummary.ratingAverage.toFixed(1),
-      helper: `${recreadorPerfilMock.dashboardReviewSummary.totalReviews} avaliacoes`,
+      helper: `${recreadorPerfilMock.dashboardReviewSummary.totalReviews} avaliações`,
     },
   ],
   hero: {
     badge: "Hub operacional ativo",
-    title: "Priorize suas proximas acoes",
+    title: "Priorize suas próximas ações",
     description:
-      "Acompanhe o que exige resposta agora, mantenha disponibilidade sob controle e avance com seguranca nas oportunidades.",
+      "Acompanhe o que exige resposta agora, mantenha a disponibilidade sob controle e avance com segurança nas oportunidades.",
     primaryAction,
     secondaryAction: {
       label: "Ajustar disponibilidade",
@@ -427,8 +434,8 @@ export const recreadorDashboardMock = {
   },
   focusMessage:
     pendingActionsCount > 0
-      ? `Voce tem ${pendingActionsCount} ponto(s) de atencao imediata no fluxo operacional.`
-      : "Nenhuma pendencia critica no momento. Use o painel para orientar seu proximo passo.",
+      ? `Você tem ${pendingActionsCount} ponto(s) de atenção imediata no fluxo operacional.`
+      : "Nenhuma pendência crítica no momento. Use o painel para orientar seu próximo passo.",
   priorities,
   quickActions,
   pendingInvites,

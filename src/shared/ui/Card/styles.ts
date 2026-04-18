@@ -12,11 +12,29 @@ const paddingBySize = {
   `,
 };
 
-export const CardBase = styled.article<{ $padding: "sm" | "md" | "lg" }>`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(246, 250, 255, 0.96) 100%);
+const toneByWeight = {
+  flat: css`
+    background: ${({ theme }) => theme.surfaces.panel};
+    box-shadow: none;
+  `,
+  soft: css`
+    background: ${({ theme }) => theme.surfaces.panelSoft};
+    box-shadow: 0 6px 14px rgba(28, 38, 64, 0.06);
+  `,
+  elevated: css`
+    background: ${({ theme }) => theme.surfaces.panelElevated};
+    box-shadow: ${({ theme }) => theme.shadows.sm};
+  `,
+};
+
+export const CardBase = styled.article<{
+  $padding: "sm" | "md" | "lg";
+  $tone: "flat" | "soft" | "elevated";
+}>`
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.lg};
-  box-shadow: 0 10px 24px rgba(28, 38, 64, 0.08);
+
+  ${({ $tone }) => toneByWeight[$tone]}
 
   ${({ $padding }) => paddingBySize[$padding]}
 
@@ -41,10 +59,10 @@ export const CardHeader = styled.header`
   justify-content: space-between;
   gap: 12px;
   align-items: flex-start;
-  margin-bottom: 18px;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    margin-bottom: 12px;
+    margin-bottom: ${({ theme }) => theme.spacing.xs};
     gap: 8px;
   }
 `;
@@ -55,14 +73,16 @@ export const CardTitleBlock = styled.div`
 `;
 
 export const CardTitle = styled.h3`
+  margin: 0;
   font-size: clamp(17px, 3.2vw, 19px);
   line-height: 1.2;
   font-family: ${({ theme }) => theme.fonts.title};
 `;
 
 export const CardSubtitle = styled.p`
+  margin: 0;
   color: ${({ theme }) => theme.colors.textMuted};
-  font-size: 13px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   line-height: 1.5;
 `;
 

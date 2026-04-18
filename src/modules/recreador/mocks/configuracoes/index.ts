@@ -32,10 +32,10 @@ export const recreadorConfiguracoesMock: ModuleSettingsMockBase = {
   title: "Configurações do recreador",
   userName: "Rafael Santos",
   description:
-    "Ajuste dados do perfil, notificacoes, acesso de usuario e seguranca em um unico fluxo.",
+    "Ajuste dados do perfil, notificações, acesso de usuário e segurança em um único fluxo.",
   stats: [
     { title: "Seções", value: "04", helper: "Perfil, Notificações, Usuários e Segurança" },
-    { title: "Persistencia", value: "Local", helper: "Aplicada nesta sessao" },
+    { title: "Persistência", value: "Local", helper: "Aplicada nesta sessão" },
     { title: "Perfil", value: "Integrado", helper: "Dados sincronizados com edição de perfil" },
     { title: "Status", value: "Pronto", helper: "Navegação interna ativa" },
   ],
@@ -74,8 +74,8 @@ export const recreadorConfiguracoesMock: ModuleSettingsMockBase = {
   ] as UserAccessItem[],
   securityTips: [...moduleSettingsSecurityTips],
   feedbackMessages: {
-    notificationsSaved: "Preferencias de notificacoes atualizadas com sucesso.",
-    usersSaved: "Permissoes de usuario atualizadas com sucesso.",
-    securitySaved: "Ajuste de seguranca atualizado com sucesso.",
+    notificationsSaved: "Preferências de notificações atualizadas com sucesso.",
+    usersSaved: "Permissões de usuário atualizadas com sucesso.",
+    securitySaved: "Ajuste de segurança atualizado com sucesso.",
   },
 };

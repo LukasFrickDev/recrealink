@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
-  padding: 16px;
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.98) 0%, rgba(238, 244, 255, 0.8) 100%);
-  box-shadow: 0 8px 18px rgba(28, 38, 64, 0.07);
+  padding: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme }) => theme.surfaces.panelElevated};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
   position: relative;
   overflow: hidden;
 
@@ -17,7 +17,7 @@ export const Wrapper = styled.article`
     width: 56px;
     height: 56px;
     border-radius: 999px;
-    background: rgba(46, 127, 240, 0.09);
+    background: ${({ theme }) => theme.status.infoSoft};
     pointer-events: none;
   }
 `;
@@ -27,30 +27,31 @@ export const Header = styled.div`
   align-items: center;
   justify-content: space-between;
   color: ${({ theme }) => theme.colors.textMuted};
-  font-size: 13px;
+  font-size: ${({ theme }) => theme.typography.label};
   font-weight: 700;
 `;
 
 export const Icon = styled.div`
   display: inline-flex;
   color: var(--statcard-icon-color, ${({ theme }) => theme.colors.brandBlue});
-  border: 1px solid rgba(46, 127, 240, 0.24);
+  border: 1px solid ${({ theme }) => theme.status.infoBorder};
   border-radius: 10px;
   padding: 4px;
-  background: rgba(255, 255, 255, 0.84);
+  background: ${({ theme }) => theme.surfaces.panel};
 `;
 
 export const Value = styled.strong`
   display: block;
-  margin-top: 12px;
-  font-size: clamp(28px, 4vw, 34px);
+  margin-top: ${({ theme }) => theme.spacing.sm};
+  font-size: clamp(1.75rem, 4vw, 2.125rem);
   line-height: 1;
   letter-spacing: -0.01em;
+  color: ${({ theme }) => theme.colors.textStrong};
 `;
 
 export const Helper = styled.p`
-  margin-top: 9px;
-  font-size: 12px;
+  margin-top: ${({ theme }) => theme.spacing.xs};
+  font-size: ${({ theme }) => theme.typography.meta};
   color: ${({ theme }) => theme.colors.textMuted};
-  line-height: 1.45;
+  line-height: 1.5;
 `;

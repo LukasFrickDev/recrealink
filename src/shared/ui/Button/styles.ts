@@ -26,19 +26,19 @@ const variantStyles = {
 
 const sizeStyles = {
   sm: css`
-    min-height: 36px;
-    padding: 0 14px;
-    font-size: 13px;
+    min-height: 34px;
+    padding: 0 ${({ theme }) => theme.spacing.sm};
+    font-size: ${({ theme }) => theme.typography.bodySm};
   `,
   md: css`
-    min-height: 42px;
-    padding: 0 18px;
-    font-size: 14px;
+    min-height: 40px;
+    padding: 0 ${({ theme }) => theme.spacing.md};
+    font-size: ${({ theme }) => theme.typography.bodySm};
   `,
   lg: css`
-    min-height: 50px;
-    padding: 0 22px;
-    font-size: 16px;
+    min-height: 46px;
+    padding: 0 ${({ theme }) => theme.spacing.lg};
+    font-size: ${({ theme }) => theme.typography.body};
   `,
 };
 
@@ -48,21 +48,38 @@ export const ButtonBase = styled.button<{
   $fullWidth: boolean;
 }>`
   border-radius: ${({ theme }) => theme.radii.md};
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.36rem;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    opacity 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease,
+    background 0.16s ease;
   width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "auto")};
 
   ${({ $variant }) => variantStyles[$variant]}
   ${({ $size }) => sizeStyles[$size]}
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: ${({ theme }) => theme.shadows.sm};
   }
 
-  &:active {
+  &:active:not(:disabled) {
     transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid transparent;
+    box-shadow: 0 0 0 4px ${({ theme }) => theme.colors.focusRing};
   }
 
   &:disabled {

@@ -60,8 +60,8 @@ export const RecreadorChecklistPage = () => {
 
     if (!target) {
       warning({
-        title: "Item indisponivel",
-        description: "Nao foi possivel localizar o item para alterar o status.",
+        title: "Item indisponível",
+        description: "Não foi possível localizar o item para alterar o status.",
       });
       return;
     }
@@ -80,7 +80,7 @@ export const RecreadorChecklistPage = () => {
     );
 
     info({
-      title: nextDone ? "Item concluido" : "Item reaberto",
+      title: nextDone ? "Item concluído" : "Item reaberto",
       description: `${target.title} foi atualizado no checklist operacional.`,
     });
   };
@@ -92,7 +92,7 @@ export const RecreadorChecklistPage = () => {
     if (!title || !helper) {
       warning({
         title: "Item incompleto",
-        description: "Preencha titulo e orientacao para salvar o item do checklist.",
+        description: "Preencha título e orientação para salvar o item do checklist.",
       });
       return;
     }
@@ -125,7 +125,7 @@ export const RecreadorChecklistPage = () => {
       ]);
       success({
         title: "Item adicionado",
-        description: "Novo item incluido no checklist operacional.",
+        description: "Novo item incluído no checklist operacional.",
       });
     }
 
@@ -143,19 +143,19 @@ export const RecreadorChecklistPage = () => {
 
     if (!target) {
       warning({
-        title: "Item indisponivel",
-        description: "Nao foi possivel localizar este item para remocao.",
+        title: "Item indisponível",
+        description: "Não foi possível localizar este item para remoção.",
       });
       return;
     }
 
     const confirmed = window.confirm(
-      `Remover o item \"${target.title}\" do checklist atual?`,
+      `Remover o item "${target.title}" do checklist atual?`,
     );
 
     if (!confirmed) {
       info({
-        title: "Remocao cancelada",
+        title: "Remoção cancelada",
         description: "O item foi mantido no checklist.",
       });
       return;
@@ -212,11 +212,11 @@ export const RecreadorChecklistPage = () => {
 
     if (
       (hasChecklistChanges || hasDraftChanges) &&
-      !window.confirm("Descartar alteracoes nao salvas do checklist?")
+      !window.confirm("Descartar alterações não salvas do checklist?")
     ) {
       info({
         title: "Cancelamento interrompido",
-        description: "As alteracoes permanecem disponiveis para revisao.",
+        description: "As alterações permanecem disponíveis para revisão.",
       });
       return;
     }
@@ -224,8 +224,8 @@ export const RecreadorChecklistPage = () => {
     setChecklist(cloneChecklist(savedChecklist));
     resetItemDraft();
     info({
-      title: "Alteracoes descartadas",
-      description: "Checklist restaurado para o ultimo estado salvo.",
+      title: "Alterações descartadas",
+      description: "Checklist restaurado para o último estado salvo.",
     });
   };
 
@@ -241,7 +241,7 @@ export const RecreadorChecklistPage = () => {
             <h2>
               <ClipboardCheck size={17} /> Progresso do checklist
             </h2>
-            <span>{progresso}% concluido</span>
+            <span>{progresso}% concluído</span>
           </S.ProgressHeader>
           <S.ProgressBar>
             <span style={{ width: `${progresso}%` }} />
@@ -253,15 +253,15 @@ export const RecreadorChecklistPage = () => {
           <h3>{editingItemId ? "Editar item" : "Adicionar item"}</h3>
           <S.EditorGrid>
             <S.EditorField>
-              <span>Titulo</span>
+              <span>Título</span>
               <input
                 value={titleDraft}
                 onChange={(event) => setTitleDraft(event.target.value)}
-                placeholder="Ex: Confirmar roteiro com a coordenacao"
+                placeholder="Ex.: Confirmar roteiro com a coordenação"
               />
             </S.EditorField>
             <S.EditorField>
-              <span>Orientacao operacional</span>
+              <span>Orientação operacional</span>
               <textarea
                 value={helperDraft}
                 onChange={(event) => setHelperDraft(event.target.value)}
@@ -280,7 +280,7 @@ export const RecreadorChecklistPage = () => {
                 $tone="neutral"
                 onClick={resetItemDraft}
               >
-                <X size={14} /> Cancelar edicao
+                  <X size={14} /> Cancelar edição
               </S.ActionButton>
             ) : null}
           </S.EditorActions>
@@ -303,7 +303,7 @@ export const RecreadorChecklistPage = () => {
                   <p>{item.helper}</p>
                 </S.ItemContent>
 
-                <S.StatusBadge $done={item.done}>{item.done ? "Concluido" : "Pendente"}</S.StatusBadge>
+                <S.StatusBadge $done={item.done}>{item.done ? "Concluído" : "Pendente"}</S.StatusBadge>
 
                 <S.ItemActions>
                   <S.IconButton
@@ -342,7 +342,7 @@ export const RecreadorChecklistPage = () => {
               Salvar checklist
             </S.SaveButton>
             <S.ActionButton type="button" $tone="neutral" onClick={handleCancelar}>
-              <X size={14} /> Cancelar alteracoes
+              <X size={14} /> Cancelar alterações
             </S.ActionButton>
           </S.FooterActions>
         </S.ReviewCard>

@@ -1,70 +1,119 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
+type DecisionTone = "pendente" | "aceito" | "recusado";
+
+const decisionToneMap = {
+  pendente: css`
+    border-left-color: ${({ theme }) => theme.colors.warning};
+    background: rgba(227, 154, 18, 0.12);
+    color: #9a6811;
+  `,
+  aceito: css`
+    border-left-color: ${({ theme }) => theme.colors.success};
+    background: rgba(23, 167, 102, 0.12);
+    color: #0f7a4d;
+  `,
+  recusado: css`
+    border-left-color: ${({ theme }) => theme.colors.borderStrong};
+    background: rgba(91, 104, 136, 0.1);
+    color: ${({ theme }) => theme.colors.textMuted};
+  `,
+};
 
 export const Wrapper = styled.section`
   display: grid;
-  gap: 1rem;
-`;
+  gap: ${({ theme }) => theme.spacing.md};
 
-export const HeaderCard = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.lg};
-  background: ${({ theme }) => theme.colors.surface};
-  padding: 1rem;
-  display: grid;
-  gap: 0.35rem;
-
-  h2 {
-    margin: 0;
-    font-size: 1rem;
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.brandBlue};
+    outline-offset: 2px;
   }
 
-  p {
-    margin: 0;
-    font-size: 0.81rem;
-    color: ${({ theme }) => theme.colors.textMuted};
-    line-height: 1.45;
+  button:disabled,
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    opacity: 0.64;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 `;
 
-export const LegendGrid = styled.div`
+export const StatusTabs = styled.nav`
   display: grid;
-  gap: 0.55rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: ${({ theme }) => theme.spacing.xs};
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 `;
 
-export const LegendCard = styled.article`
-  border: 1px dashed ${({ theme }) => theme.colors.border};
+export const StatusTabButton = styled.button<{ $active: boolean }>`
+  border: 1px solid ${({ theme, $active }) => ($active ? theme.colors.brandBlue : theme.colors.border)};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.surfaceSoft};
-  padding: 0.72rem;
-  display: grid;
-  gap: 0.3rem;
+  background: ${({ $active }) =>
+    $active
+      ? "linear-gradient(154deg, rgba(46, 127, 240, 0.14), rgba(255, 255, 255, 0.95))"
+      : "linear-gradient(154deg, rgba(255, 255, 255, 0.88), rgba(246, 250, 255, 0.84))"};
+  min-height: 48px;
+  padding: 0.46rem 0.62rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.42rem;
+  cursor: pointer;
+  transition: border-color 160ms ease, transform 160ms ease;
 
-  strong {
-    font-size: 0.8rem;
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.75rem;
-    color: ${({ theme }) => theme.colors.textMuted};
-    line-height: 1.4;
+  &:hover:not(:disabled) {
+    border-color: ${({ theme }) => theme.colors.brandBlue};
+    transform: translateY(-1px);
   }
 `;
 
-export const BoardGrid = styled.section`
+export const StatusTabLabel = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  color: ${({ theme }) => theme.colors.textStrong};
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  font-weight: 800;
+`;
+
+export const StatusTabCount = styled.strong`
+  min-width: 24px;
+  height: 24px;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  border: 1px solid rgba(46, 127, 240, 0.3);
+  background: rgba(46, 127, 240, 0.1);
+  color: ${({ theme }) => theme.colors.brandBlue};
+  font-size: ${({ theme }) => theme.typography.meta};
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const StatusPanel = styled.section`
   display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 `;
 
 export const ColumnCard = styled.article`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.surface};
-  padding: 0.75rem;
+  background: ${({ theme }) => theme.surfaces.panel};
+  padding: 0.64rem;
   display: grid;
-  gap: 0.6rem;
+  gap: 0.52rem;
+  min-height: 420px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    min-height: 0;
+  }
 `;
 
 export const ColumnHeader = styled.header`
@@ -75,63 +124,143 @@ export const ColumnHeader = styled.header`
 
   h3 {
     margin: 0;
-    font-size: 0.86rem;
+    font-size: ${({ theme }) => theme.typography.cardTitle};
     display: inline-flex;
     align-items: center;
     gap: 0.32rem;
   }
 
   span {
-    font-size: 0.69rem;
-    font-weight: 700;
+    font-size: ${({ theme }) => theme.typography.meta};
+    font-weight: 800;
     color: ${({ theme }) => theme.colors.textMuted};
-    border: 1px solid ${({ theme }) => theme.colors.border};
+    border: ${({ theme }) => theme.borders.subtle};
     border-radius: ${({ theme }) => theme.radii.pill};
-    padding: 0.12rem 0.42rem;
-    background: ${({ theme }) => theme.colors.surfaceSoft};
+    padding: 0.12rem 0.4rem;
+    background: ${({ theme }) => theme.surfaces.panelSoft};
   }
+`;
+
+export const ColumnHelper = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  line-height: 1.45;
 `;
 
 export const InviteList = styled.div`
   display: grid;
-  gap: 0.6rem;
+  gap: 0.5rem;
 `;
 
 export const InviteCard = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.surfaceSoft};
-  padding: 0.62rem;
+  background: linear-gradient(164deg, rgba(255, 255, 255, 0.92), rgba(242, 248, 255, 0.74));
+  padding: 0.5rem;
   display: grid;
-  gap: 0.38rem;
+  gap: 0.34rem;
 `;
 
 export const InviteTop = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 0.4rem;
 
+  min-width: 0;
+
+  > span {
+    flex-shrink: 0;
+  }
+`;
+
+export const InviteIdentity = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.46rem;
+  min-width: 0;
+`;
+
+export const InviteThumb = styled.span`
+  width: 52px;
+  height: 52px;
+  border-radius: ${({ theme }) => theme.radii.md};
+  overflow: hidden;
+  display: inline-flex;
+  border: 1px solid rgba(46, 127, 240, 0.24);
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+`;
+
+export const InviteHeading = styled.div`
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+
   strong {
-    font-size: 0.81rem;
+    font-size: ${({ theme }) => theme.typography.bodySm};
+    color: ${({ theme }) => theme.colors.textStrong};
+    line-height: 1.25;
+  }
+
+  span {
+    font-size: ${({ theme }) => theme.typography.meta};
+    color: ${({ theme }) => theme.colors.textMuted};
+    line-height: 1.35;
+    text-transform: none;
+    letter-spacing: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
 export const OriginBadge = styled.span<{ $origin: "hotelaria" | "eventos" }>`
   border-radius: ${({ theme }) => theme.radii.pill};
-  font-size: 0.66rem;
+  font-size: ${({ theme }) => theme.typography.micro};
   font-weight: 800;
   letter-spacing: 0.03em;
-  padding: 0.14rem 0.42rem;
+  text-transform: uppercase;
+  padding: 0.12rem 0.4rem;
   border: 1px solid
-    ${({ $origin }) => ($origin === "hotelaria" ? "rgba(29, 78, 216, 0.34)" : "rgba(194, 65, 12, 0.34)")};
-  background: ${({ $origin }) => ($origin === "hotelaria" ? "rgba(29, 78, 216, 0.1)" : "rgba(194, 65, 12, 0.1)")};
-  color: ${({ $origin }) => ($origin === "hotelaria" ? "#1d4ed8" : "#9a3412")};
+    ${({ $origin }) => ($origin === "hotelaria" ? "rgba(46, 127, 240, 0.34)" : "rgba(211, 77, 98, 0.34)")};
+  background: ${({ $origin }) => ($origin === "hotelaria" ? "rgba(46, 127, 240, 0.1)" : "rgba(211, 77, 98, 0.1)")};
+  color: ${({ $origin }) => ($origin === "hotelaria" ? "#1e5fb4" : "#b53b53")};
+`;
+
+export const MetaPillRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.26rem;
+`;
+
+export const MetaPill = styled.span`
+  border: 1px solid rgba(46, 127, 240, 0.18);
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: rgba(255, 255, 255, 0.86);
+  min-height: 24px;
+  padding: 0 0.44rem;
+  font-size: ${({ theme }) => theme.typography.meta};
+  color: ${({ theme }) => theme.colors.text};
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+
+  svg {
+    color: ${({ theme }) => theme.colors.brandBlue};
+  }
 `;
 
 export const MetaLine = styled.p`
   margin: 0;
-  font-size: 0.73rem;
+  font-size: ${({ theme }) => theme.typography.meta};
   color: ${({ theme }) => theme.colors.textMuted};
   line-height: 1.35;
   display: inline-flex;
@@ -139,14 +268,25 @@ export const MetaLine = styled.p`
   gap: 0.3rem;
 `;
 
+export const DecisionHint = styled.p<{ $status: DecisionTone }>`
+  margin: 0;
+  border-left: 4px solid transparent;
+  border-radius: ${({ theme }) => theme.radii.md};
+  padding: 0.5rem 0.56rem;
+  font-size: ${({ theme }) => theme.typography.meta};
+  line-height: 1.4;
+
+  ${({ $status }) => decisionToneMap[$status]}
+`;
+
 export const TimelineList = styled.ul`
   margin: 0;
-  padding-left: 1rem;
+  padding-left: 0.94rem;
   display: grid;
-  gap: 0.26rem;
+  gap: 0.22rem;
 
   li {
-    font-size: 0.7rem;
+    font-size: ${({ theme }) => theme.typography.meta};
     color: ${({ theme }) => theme.colors.textMuted};
     line-height: 1.35;
   }
@@ -154,43 +294,59 @@ export const TimelineList = styled.ul`
 
 export const CommitmentNote = styled.p`
   margin: 0;
-  font-size: 0.73rem;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   color: ${({ theme }) => theme.colors.success};
-  font-weight: 600;
+  font-weight: 700;
 `;
 
 export const ActionsRow = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.42rem;
+  gap: 0.34rem;
 `;
 
 const BaseButton = styled.button`
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: 0.73rem;
-  font-weight: 700;
-  padding: 0.43rem 0.64rem;
+  min-height: 34px;
+  font-size: ${({ theme }) => theme.typography.meta};
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  padding: 0 0.62rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
+  transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.64;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
 `;
 
 export const AcceptButton = styled(BaseButton)`
-  border: 1px solid rgba(5, 150, 105, 0.35);
-  background: rgba(5, 150, 105, 0.12);
-  color: #047857;
+  border: 1px solid rgba(23, 167, 102, 0.36);
+  background: linear-gradient(146deg, rgba(23, 167, 102, 0.12), rgba(255, 255, 255, 0.78));
+  color: #0f7a4d;
+  box-shadow: 0 8px 14px rgba(23, 167, 102, 0.14);
 `;
 
 export const RejectButton = styled(BaseButton)`
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(148, 163, 184, 0.13);
+  border: 1px solid rgba(91, 104, 136, 0.38);
+  background: linear-gradient(146deg, rgba(91, 104, 136, 0.12), rgba(255, 255, 255, 0.78));
   color: #475569;
 `;
 
 export const OpenOpportunityButton = styled(BaseButton)`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid rgba(46, 127, 240, 0.22);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.9));
+  backdrop-filter: blur(6px);
   color: ${({ theme }) => theme.colors.text};
 `;
 
@@ -198,7 +354,7 @@ export const DecisionOverlay = styled.div`
   position: fixed;
   inset: 0;
   z-index: 1400;
-  background: rgba(15, 23, 42, 0.36);
+  background: rgba(15, 23, 42, 0.52);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -206,25 +362,29 @@ export const DecisionOverlay = styled.div`
 `;
 
 export const DecisionModal = styled.article`
-  width: min(440px, 100%);
+  width: min(460px, 100%);
   border-radius: ${({ theme }) => theme.radii.lg};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) => theme.surfaces.panel};
   box-shadow: ${({ theme }) => theme.shadows.md};
-  padding: 1rem;
+  padding: ${({ theme }) => theme.spacing.md};
   display: grid;
-  gap: 0.58rem;
+  gap: ${({ theme }) => theme.spacing.xs};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: ${({ theme }) => theme.spacing.sm};
+  }
 
   h3 {
     margin: 0;
-    font-size: 0.96rem;
+    font-size: ${({ theme }) => theme.typography.sectionTitle};
   }
 
   p {
     margin: 0;
-    font-size: 0.77rem;
+    font-size: ${({ theme }) => theme.typography.bodySm};
     color: ${({ theme }) => theme.colors.textMuted};
-    line-height: 1.42;
+    line-height: 1.45;
   }
 `;
 
@@ -233,35 +393,49 @@ export const DecisionActions = styled.div`
   justify-content: flex-end;
   gap: 0.45rem;
   flex-wrap: wrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    > button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 `;
 
 const DecisionBaseButton = styled.button`
   border-radius: ${({ theme }) => theme.radii.md};
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.44rem 0.72rem;
+  min-height: 36px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  font-weight: 800;
+  padding: 0 0.72rem;
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.64;
+    cursor: not-allowed;
+  }
 `;
 
 export const DecisionCancelButton = styled(DecisionBaseButton)`
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.surface};
+  border: ${({ theme }) => theme.borders.subtle};
+  background: #fff;
   color: ${({ theme }) => theme.colors.text};
 `;
 
 export const DecisionConfirmButton = styled(DecisionBaseButton)<{ $tone: "aceito" | "recusado" }>`
   border: 1px solid
-    ${({ $tone }) => ($tone === "aceito" ? "rgba(5, 150, 105, 0.45)" : "rgba(148, 163, 184, 0.48)")};
-  background: ${({ $tone }) => ($tone === "aceito" ? "rgba(5, 150, 105, 0.14)" : "rgba(148, 163, 184, 0.15)")};
-  color: ${({ $tone }) => ($tone === "aceito" ? "#047857" : "#475569")};
+    ${({ $tone }) => ($tone === "aceito" ? "rgba(23, 167, 102, 0.4)" : "rgba(91, 104, 136, 0.42)")};
+  background: ${({ $tone }) => ($tone === "aceito" ? "rgba(23, 167, 102, 0.14)" : "rgba(91, 104, 136, 0.14)")};
+  color: ${({ $tone }) => ($tone === "aceito" ? "#0f7a4d" : "#475569")};
 `;
 
 export const EmptyState = styled.p`
   margin: 0;
-  font-size: 0.76rem;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   color: ${({ theme }) => theme.colors.textMuted};
-  border: 1px dashed ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.dashed};
   border-radius: ${({ theme }) => theme.radii.md};
-  padding: 0.62rem;
-  background: ${({ theme }) => theme.colors.surface};
+  padding: 0.64rem;
+  background: ${({ theme }) => theme.surfaces.panel};
+  line-height: 1.45;
 `;

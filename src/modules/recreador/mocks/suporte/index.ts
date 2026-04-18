@@ -3,7 +3,7 @@ export const recreadorSupportMock = {
   userName: "Rafael Santos",
   title: "Suporte",
   description:
-    "Central de apoio para duvidas tecnicas, fluxo operacional e acompanhamento de chamados.",
+    "Central de apoio para dúvidas técnicas, fluxo operacional e acompanhamento de chamados.",
   stats: [
     { title: "Chamados abertos", value: "04", helper: "2 com retorno em andamento" },
     { title: "Tempo médio", value: "6h", helper: "Primeiro atendimento" },
@@ -19,7 +19,7 @@ export const recreadorSupportMock = {
   canais: [
     {
       id: "email",
-      title: "Email direto",
+      title: "E-mail direto",
       description: "Envie prints e detalhes para suporte@recrealink.com",
     },
     {
@@ -30,7 +30,7 @@ export const recreadorSupportMock = {
     {
       id: "base",
       title: "Base de conhecimento",
-      description: "Artigos de ajuda sobre perfil, convites, disponibilidade e notificacoes",
+      description: "Artigos de ajuda sobre perfil, convites, disponibilidade e notificações",
     },
     {
       id: "notifications",
@@ -41,8 +41,8 @@ export const recreadorSupportMock = {
   knowledgeBase: [
     {
       id: "kb-perfil",
-      title: "Como manter o perfil publico atualizado",
-      description: "Revise dados principais, especialidades e links de portfolio.",
+      title: "Como manter o perfil público atualizado",
+      description: "Revise dados principais, especialidades e links de portfólio.",
       route: "/app/recreador/perfil",
     },
     {
@@ -54,12 +54,12 @@ export const recreadorSupportMock = {
     {
       id: "kb-disponibilidade",
       title: "Como evitar conflitos de disponibilidade",
-      description: "Use bloqueio manual e recorrencia para reduzir sobreposicoes.",
+      description: "Use bloqueio manual e recorrência para reduzir sobreposições.",
       route: "/app/recreador/disponibilidade",
     },
     {
       id: "kb-notificacoes",
-      title: "Como organizar notificacoes do modulo",
+      title: "Como organizar notificações do módulo",
       description: "Filtre por tipo e trate itens de sistema antes de novos aceites.",
       route: "/app/recreador/notificacoes",
     },

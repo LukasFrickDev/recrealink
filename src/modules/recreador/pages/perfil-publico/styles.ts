@@ -1,116 +1,325 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.section`
+export const Page = styled.main`
+  min-height: 100dvh;
+  position: relative;
+  padding: ${({ theme }) => `${theme.spacing.lg} ${theme.spacing.md}`};
+  background:
+    radial-gradient(circle at 100% 0%, rgba(46, 127, 240, 0.16) 0%, rgba(46, 127, 240, 0) 40%),
+    radial-gradient(circle at 0% 100%, rgba(249, 111, 38, 0.14) 0%, rgba(249, 111, 38, 0) 44%),
+    linear-gradient(180deg, #f4f8ff 0%, #f9fbff 100%);
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: ${({ theme }) => `${theme.spacing.md} ${theme.spacing.sm}`};
+  }
+`;
+
+export const Atmosphere = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(125deg, rgba(46, 127, 240, 0.04), rgba(255, 255, 255, 0) 52%),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(46, 127, 240, 0.04) 0,
+      rgba(46, 127, 240, 0.04) 1px,
+      rgba(255, 255, 255, 0) 1px,
+      rgba(255, 255, 255, 0) 18px
+    );
+`;
+
+export const Container = styled.div`
+  position: relative;
+  width: min(1080px, 100%);
+  margin: 0 auto;
   display: grid;
-  gap: 1rem;
+  gap: ${({ theme }) => theme.spacing.md};
+`;
+
+export const Topbar = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  flex-wrap: wrap;
+`;
+
+export const PublicBadge = styled.span`
+  min-height: 28px;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  border: 1px solid rgba(46, 127, 240, 0.3);
+  background: rgba(255, 255, 255, 0.9);
+  color: ${({ theme }) => theme.colors.brandBlue};
+  font-size: ${({ theme }) => theme.typography.micro};
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0 0.66rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+`;
+
+export const TopbarActions = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.xs};
+  flex-wrap: wrap;
+`;
+
+export const GhostButton = styled.button`
+  border: 1px solid rgba(46, 127, 240, 0.18);
+  border-radius: ${({ theme }) => theme.radii.md};
+  min-height: 36px;
+  padding: 0 0.72rem;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.9));
+  backdrop-filter: blur(6px);
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease, transform 150ms ease;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.brandBlue};
+    color: ${({ theme }) => theme.colors.brandBlue};
+    transform: translateY(-1px);
+  }
 `;
 
 export const HeroCard = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.borderStrong};
   border-radius: ${({ theme }) => theme.radii.lg};
-  background: ${({ theme }) => theme.colors.surface};
-  padding: 1rem;
+  padding: ${({ theme }) => theme.spacing.lg};
+  background:
+    radial-gradient(circle at 100% 0%, rgba(46, 127, 240, 0.18) 0%, rgba(46, 127, 240, 0) 42%),
+    radial-gradient(circle at 0% 100%, rgba(249, 111, 38, 0.16) 0%, rgba(249, 111, 38, 0) 48%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.99), rgba(236, 244, 255, 0.9));
+  box-shadow: ${({ theme }) => theme.shadows.sm};
   display: grid;
-  gap: 0.75rem;
+  gap: ${({ theme }) => theme.spacing.sm};
+  overflow: hidden;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 export const HeroTop = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 0.85rem;
+  gap: ${({ theme }) => theme.spacing.sm};
   flex-wrap: wrap;
 `;
 
 export const IdentityBlock = styled.div`
   display: flex;
-  gap: 0.7rem;
+  gap: ${({ theme }) => theme.spacing.sm};
   align-items: center;
 `;
 
 export const Avatar = styled.div`
-  width: 60px;
-  height: 60px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: ${({ theme }) => theme.colors.surfaceSoft};
+  border: 1px solid rgba(46, 127, 240, 0.28);
+  background: rgba(255, 255, 255, 0.94);
+  color: ${({ theme }) => theme.colors.brandBlue};
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
-  font-weight: 800;
-  color: ${({ theme }) => theme.colors.brandBlue};
+  font-size: 1.06rem;
+  font-weight: 900;
 `;
 
 export const Identity = styled.div`
   display: grid;
-  gap: 0.12rem;
+  gap: 2px;
 
-  h2 {
+  h1 {
     margin: 0;
-    font-size: 1rem;
+    font-family: ${({ theme }) => theme.fonts.title};
+    font-size: clamp(1.28rem, 3vw, 1.66rem);
+    line-height: 1.15;
   }
 
   strong {
-    font-size: 0.8rem;
     color: ${({ theme }) => theme.colors.textMuted};
+    font-size: ${({ theme }) => theme.typography.label};
+    letter-spacing: 0.02em;
   }
 
   p {
     margin: 0;
-    font-size: 0.82rem;
-    color: ${({ theme }) => theme.colors.textMuted};
-    max-width: 56ch;
+    color: ${({ theme }) => theme.colors.text};
+    font-size: ${({ theme }) => theme.typography.bodySm};
+    line-height: 1.5;
+    max-width: 64ch;
   }
 `;
 
 export const MetaRow = styled.div`
-  display: flex;
-  gap: 0.45rem;
-  flex-wrap: wrap;
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 export const MetaBadge = styled.span`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  min-height: 30px;
   border-radius: ${({ theme }) => theme.radii.pill};
-  background: ${({ theme }) => theme.colors.surfaceSoft};
+  border: 1px solid rgba(46, 127, 240, 0.24);
+  background: rgba(255, 255, 255, 0.92);
   color: ${({ theme }) => theme.colors.text};
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 0.22rem 0.52rem;
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  font-weight: 700;
+  padding: 0 0.62rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.28rem;
+  gap: 0.32rem;
 `;
 
 export const Bio = styled.p`
   margin: 0;
-  font-size: 0.82rem;
-  line-height: 1.5;
-  color: ${({ theme }) => theme.colors.text};
-`;
-
-export const Grid = styled.section`
-  display: grid;
-  gap: 0.7rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-`;
-
-export const Card = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid rgba(46, 127, 240, 0.2);
+  border-left: 4px solid ${({ theme }) => theme.colors.brandBlue};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.surface};
-  padding: 0.8rem;
-  display: grid;
-  gap: 0.6rem;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.9));
+  backdrop-filter: blur(6px);
+  padding: 0.76rem 0.84rem;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  line-height: 1.6;
 `;
 
-export const CardTitle = styled.h3`
+export const ShowcaseGrid = styled.div`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.xs};
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+export const ShowcaseCard = styled.article`
+  border: 1px solid rgba(46, 127, 240, 0.2);
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.9));
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  display: grid;
+`;
+
+export const ShowcaseMedia = styled.div`
+  height: 104px;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0.38));
+  }
+`;
+
+export const ShowcaseCopy = styled.div`
+  padding: 0.56rem 0.62rem;
+  display: grid;
+  gap: 0.12rem;
+
+  strong {
+    color: ${({ theme }) => theme.colors.textStrong};
+    font-size: ${({ theme }) => theme.typography.label};
+    line-height: 1.3;
+  }
+
+  span {
+    color: ${({ theme }) => theme.colors.textMuted};
+    font-size: ${({ theme }) => theme.typography.meta};
+    line-height: 1.4;
+  }
+`;
+
+export const HeroFooter = styled.div`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.xs};
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+export const HeroStat = styled.article`
+  border: ${({ theme }) => theme.borders.subtle};
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.64rem 0.72rem;
+  display: grid;
+  gap: 0.18rem;
+
+  strong {
+    color: ${({ theme }) => theme.colors.textStrong};
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1;
+  }
+
+  span {
+    color: ${({ theme }) => theme.colors.textMuted};
+    font-size: ${({ theme }) => theme.typography.meta};
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+`;
+
+export const UpdatedLabel = styled.p`
   margin: 0;
-  font-size: 0.88rem;
+  grid-column: 1 / -1;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: ${({ theme }) => theme.typography.meta};
+  line-height: 1.5;
+`;
+
+export const HighlightsGrid = styled.section`
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.sm};
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+export const HighlightCard = styled.article`
+  border: ${({ theme }) => theme.borders.subtle};
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: rgba(255, 255, 255, 0.95);
+  padding: ${({ theme }) => theme.spacing.sm};
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.xs};
+`;
+
+export const CardTitle = styled.h2`
+  margin: 0;
+  font-size: ${({ theme }) => theme.typography.cardTitle};
   display: inline-flex;
   align-items: center;
-  gap: 0.38rem;
+  gap: 0.36rem;
 `;
 
 export const Chips = styled.div`
@@ -120,32 +329,32 @@ export const Chips = styled.div`
 `;
 
 export const Chip = styled.span`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.pill};
-  background: ${({ theme }) => theme.colors.surfaceSoft};
-  padding: 0.2rem 0.54rem;
-  font-size: 0.72rem;
-  font-weight: 600;
+  background: ${({ theme }) => theme.surfaces.panelSoft};
   color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.meta};
+  font-weight: 700;
+  padding: 0.16rem 0.5rem;
 `;
 
 export const EmptyCopy = styled.p`
   margin: 0;
-  font-size: 0.74rem;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   color: ${({ theme }) => theme.colors.textMuted};
-  line-height: 1.45;
+  line-height: 1.5;
 `;
 
 export const RuleList = styled.ul`
   margin: 0;
   padding-left: 1rem;
   display: grid;
-  gap: 0.32rem;
+  gap: 0.34rem;
 
   li {
     color: ${({ theme }) => theme.colors.textMuted};
-    font-size: 0.74rem;
-    line-height: 1.4;
+    font-size: ${({ theme }) => theme.typography.bodySm};
+    line-height: 1.45;
   }
 `;
 
@@ -153,12 +362,12 @@ export const LinkList = styled.ul`
   margin: 0;
   padding-left: 1rem;
   display: grid;
-  gap: 0.32rem;
+  gap: 0.34rem;
 
   li {
     color: ${({ theme }) => theme.colors.textMuted};
-    font-size: 0.74rem;
-    line-height: 1.4;
+    font-size: ${({ theme }) => theme.typography.bodySm};
+    line-height: 1.45;
     min-width: 0;
   }
 
@@ -173,27 +382,47 @@ export const LinkList = styled.ul`
   }
 `;
 
-export const ReputationLine = styled.div`
+export const ReviewsCard = styled.article`
+  border: 1px solid ${({ theme }) => theme.colors.borderStrong};
+  border-radius: ${({ theme }) => theme.radii.lg};
+  background: rgba(255, 255, 255, 0.98);
+  padding: ${({ theme }) => theme.spacing.md};
+  display: grid;
+  gap: ${({ theme }) => theme.spacing.xs};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
+`;
+
+export const ReviewsHeader = styled.header`
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.spacing.sm};
+  flex-wrap: wrap;
+`;
+
+export const ReputationLine = styled.div`
+  display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.44rem;
+  gap: 0.42rem;
 
   strong {
-    font-size: 1rem;
     color: ${({ theme }) => theme.colors.warning};
+    font-size: clamp(1.02rem, 2vw, 1.2rem);
+    line-height: 1;
   }
 
   span {
-    font-size: 0.74rem;
     color: ${({ theme }) => theme.colors.textMuted};
+    font-size: ${({ theme }) => theme.typography.bodySm};
   }
 `;
 
 export const Policy = styled.p`
   margin: 0;
-  font-size: 0.75rem;
   color: ${({ theme }) => theme.colors.textMuted};
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  line-height: 1.5;
 `;
 
 export const Stars = styled.div`
@@ -205,56 +434,58 @@ export const Stars = styled.div`
 
 export const ReviewGrid = styled.div`
   display: grid;
-  gap: 0.6rem;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: ${({ theme }) => theme.spacing.sm};
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 `;
 
 export const ReviewCard = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme }) => theme.colors.surfaceSoft};
-  padding: 0.65rem;
+  background: ${({ theme }) => theme.surfaces.panelSoft};
+  padding: 0.72rem;
   display: grid;
-  gap: 0.35rem;
+  gap: 0.38rem;
 `;
 
 export const ReviewTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.44rem;
   flex-wrap: wrap;
 
   strong {
-    font-size: 0.8rem;
+    font-size: ${({ theme }) => theme.typography.label};
   }
 
   span {
-    font-size: 0.7rem;
     color: ${({ theme }) => theme.colors.textMuted};
-    font-weight: 600;
+    font-size: ${({ theme }) => theme.typography.meta};
+    font-weight: 700;
   }
 `;
 
 export const ReviewMeta = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 0.36rem;
 
   span {
     border-radius: ${({ theme }) => theme.radii.pill};
-    border: 1px solid ${({ theme }) => theme.colors.border};
-    background: ${({ theme }) => theme.colors.surface};
+    border: ${({ theme }) => theme.borders.subtle};
+    background: #fff;
     color: ${({ theme }) => theme.colors.textMuted};
-    font-size: 0.66rem;
-    padding: 0.12rem 0.42rem;
-    font-weight: 600;
+    font-size: ${({ theme }) => theme.typography.micro};
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    padding: 0.14rem 0.42rem;
   }
 `;
 
 export const ReviewText = styled.p`
   margin: 0;
-  font-size: 0.76rem;
   color: ${({ theme }) => theme.colors.text};
-  line-height: 1.4;
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  line-height: 1.5;
 `;

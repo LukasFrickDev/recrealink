@@ -6,11 +6,19 @@ interface CardProps {
   subtitle?: string;
   action?: ReactNode;
   padding?: "sm" | "md" | "lg";
+  tone?: "flat" | "soft" | "elevated";
 }
 
-export const Card = ({ children, title, subtitle, action, padding = "md" }: PropsWithChildren<CardProps>) => {
+export const Card = ({
+  children,
+  title,
+  subtitle,
+  action,
+  padding = "md",
+  tone = "elevated",
+}: PropsWithChildren<CardProps>) => {
   return (
-    <S.CardBase $padding={padding}>
+    <S.CardBase $padding={padding} $tone={tone}>
       {title || subtitle || action ? (
         <S.CardHeader>
           <S.CardTitleBlock>

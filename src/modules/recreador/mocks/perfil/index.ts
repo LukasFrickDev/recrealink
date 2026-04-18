@@ -94,9 +94,9 @@ const fallbackProfile = {
   fullName: "Rafael Santos",
   role: "Recreador profissional",
   bio:
-    "Especialista em recreacao infantil e familiar com foco em seguranca, acolhimento e alta energia.",
-  locationLabel: "Sao Paulo - SP",
-  specialties: ["Recreacao infantil", "Gincanas aquatica", "Eventos tematicos"],
+    "Especialista em recreação infantil e familiar, com foco em segurança, acolhimento e alta energia.",
+  locationLabel: "São Paulo - SP",
+  specialties: ["Recreação infantil", "Gincanas aquáticas", "Eventos temáticos"],
 };
 
 const profileBase = recreador ?? fallbackProfile;
@@ -113,21 +113,21 @@ const reviewItems: ProfileReviewItem[] = [
     visibility: "publica" as const,
     canRespond: true,
     suggestedResponse:
-      "Obrigado pelo feedback. Seguimos melhorando cada entrega para manter a experiencia da familia.",
+      "Obrigado pelo feedback. Seguimos melhorando cada entrega para manter a experiência da família.",
   })),
   {
     id: "feedback-familia-rodriguez",
-    author: "Familia Rodriguez",
-    authorRole: "Hospedes",
-    sourceLabel: "Familia atendida",
+    author: "Família Rodriguez",
+    authorRole: "Hóspedes",
+    sourceLabel: "Família atendida",
     rating: 5,
     comment:
-      "As criancas pediram para repetir a atividade no dia seguinte. Energia alta e conducao segura.",
+      "As crianças pediram para repetir a atividade no dia seguinte. Energia alta e condução segura.",
     dateLabel: "12 Jan 2026",
     visibility: "publica",
     canRespond: true,
     suggestedResponse:
-      "Ficamos felizes com a experiencia da familia. Obrigado por compartilhar e confiar no trabalho.",
+      "Ficamos felizes com a experiência da família. Obrigado por compartilhar e confiar no trabalho.",
   },
 ];
 
@@ -145,7 +145,7 @@ const reviewMetrics: ReviewMetric[] = [
   { id: "pontualidade", label: "Pontualidade", value: 95 },
   { id: "engajamento", label: "Engajamento", value: 89 },
   { id: "criatividade", label: "Criatividade", value: 92 },
-  { id: "comunicacao", label: "Comunicacao", value: 90 },
+  { id: "comunicacao", label: "Comunicação", value: 90 },
 ];
 
 const profileCompletionStats = {
@@ -157,7 +157,7 @@ const profileCompletionStats = {
 export const recreadorPerfilMock = {
   title: "Perfil",
   description:
-    "Gerencie seu perfil profissional completo em uma pagina unica, com vitrine publica e reputacao.",
+    "Gerencie seu perfil profissional completo em uma página única, com vitrine pública e reputação.",
   stats: [
     {
       title: "Completude",
@@ -170,54 +170,54 @@ export const recreadorPerfilMock = {
       helper: "Ativas na vitrine",
     },
     {
-      title: "Avaliacao media",
+      title: "Avaliação média",
       value: profileCompletionStats.ratingLabel,
-      helper: `${reviewItems.length} avaliacoes`,
+      helper: `${reviewItems.length} avaliações`,
     },
   ],
   publicProfileRoute: "/app/recreador/perfil-publico",
   specialtyOptions: [
-    { id: "rec-infantil", label: "Recreacao infantil" },
+    { id: "rec-infantil", label: "Recreação infantil" },
     { id: "esportes", label: "Esportes e gincanas" },
-    { id: "aquaticas", label: "Atividades aquaticas" },
+    { id: "aquaticas", label: "Atividades aquáticas" },
     { id: "oficinas", label: "Oficinas criativas" },
     { id: "teen", label: "Eventos teen" },
-    { id: "musica", label: "Musica e expressao corporal" },
-    { id: "inclusao", label: "Inclusao e acessibilidade" },
-    { id: "familias", label: "Lazer para familias" },
+    { id: "musica", label: "Música e expressão corporal" },
+    { id: "inclusao", label: "Inclusão e acessibilidade" },
+    { id: "familias", label: "Lazer para famílias" },
   ] as SpecialtyOption[],
   ageGroupOptions: [
     { id: "0-3", label: "0 a 3 anos" },
     { id: "4-7", label: "4 a 7 anos" },
     { id: "8-12", label: "8 a 12 anos" },
     { id: "13-17", label: "13 a 17 anos" },
-    { id: "familias", label: "Familias e faixa mista" },
+    { id: "familias", label: "Famílias e faixa mista" },
   ] as AgeGroupOption[],
   cacheRangeOptions: [
     {
       id: "cache-a",
       label: "R$ 220 - R$ 320 / turno",
-      helper: "Pacotes de ate 4h",
+      helper: "Pacotes de até 4h",
     },
     {
       id: "cache-b",
-      label: "R$ 340 - R$ 520 / diaria",
+      label: "R$ 340 - R$ 520 / diária",
       helper: "Eventos de 6h a 8h",
     },
     {
       id: "cache-c",
       label: "Sob consulta",
-      helper: "Operacoes especiais e viagens",
+      helper: "Operações especiais e viagens",
     },
   ] as CacheRangeOption[],
   experienceItems: [
     {
       id: "exp-1",
-      title: "Recreacao de verao",
-      location: "Florianopolis, SC",
+      title: "Recreação de verão",
+      location: "Florianópolis, SC",
       dateLabel: "15 Jan 2026",
       audienceLabel: "45 participantes | 5 a 10 anos",
-      highlights: ["Gincana aquatica", "Teatro infantil", "Pintura facial"],
+      highlights: ["Gincana aquática", "Teatro infantil", "Pintura facial"],
     },
     {
       id: "exp-2",
@@ -225,22 +225,22 @@ export const recreadorPerfilMock = {
       location: "Bombinhas, SC",
       dateLabel: "10 Jan 2026",
       audienceLabel: "60 participantes | faixa mista",
-      highlights: ["Karaoke", "Danca", "Bingo de integracao"],
+      highlights: ["Karaokê", "Dança", "Bingo de integração"],
     },
     {
       id: "exp-3",
       title: "Gincana familiar",
-      location: "Balneario Camboriu, SC",
+      location: "Balneário Camboriú, SC",
       dateLabel: "05 Jan 2026",
-      audienceLabel: "30 participantes | familias",
-      highlights: ["Caca ao tesouro", "Corrida do saco", "Quiz familiar"],
+      audienceLabel: "30 participantes | famílias",
+      highlights: ["Caça ao tesouro", "Corrida do saco", "Quiz familiar"],
     },
   ] as ProfileExperienceItem[],
   certifications: getRecreadorCertifications("rec-rafael-santos").map((certification) => ({
     id: certification.id,
     title: certification.title,
     institution: certification.institution,
-    validityLabel: certification.validity ?? "Validade nao informada",
+    validityLabel: certification.validity ?? "Validade não informada",
     status: certification.status === "Valido" ? "valido" : "atualizar",
   })) as ProfileCertificationItem[],
   gallery: [
@@ -248,46 +248,46 @@ export const recreadorPerfilMock = {
       id: "gal-1",
       image:
         "https://images.unsplash.com/photo-1517164850305-99a3e65bb47e?q=80&w=1200&auto=format&fit=crop",
-      description: "Gincana aquatica em resort familiar",
+      description: "Gincana aquática em resort familiar",
     },
     {
       id: "gal-2",
       image:
         "https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=1200&auto=format&fit=crop",
-      description: "Show de talentos com criancas e adolescentes",
+      description: "Show de talentos com crianças e adolescentes",
     },
     {
       id: "gal-3",
       image:
         "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1200&auto=format&fit=crop",
-      description: "Oficina criativa com familias",
+      description: "Oficina criativa com famílias",
     },
     {
       id: "gal-4",
       image:
         "https://images.unsplash.com/photo-1529078155058-5d716f45d604?q=80&w=1200&auto=format&fit=crop",
-      description: "Caca ao tesouro tematica",
+      description: "Caça ao tesouro temática",
     },
   ] as ProfileGalleryItem[],
   publicProfile: {
     displayName: profileBase.fullName,
     roleLabel: profileBase.role,
-    headline: "Recreador focado em experiencias seguras, dinamicas e memoraveis para familias.",
+    headline: "Recreador focado em experiências seguras, dinâmicas e memoráveis para famílias.",
     bio: profileBase.bio,
     city: profileBase.locationLabel,
     specialties: profileBase.specialties,
-    ageGroups: ["4 a 7 anos", "8 a 12 anos", "Familias"],
-    cacheRangeLabel: "R$ 340 - R$ 520 / diaria",
-    galleryHighlights: ["Gincanas", "Oficinas", "Programacao noturna"],
+    ageGroups: ["4 a 7 anos", "8 a 12 anos", "Famílias"],
+    cacheRangeLabel: "R$ 340 - R$ 520 / diária",
+    galleryHighlights: ["Gincanas", "Oficinas", "Programação noturna"],
     visibilityRules: [
-      "Contato direto nao fica publico.",
-      "Avaliacao media e comentarios validados ficam visiveis.",
-      "Historico operacional interno permanece privado.",
+      "Contato direto não fica público.",
+      "Avaliação média e comentários validados ficam visíveis.",
+      "Histórico operacional interno permanece privado.",
     ],
   } as PublicProfileData,
   reviews: {
     policyLabel:
-      "Avaliacoes publicas entram na vitrine. Observacoes operacionais continuam em camada interna.",
+      "Avaliações públicas entram na vitrine. Observações operacionais continuam em camada interna.",
     allowResponse: true,
     items: reviewItems,
   },

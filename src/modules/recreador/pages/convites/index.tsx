@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CheckCircle2, Clock3, MapPin, XCircle } from "lucide-react";
+import { Banknote, CalendarDays, CheckCircle2, Clock3, MapPin, XCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setLastVisualAction } from "@/app/store/slices/recreadorSlice";
@@ -12,6 +12,31 @@ const originLabel = {
   hotelaria: "Hotelaria",
   eventos: "Eventos",
 } as const;
+
+const originVisualMap = {
+  hotelaria: {
+    image:
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
+    label: "Operação em hotelaria",
+  },
+  eventos: {
+    image:
+      "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop",
+    label: "Operação em eventos",
+  },
+} as const;
+
+const columnDescription: Record<ConviteStatus, string> = {
+  pendente: "Convites que exigem decisão agora para não perder o prazo.",
+  aceito: "Aceites já registrados e prontos para acompanhamento da agenda.",
+  recusado: "Histórico de recusas para rastreabilidade operacional.",
+};
+
+const statusTabs = [
+  { status: "pendente", label: "Pendentes", icon: Clock3 },
+  { status: "aceito", label: "Aceitos", icon: CheckCircle2 },
+  { status: "recusado", label: "Recusados", icon: XCircle },
+] as const;
 
 type InviteDecisionDraft = {
   inviteId: string;
@@ -27,6 +52,7 @@ export const RecreadorConvitesPage = () => {
 
   const [items, setItems] = useState<ConviteItem[]>(recreadorConvitesMock.items);
   const [decisionDraft, setDecisionDraft] = useState<InviteDecisionDraft | null>(null);
+  const [activeStatus, setActiveStatus] = useState<ConviteStatus>("pendente");
 
   useEffect(() => {
     if (!decisionDraft) {
@@ -52,9 +78,9 @@ export const RecreadorConvitesPage = () => {
     const recusados = items.filter((item) => item.status === "recusado").length;
 
     return [
-      { title: "Pendentes", value: String(pendentes), helper: "Aguardando decisao" },
+      { title: "Pendentes", value: String(pendentes), helper: "Aguardando decisão" },
       { title: "Aceitos", value: String(aceitos), helper: "Com compromisso previsto" },
-      { title: "Recusados", value: String(recusados), helper: "Historico de decisao" },
+      { title: "Recusados", value: String(recusados), helper: "Histórico da decisão" },
     ];
   }, [items]);
 
@@ -67,21 +93,26 @@ export const RecreadorConvitesPage = () => {
     [items],
   );
 
+  const activeStatusLabel =
+    statusTabs.find((item) => item.status === activeStatus)?.label ?? "Pendentes";
+
+  const activeItems = grouped[activeStatus];
+
   const handleUpdateStatus = (inviteId: string, nextStatus: ConviteStatus) => {
     const current = items.find((item) => item.id === inviteId);
 
     if (!current) {
       warning({
-        title: "Convite indisponivel",
-        description: "Nao foi possivel localizar este convite para atualizar o status.",
+        title: "Convite indisponível",
+        description: "Não foi possível localizar este convite para atualizar o status.",
       });
       return;
     }
 
     if (current.status === nextStatus) {
       info({
-        title: "Status sem alteracao",
-        description: `O convite ${current.opportunityCode} ja esta com este status.`,
+        title: "Status sem alteração",
+        description: `O convite ${current.opportunityCode} já está com este status.`,
       });
       return;
     }
@@ -101,10 +132,10 @@ export const RecreadorConvitesPage = () => {
           statusReason:
             nextStatus === "aceito"
               ? "Aceite registrado e compromisso encaminhado para disponibilidade."
-              : "Recusa registrada no historico de convites.",
+              : "Recusa registrada no histórico de convites.",
           commitmentPreview:
             nextStatus === "aceito"
-              ? item.commitmentPreview ?? "Compromisso futuro aguardando consolidacao de agenda."
+              ? item.commitmentPreview ?? "Compromisso futuro aguardando consolidação de agenda."
               : undefined,
           timeline: [...item.timeline, { id: `${item.id}-${nextStatus}-now`, label: timelineLabel, dateLabel }],
         };
@@ -129,15 +160,15 @@ export const RecreadorConvitesPage = () => {
 
     warning({
       title: "Convite recusado",
-      description: `${current.opportunityCode} movido para Recusados com historico preservado.`,
+      description: `${current.opportunityCode} movido para Recusados com histórico preservado.`,
     });
   };
 
   const handleRequestDecision = (item: ConviteItem, nextStatus: ConviteStatus) => {
     if (item.status !== "pendente") {
       info({
-        title: "Convite ja decidido",
-        description: `Este convite ja esta marcado como ${item.status}.`,
+        title: "Convite já decidido",
+        description: `Este convite já está marcado como ${item.status}.`,
       });
       return;
     }
@@ -150,7 +181,7 @@ export const RecreadorConvitesPage = () => {
     });
   };
 
-  const renderColumn = (status: ConviteStatus, title: string, itemsList: ConviteItem[]) => (
+  const renderStatusPanel = (status: ConviteStatus, title: string, itemsList: ConviteItem[]) => (
     <S.ColumnCard>
       <S.ColumnHeader>
         <h3>
@@ -161,14 +192,15 @@ export const RecreadorConvitesPage = () => {
         </h3>
         <span>{itemsList.length}</span>
       </S.ColumnHeader>
+      <S.ColumnHelper>{columnDescription[status]}</S.ColumnHelper>
 
       {itemsList.length === 0 ? (
         <S.EmptyState>
           {status === "pendente"
-            ? "Nenhum convite pendente. Novos convites aparecerao aqui automaticamente."
+            ? "Nenhum convite pendente. Novos convites aparecerão aqui automaticamente."
             : status === "aceito"
-              ? "Nenhum convite aceito. Aceites pendentes serao listados nesta coluna."
-              : "Nenhum convite recusado no momento."}
+              ? "Nenhum convite aceito. Aceites aparecerão aqui."
+              : "Nenhum convite recusado. Recusas aparecerão aqui."}
         </S.EmptyState>
       ) : null}
 
@@ -176,19 +208,49 @@ export const RecreadorConvitesPage = () => {
         {itemsList.map((item) => (
           <S.InviteCard key={item.id}>
             <S.InviteTop>
-              <strong>{item.opportunityCode} · {item.roleLabel}</strong>
+              <S.InviteIdentity>
+                <S.InviteThumb>
+                  <img
+                    src={originVisualMap[item.originKind].image}
+                    alt={`${item.originName} - ${originVisualMap[item.originKind].label}`}
+                    loading="lazy"
+                  />
+                </S.InviteThumb>
+
+                <S.InviteHeading>
+                  <strong>{item.originName}</strong>
+                  <span>{item.opportunityCode} · {item.roleLabel}</span>
+                </S.InviteHeading>
+              </S.InviteIdentity>
+
               <S.OriginBadge $origin={item.originKind}>{originLabel[item.originKind]}</S.OriginBadge>
             </S.InviteTop>
 
-            <S.MetaLine>{item.originName}</S.MetaLine>
             <S.MetaLine>{item.originSummary}</S.MetaLine>
-            <S.MetaLine>
-              <MapPin size={13} /> {item.cityLabel}
-            </S.MetaLine>
-            <S.MetaLine>{item.periodLabel} · {item.compensationLabel}</S.MetaLine>
+
+            <S.MetaPillRow>
+              <S.MetaPill>
+                <MapPin size={13} /> {item.cityLabel}
+              </S.MetaPill>
+              <S.MetaPill>
+                <CalendarDays size={13} /> {item.periodLabel}
+              </S.MetaPill>
+              <S.MetaPill>
+                <Banknote size={13} /> {item.compensationLabel}
+              </S.MetaPill>
+            </S.MetaPillRow>
+
             <S.MetaLine>Recebido em {item.inviteDateLabel} · prazo {item.responseDeadlineLabel}</S.MetaLine>
             <S.MetaLine>{item.relationshipLabel}</S.MetaLine>
             <S.MetaLine>{item.statusReason}</S.MetaLine>
+
+            <S.DecisionHint $status={status}>
+              {status === "pendente"
+                ? `Responder até ${item.responseDeadlineLabel}.`
+                : status === "aceito"
+                  ? "Aceite registrado. Verifique a coerência com Disponibilidade."
+                  : "Recusa registrada para histórico e aprendizado de triagem."}
+            </S.DecisionHint>
 
             {item.commitmentPreview ? <S.CommitmentNote>{item.commitmentPreview}</S.CommitmentNote> : null}
 
@@ -230,16 +292,31 @@ export const RecreadorConvitesPage = () => {
       stats={stats}
     >
       <S.Wrapper>
-        <S.HeaderCard>
-          <h2>Central de convites</h2>
-          <p>Decida convites recebidos. Pesquisa e candidatura continuam em Oportunidades.</p>
-        </S.HeaderCard>
+        <S.StatusTabs>
+          {statusTabs.map((tab) => {
+            const Icon = tab.icon;
+            const count = grouped[tab.status].length;
 
-        <S.BoardGrid>
-          {renderColumn("pendente", "Pendentes", grouped.pendente)}
-          {renderColumn("aceito", "Aceitos", grouped.aceito)}
-          {renderColumn("recusado", "Recusados", grouped.recusado)}
-        </S.BoardGrid>
+            return (
+              <S.StatusTabButton
+                key={tab.status}
+                type="button"
+                $active={activeStatus === tab.status}
+                onClick={() => setActiveStatus(tab.status)}
+              >
+                <S.StatusTabLabel>
+                  <Icon size={15} />
+                  {tab.label}
+                </S.StatusTabLabel>
+                <S.StatusTabCount>{count}</S.StatusTabCount>
+              </S.StatusTabButton>
+            );
+          })}
+        </S.StatusTabs>
+
+        <S.StatusPanel>
+          {renderStatusPanel(activeStatus, activeStatusLabel, activeItems)}
+        </S.StatusPanel>
 
         {decisionDraft ? (
           <S.DecisionOverlay onClick={() => setDecisionDraft(null)}>

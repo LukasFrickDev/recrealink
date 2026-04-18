@@ -42,37 +42,37 @@ export const RecreadorSupportPage = () => {
     dispatch(setLastVisualAction("Chamado enviado para o suporte."));
     success({
       title: "Chamado enviado",
-      description: "Sua solicitacao foi registrada e entrou na fila de atendimento.",
+      description: "Sua solicitação foi registrada e entrou na fila de atendimento.",
     });
   };
 
   const handleAbrirCanal = (canalId: string) => {
     if (canalId === "email") {
-      const mailSubject = encodeURIComponent("Suporte Recreador - RecreaLink");
-      const mailBody = encodeURIComponent(
-        "Ola, preciso de ajuda no modulo Recreador.\n\nDescreva abaixo:\n- Tela\n- Acao\n- Resultado esperado\n- Resultado atual",
-      );
+	  const mailSubject = encodeURIComponent("Suporte Recreador - RecreaLink");
+	  const mailBody = encodeURIComponent(
+	    "Olá, preciso de ajuda no módulo Recreador.\n\nDescreva abaixo:\n- Tela\n- Ação\n- Resultado esperado\n- Resultado atual",
+	  );
 
       window.location.href = `mailto:suporte@recrealink.com?subject=${mailSubject}&body=${mailBody}`;
-      dispatch(setLastVisualAction("Canal de email aberto para contato com o suporte."));
+      dispatch(setLastVisualAction("Canal de e-mail aberto para contato com o suporte."));
       return;
     }
 
     if (canalId === "chat") {
       navigate("/app/recreador/chat");
-      dispatch(setLastVisualAction("Redirecionado para o chat de atendimento do modulo."));
+      dispatch(setLastVisualAction("Redirecionado para o chat de atendimento do módulo."));
       return;
     }
 
     if (canalId === "base") {
       knowledgeBaseRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      dispatch(setLastVisualAction("Base de conhecimento aberta na pagina de suporte."));
+      dispatch(setLastVisualAction("Base de conhecimento aberta na página de suporte."));
       return;
     }
 
     if (canalId === "notifications") {
       navigate("/app/recreador/notificacoes");
-      dispatch(setLastVisualAction("Redirecionado para notificacoes do modulo."));
+      dispatch(setLastVisualAction("Redirecionado para notificações do módulo."));
       return;
     }
 
@@ -97,8 +97,8 @@ export const RecreadorSupportPage = () => {
               <h2>Central de suporte</h2>
               <p>
                 {enviado
-                  ? "Chamado enviado. Abra um novo chamado se precisar complementar informacoes."
-                  : "Envie duvidas tecnicas ou operacionais para o time de suporte."}
+                  ? "Chamado enviado. Abra um novo chamado se precisar complementar informações."
+                  : "Envie dúvidas técnicas ou operacionais para o time de suporte."}
               </p>
             </div>
           </S.HeaderTop>

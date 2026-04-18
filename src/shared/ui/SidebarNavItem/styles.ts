@@ -3,26 +3,44 @@ import styled, { css } from "styled-components";
 export const Item = styled.div<{ $active: boolean; $collapsed: boolean }>`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: ${({ theme }) => theme.spacing.xs};
   border-radius: ${({ theme }) => theme.radii.md};
-  padding: ${({ $collapsed }) => ($collapsed ? "10px" : "10px 12px")};
+  padding: ${({ $collapsed, theme }) =>
+    $collapsed ? theme.spacing.sm : `${theme.spacing.sm} ${theme.spacing.md}`};
   border: 1px solid transparent;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+  a:focus-visible & {
+    outline: 2px solid var(--sidebar-active-border, ${({ theme }) => theme.colors.brandBlue});
+    outline-offset: 2px;
+  }
 
   ${({ $active, theme }) =>
     $active
       ? css`
           background: var(--sidebar-active-bg, rgba(46, 127, 240, 0.12));
           border-color: var(--sidebar-active-border, ${theme.colors.brandBlue});
-          box-shadow: 0 8px 16px rgba(28, 38, 64, 0.08);
+          box-shadow: ${theme.shadows.sm};
         `
       : css`
           &:hover {
             background: var(--sidebar-hover-bg, rgba(46, 127, 240, 0.06));
-            border-color: rgba(101, 112, 138, 0.24);
+            border-color: ${theme.colors.borderStrong};
             transform: translateY(-1px);
           }
         `}
+
+  ${({ $collapsed }) =>
+    $collapsed
+      ? css`
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          min-height: 62px;
+          padding: 8px 6px;
+          gap: 4px;
+        `
+      : null}
 `;
 
 export const Icon = styled.div`
@@ -31,19 +49,31 @@ export const Icon = styled.div`
   transition: color 0.2s ease;
 `;
 
-export const TextBlock = styled.div`
+export const TextBlock = styled.div<{ $active: boolean }>`
   display: grid;
-  gap: 2px;
+  gap: 3px;
 
   strong {
-    font-size: 13px;
-    color: ${({ theme }) => theme.colors.text};
-    line-height: 1.2;
+    font-size: ${({ theme }) => theme.typography.label};
+    color: ${({ theme }) => theme.colors.textStrong};
+    line-height: 1.28;
   }
 
   span {
-    font-size: 11px;
+    font-size: ${({ theme }) => theme.typography.meta};
     color: ${({ theme }) => theme.colors.textMuted};
-    line-height: 1.35;
+    line-height: 1.42;
+    display: ${({ $active }) => ($active ? "block" : "none")};
   }
+`;
+
+export const CollapsedLabel = styled.span`
+  font-size: ${({ theme }) => theme.typography.micro};
+  color: ${({ theme }) => theme.colors.textStrong};
+  line-height: 1.25;
+  text-align: center;
+  max-width: 7ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;

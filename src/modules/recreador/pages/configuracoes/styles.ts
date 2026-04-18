@@ -1,14 +1,18 @@
 import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
+  --recreador-settings-accent: ${({ theme }) => theme.colors.brandBlue};
+  --recreador-settings-accent-soft: rgba(46, 127, 240, 0.1);
+  --recreador-settings-accent-border: rgba(46, 127, 240, 0.34);
+
   display: grid;
-  gap: 16px;
+  gap: ${({ theme }) => theme.spacing.md};
 `;
 
 export const ProfileGrid = styled.div`
   display: grid;
-  gap: 12px;
-  grid-template-columns: 0.6fr 1.4fr;
+  gap: ${({ theme }) => theme.spacing.sm};
+  grid-template-columns: minmax(250px, 0.62fr) minmax(0, 1.38fr);
   align-items: start;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
@@ -17,63 +21,92 @@ export const ProfileGrid = styled.div`
 `;
 
 export const ProfileAside = styled.aside`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid var(--recreador-settings-accent-border);
   border-radius: ${({ theme }) => theme.radii.md};
-  background: #fff;
-  padding: 12px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(46, 127, 240, 0.16), rgba(46, 127, 240, 0) 44%),
+    radial-gradient(circle at 0% 100%, rgba(249, 111, 38, 0.12), rgba(249, 111, 38, 0) 52%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(237, 245, 255, 0.92));
+  padding: ${({ theme }) => theme.spacing.md};
   display: grid;
   grid-auto-flow: row;
   gap: 10px;
   justify-items: center;
-  justify-self: center;
-  align-self: start;
-  width: min(100%, 320px);
+  justify-self: stretch;
+  align-self: stretch;
+  min-height: 100%;
   text-align: center;
+  box-shadow: ${({ theme }) => theme.shadows.sm};
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    position: sticky;
+    top: 94px;
+  }
 `;
 
 export const AvatarPreview = styled.div`
-  width: 86px;
-  height: 86px;
-  border-radius: 22px;
-  background: linear-gradient(150deg, ${({ theme }) => theme.colors.brandBlue}, ${({ theme }) => theme.colors.brandPurple});
+  width: 92px;
+  height: 92px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.44);
+  background: linear-gradient(150deg, ${({ theme }) => theme.colors.brandBlue}, ${({ theme }) => theme.colors.brandOrange});
   color: #fff;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 12px 20px rgba(28, 38, 64, 0.18);
 `;
 
 export const ProfileName = styled.strong`
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.typography.cardTitle};
+  line-height: 1.2;
 `;
 
 export const ProfileRole = styled.span`
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   color: ${({ theme }) => theme.colors.textMuted};
 `;
 
 export const OutlineButton = styled.button`
-  min-height: 34px;
+  min-height: 36px;
   border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid var(--recreador-settings-accent-border);
   background: #fff;
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 12px;
+  color: ${({ theme }) => theme.colors.brandBlue};
+  font-size: ${({ theme }) => theme.typography.bodySm};
   font-weight: 700;
-  padding: 0 10px;
+  padding: 0 12px;
   cursor: pointer;
+  width: 100%;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    background: var(--recreador-settings-accent-soft);
+    border-color: var(--recreador-settings-accent-border);
+    transform: translateY(-1px);
+  }
 `;
 
 export const ProfileForm = styled.div`
+  border: ${({ theme }) => theme.borders.subtle};
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: ${({ theme }) => theme.surfaces.panelElevated};
+  padding: ${({ theme }) => theme.spacing.md};
   display: grid;
-  gap: 10px;
+  gap: ${({ theme }) => theme.spacing.sm};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: ${({ theme }) => theme.spacing.sm};
+  }
 `;
 
 export const InputRow = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: ${({ theme }) => theme.spacing.xs};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     grid-template-columns: minmax(0, 1fr);
@@ -82,25 +115,36 @@ export const InputRow = styled.div`
 
 export const Field = styled.label`
   display: grid;
-  gap: 5px;
+  gap: 6px;
 
   span {
-    font-size: 12px;
+    font-size: ${({ theme }) => theme.typography.meta};
     font-weight: 700;
+    color: ${({ theme }) => theme.colors.textMuted};
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
 
   input,
   textarea {
-    border: 1px solid ${({ theme }) => theme.colors.border};
+    border: ${({ theme }) => theme.borders.subtle};
     border-radius: ${({ theme }) => theme.radii.md};
     padding: 10px;
-    font-size: 13px;
+    font-size: ${({ theme }) => theme.typography.bodySm};
     font-family: ${({ theme }) => theme.fonts.body};
-    background: #fff;
+    background: rgba(255, 255, 255, 0.96);
+    color: ${({ theme }) => theme.colors.text};
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--recreador-settings-accent-border);
+      box-shadow: 0 0 0 4px var(--recreador-settings-accent-soft);
+    }
   }
 
   textarea {
-    min-height: 88px;
+    min-height: 92px;
     resize: vertical;
   }
 `;
@@ -108,7 +152,7 @@ export const Field = styled.label`
 export const ChipGrid = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
 `;
 
 export const Chip = styled.button<{ $selected: boolean }>`
@@ -116,38 +160,58 @@ export const Chip = styled.button<{ $selected: boolean }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   background: #fff;
   color: ${({ theme }) => theme.colors.text};
-  font-size: 11px;
+  min-height: 30px;
+  font-size: ${({ theme }) => theme.typography.meta};
   font-weight: 700;
-  padding: 5px 10px;
+  padding: 0 10px;
   cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 
   ${({ $selected }) =>
     $selected
       ? css`
-          border-color: rgba(46, 127, 240, 0.35);
-          background: rgba(46, 127, 240, 0.1);
-          color: #1f67c8;
+          border-color: var(--recreador-settings-accent-border);
+          background: var(--recreador-settings-accent-soft);
+          color: var(--recreador-settings-accent);
         `
       : null}
+
+  &:hover {
+    border-color: var(--recreador-settings-accent-border);
+    transform: translateY(-1px);
+  }
 `;
 
 export const ActionsRow = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    > button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 `;
 
 export const PrimaryButton = styled.button`
-  min-height: 36px;
+  min-height: 38px;
   border-radius: ${({ theme }) => theme.radii.md};
-  border: none;
-  background: ${({ theme }) => theme.colors.brandBlue};
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  background: linear-gradient(120deg, ${({ theme }) => theme.colors.brandBlue}, ${({ theme }) => theme.colors.brandOrange});
   color: #fff;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  font-weight: 800;
   padding: 0 12px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(28, 38, 64, 0.18);
+  }
 `;

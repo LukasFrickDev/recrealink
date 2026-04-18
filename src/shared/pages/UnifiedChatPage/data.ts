@@ -12,13 +12,13 @@ interface UnifiedChatModuleConfig {
   pageDescription: string;
   stats: ModuleDashboardStatItem[];
   templateData: ChatPageTemplateData;
-  tone?: "default" | "hotelaria" | "pais";
+  tone?: "default" | "hotelaria" | "pais" | "recreador";
 }
 
 export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleConfig> = {
   recreador: {
     pageTitle: "Chat do recreador",
-    pageDescription: "Conversas do modulo para comunicacao com hoteis e equipe.",
+    pageDescription: "Conversas do módulo para comunicação com hotéis e equipe.",
     stats: [
       { title: "Conversas", value: "04", helper: "2 ativas agora" },
       { title: "Não lidas", value: "05", helper: "Priorize respostas" },
@@ -37,7 +37,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           name: "Ana Martins",
           subtitle: "Coordenadora de lazer",
           detail: "Cyan Resort",
-          lastMessage: "Consegue confirmar disponibilidade para sabado?",
+          lastMessage: "Consegue confirmar disponibilidade para sábado?",
           lastTime: "10:24",
           unread: 2,
           online: true,
@@ -57,7 +57,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           name: "Marina Costa",
           subtitle: "Recreadora sênior",
           detail: "Equipe interna",
-          lastMessage: "Vamos alinhar a dinamica da gincana aquatica.",
+          lastMessage: "Vamos alinhar a dinâmica da gincana aquática.",
           lastTime: "Ontem",
           unread: 1,
           online: true,
@@ -85,7 +85,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           {
             id: "m-2",
             author: "Contato",
-            content: "Consegue confirmar disponibilidade para sabado?",
+            content: "Consegue confirmar disponibilidade para sábado?",
             time: "10:24",
             mine: false,
           },
@@ -103,7 +103,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           {
             id: "m-4",
             author: "Contato",
-            content: "Vamos alinhar a dinamica da gincana aquatica.",
+            content: "Vamos alinhar a dinâmica da gincana aquática.",
             time: "Ontem",
             mine: false,
           },
@@ -120,6 +120,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
       },
       quickReplies: [...recreadorChatQuickReplies],
     },
+    tone: "recreador",
   },
   hotelaria: {
     pageTitle: "Chat da operação",
@@ -346,15 +347,15 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
     ],
     templateData: {
       sectionTitle: "Conversas da operação",
-      sectionSubtitle: "Acompanhe solicitacoes de clientes e alinhamentos da equipe em tempo real.",
+      sectionSubtitle: "Acompanhe solicitações de clientes e alinhamentos da equipe em tempo real.",
       searchPlaceholder: "Buscar por cliente, assunto ou equipe",
       composePlaceholder: "Digite sua mensagem...",
       sendButtonLabel: "Enviar",
       conversations: [
         {
           id: "conv-1",
-          name: "Clube Estacao Kids",
-          subtitle: "Evento de sabado",
+          name: "Clube Estação Kids",
+          subtitle: "Evento de sábado",
           detail: "Responsável: Ana Ribeiro",
           lastMessage: "Podemos ajustar o início para 14h?",
           lastTime: "09:12",
@@ -374,7 +375,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
         {
           id: "conv-3",
           name: "Resort Vale Azul",
-          subtitle: "Orcamento corporativo",
+          subtitle: "Orçamento corporativo",
           detail: "Comercial: Julia Prado",
           lastMessage: "Aguardando proposta revisada.",
           lastTime: "Ontem",
@@ -403,7 +404,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           {
             id: "m-3",
             author: "Carlos Mendes",
-            content: "Checklist final da equipe já esta no drive compartilhado.",
+            content: "Checklist final da equipe já está no drive compartilhado.",
             time: "18:35",
             mine: false,
           },

@@ -85,24 +85,24 @@ export const RecreadorConfiguracoesPage = () => {
           securityTips={recreadorConfiguracoesMock.securityTips}
           feedbackMessages={recreadorConfiguracoesMock.feedbackMessages}
           onSaveNotifications={() => {
-            dispatch(setLastVisualAction("Preferencias de notificacao atualizadas."));
+            dispatch(setLastVisualAction("Preferências de notificação atualizadas."));
             success({
-              title: "Notificacoes atualizadas",
-              description: "Preferencias de notificacao salvas.",
+              title: "Notificações atualizadas",
+              description: "Preferências de notificação salvas.",
             });
           }}
           onSaveUsers={() => {
-            dispatch(setLastVisualAction("Permissoes de usuario atualizadas."));
+            dispatch(setLastVisualAction("Permissões de usuário atualizadas."));
             success({
-              title: "Usuarios atualizados",
-              description: "Permissoes de acesso salvas.",
+              title: "Usuários atualizados",
+              description: "Permissões de acesso salvas.",
             });
           }}
           onSaveSecurity={() => {
-            dispatch(setLastVisualAction("Ajuste de seguranca atualizado."));
+            dispatch(setLastVisualAction("Ajuste de segurança atualizado."));
             success({
-              title: "Seguranca atualizada",
-              description: "Alteracao de seguranca registrada.",
+              title: "Segurança atualizada",
+              description: "Alteração de segurança registrada.",
             });
           }}
           profileTabId="perfil"

@@ -31,11 +31,13 @@ export const SidebarNavItem = ({
         <S.Item $active={isActive} $collapsed={collapsed} title={collapsed ? label : undefined}>
           {icon ? <S.Icon>{icon}</S.Icon> : null}
           {!collapsed ? (
-            <S.TextBlock>
+            <S.TextBlock $active={isActive}>
               <strong>{label}</strong>
               {description ? <span>{description}</span> : null}
             </S.TextBlock>
-          ) : null}
+          ) : (
+            <S.CollapsedLabel>{label}</S.CollapsedLabel>
+          )}
         </S.Item>
       )}
     </NavLink>

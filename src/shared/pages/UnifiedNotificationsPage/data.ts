@@ -13,7 +13,7 @@ interface UnifiedNotificationsModuleConfig {
   pageDescription: string;
   stats: ModuleDashboardStatItem[];
   templateData: NotificationsPageTemplateData;
-  tone?: "default" | "hotelaria" | "pais";
+  tone?: "default" | "hotelaria" | "pais" | "recreador";
 }
 
 export const unifiedNotificationsPageByModule: Record<
@@ -43,7 +43,7 @@ export const unifiedNotificationsPageByModule: Record<
           type: "oportunidade",
           title: "Nova vaga em hotel parceiro",
           description: "Cyan Resort abriu turno para recreação infantil neste fim de semana.",
-          time: "Ha 12 min",
+          time: "Há 12 min",
           read: false,
           actionRoute: "/app/recreador/oportunidades?codigo=HTL-001",
           actionLabel: "Abrir oportunidades",
@@ -52,8 +52,8 @@ export const unifiedNotificationsPageByModule: Record<
           id: "n-2",
           type: "mensagem",
           title: "Nova mensagem no chat",
-          description: "Ana Martins respondeu sobre sua disponibilidade para sabado.",
-          time: "Ha 25 min",
+          description: "Ana Martins respondeu sobre sua disponibilidade para sábado.",
+          time: "Há 25 min",
           read: false,
           actionRoute: "/app/recreador/chat",
           actionLabel: "Abrir chat",
@@ -82,7 +82,7 @@ export const unifiedNotificationsPageByModule: Record<
           id: "n-5",
           type: "mensagem",
           title: "Briefing recebido",
-          description: "Royal Palm enviou orientacoes da atividade de fim de semana.",
+          description: "Royal Palm enviou orientações da atividade de fim de semana.",
           time: "Ontem",
           read: true,
           actionRoute: "/app/recreador/chat",
@@ -90,13 +90,14 @@ export const unifiedNotificationsPageByModule: Record<
         },
       ],
     },
+    tone: "recreador",
   },
   hotelaria: {
     pageTitle: "Central de notificações",
     pageDescription: "Fila de alertas com prioridade e ação recomendada por origem operacional.",
     stats: [
       { title: "Urgentes", value: "3", helper: "Ação imediata" },
-      { title: "Importantes", value: "8", helper: "Acompanhamento diario" },
+      { title: "Importantes", value: "8", helper: "Acompanhamento diário" },
       { title: "Informativas", value: "14", helper: "Histórico recente" },
       { title: "Resolvidas", value: "64", helper: "Últimos 7 dias" },
     ],
@@ -112,8 +113,8 @@ export const unifiedNotificationsPageByModule: Record<
         {
           id: "hotelaria-notification-1",
           type: "urgente",
-          title: "Cobertura de sabado abaixo da meta",
-          description: "Escalas: Reforcar lider kids para turno da tarde",
+          title: "Cobertura de sábado abaixo da meta",
+          description: "Escalas: reforçar líder kids para o turno da tarde",
           time: "Agora",
           read: false,
         },
@@ -183,7 +184,7 @@ export const unifiedNotificationsPageByModule: Record<
           id: "pais-not-4",
           type: "agenda",
           title: "Lembrete de contato",
-          description: "Agendamento com equipe comercial da Diversao Total em 2 horas.",
+          description: "Agendamento com equipe comercial da Diversão Total em 2 horas.",
           time: "Hoje",
           read: false,
         },
@@ -202,11 +203,11 @@ export const unifiedNotificationsPageByModule: Record<
     ],
     templateData: {
       sectionTitle: "Central de alertas",
-      sectionSubtitle: "Monitore os avisos que impactam vendas, agenda e execucao.",
+      sectionSubtitle: "Monitore os avisos que impactam vendas, agenda e execução.",
       markAllLabel: "Marcar tudo como lido",
       searchPlaceholder: "Buscar notificações",
       detailLabel: "Ver detalhe",
-      emptyMessage: "Nenhuma notificacao encontrada para este filtro.",
+      emptyMessage: "Nenhuma notificação encontrada para este filtro.",
       filters: [
         { id: "todas", label: "Todas" },
         { id: "nao-lidas", label: "Não lidas" },
@@ -220,14 +221,14 @@ export const unifiedNotificationsPageByModule: Record<
           id: "n-1",
           type: "orcamentos",
           title: "Proposta aguardando aprovação",
-          description: "Clube Estacao Kids solicitou ajustes no pacote premium.",
+          description: "Clube Estação Kids solicitou ajustes no pacote premium.",
           time: "Agora",
           read: false,
         },
         {
           id: "n-2",
           type: "agenda",
-          title: "Mudanca de horario",
+          title: "Mudança de horário",
           description: "Evento corporativo foi antecipado para 13h.",
           time: "Hoje",
           read: false,
@@ -236,7 +237,7 @@ export const unifiedNotificationsPageByModule: Record<
           id: "n-3",
           type: "equipe",
           title: "Disponibilidade atualizada",
-          description: "Lucas Nunes confirmou presença para sabado.",
+          description: "Lucas Nunes confirmou presença para sábado.",
           time: "Hoje",
           read: true,
         },
@@ -244,7 +245,7 @@ export const unifiedNotificationsPageByModule: Record<
           id: "n-4",
           type: "sistema",
           title: "Revisão de segurança",
-          description: "Recomendacao de atualização de senha da conta principal.",
+          description: "Recomendação de atualização de senha da conta principal.",
           time: "Ontem",
           read: true,
         },

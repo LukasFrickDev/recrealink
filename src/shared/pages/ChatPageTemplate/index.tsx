@@ -6,7 +6,7 @@ import * as S from "./styles";
 
 interface ChatPageTemplateProps {
   data: ChatPageTemplateData;
-  tone?: "default" | "hotelaria" | "pais";
+  tone?: "default" | "hotelaria" | "pais" | "recreador";
 }
 
 export const ChatPageTemplate = ({ data, tone = "default" }: ChatPageTemplateProps) => {

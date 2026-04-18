@@ -230,3 +230,87 @@ validar coerência entre botões, destinos, modais e estados
 remover ações mortas e cards inúteis
 revisar estados vazios e fluxos interrompidos
 fechar o Recreador funcionalmente antes da etapa visual
+
+
+ETAPA 3  visual
+Fase 1 — Auditoria visual e semântica
+
+Objetivo:
+
+mapear o que hoje está:
+genérico
+frio/flat
+excessivamente explicativo
+inconsistente
+semântico demais ou semântico de menos
+identificar onde dashboard/blocos existem sem necessidade
+separar o que é problema de:
+shell
+página núcleo
+página complementar
+shared
+Resumo curto
+
+diagnosticar o que deixa o módulo menos profissional e menos claro visualmente
+
+Fase 2 — Direção visual mestre + shell
+
+Objetivo:
+
+definir a linguagem visual-base do Recreador
+fechar semântica visual, hierarquia, densidade, ícones, superfícies e navegação
+refinar sidebar, topbar, headers e estrutura compartilhada
+garantir leitura fácil para usuário menos técnico
+Resumo curto
+
+criar a base visual do módulo e a casca compartilhada que os outros módulos vão herdar
+
+Fase 3 — Páginas núcleo de alto impacto
+
+Objetivo:
+
+refinar visualmente:
+dashboard
+perfil
+perfil público
+oportunidades
+convites
+disponibilidade
+melhorar cards, listas, blocos, summaries, estados e composição
+remover qualquer “dashboard em página” que não faça sentido
+Resumo curto
+
+dar a cara principal do produto nas páginas que mais definem a experiência
+
+Fase 4 — Complementares e shared no contexto do Recreador
+
+Objetivo:
+
+levar a mesma qualidade para:
+checklist
+suporte
+configurações
+chat/notificações no contexto do módulo
+revisar componentes/shared que ainda estejam genéricos demais
+Resumo curto
+
+fechar o resto do módulo para ele parecer um produto inteiro, e não só o núcleo bem feito
+
+Fase 5 — Microconsistência, responsividade e fechamento visual
+
+Objetivo:
+
+revisar:
+botões
+chips
+badges
+toasts
+modais
+drawers
+empty states
+estados hover/focus/active/disabled
+breakpoints
+preparar o Recreador para virar base dos outros módulos
+Resumo curto
+
+fechar o módulo visualmente e deixar pronto para replicação

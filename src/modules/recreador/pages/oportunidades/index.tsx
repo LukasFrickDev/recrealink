@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CalendarDays, Clock3, Handshake, MapPin, Search, Send } from "lucide-react";
+import { Banknote, CalendarDays, Clock3, Handshake, MapPin, Search, Send } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setLastVisualAction } from "@/app/store/slices/recreadorSlice";
@@ -15,6 +15,8 @@ import {
 	type OpportunityTypeFilter,
 } from "@/modules/recreador/mocks/oportunidades";
 import * as S from "./styles";
+
+type DecisionHintTone = "neutral" | "info" | "warning" | "success";
 
 const normalize = (value: string) =>
 	value
@@ -40,6 +42,61 @@ const originLabel: Record<OpportunityOriginKind, string> = {
 	eventos: "Eventos",
 };
 
+const originVisualMap = {
+	hotelaria: {
+		image:
+			"https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
+		label: "Operação em hotelaria",
+	},
+	eventos: {
+		image:
+			"https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop",
+		label: "Operação em eventos",
+	},
+} as const;
+
+const typeLabelMap: Record<Exclude<OpportunityTypeFilter, "todos">, string> = {
+	resort: "Resort",
+	hotel: "Hotel",
+	"evento-corporativo": "Evento corporativo",
+	"evento-social": "Evento social",
+};
+
+const getDecisionHint = (item: (typeof recreadorOportunidadesMock.items)[number]) => {
+	if (item.lifecycleStatus === "confirmada") {
+		return {
+			tone: "success" as DecisionHintTone,
+			label: "Compromisso confirmado. Revise sua agenda em Disponibilidade.",
+		};
+	}
+
+	if (item.inviteStatus === "convite-recebido") {
+		return {
+			tone: "warning" as DecisionHintTone,
+			label: "Convite recebido. A decisão de aceite ou recusa fica em Convites.",
+		};
+	}
+
+	if (item.applicationStatus === "candidatura-enviada") {
+		return {
+			tone: "info" as DecisionHintTone,
+			label: "Candidatura enviada. Acompanhe retorno e eventuais convites.",
+		};
+	}
+
+	if (item.lifecycleStatus === "encerrada") {
+		return {
+			tone: "neutral" as DecisionHintTone,
+			label: "Vaga encerrada para novas candidaturas.",
+		};
+	}
+
+	return {
+		tone: "neutral" as DecisionHintTone,
+		label: "Vaga aberta para candidatura imediata.",
+	};
+};
+
 export const RecreadorOportunidadesPage = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
@@ -58,6 +115,11 @@ export const RecreadorOportunidadesPage = () => {
 		return rawCode ? rawCode.toUpperCase() : "";
 	}, [searchParams]);
 
+	const highlightedGlobalTerm = useMemo(
+		() => searchParams.get("termo")?.trim() ?? "",
+		[searchParams],
+	);
+
 	const contextOpportunity = useMemo(
 		() => items.find((item) => item.code === highlightedOpportunityCode) ?? null,
 		[highlightedOpportunityCode, items],
@@ -71,6 +133,14 @@ export const RecreadorOportunidadesPage = () => {
 		setSearchTerm((previous) => (previous.trim().length > 0 ? previous : highlightedOpportunityCode));
 	}, [highlightedOpportunityCode]);
 
+	useEffect(() => {
+		if (!highlightedGlobalTerm || highlightedOpportunityCode) {
+			return;
+		}
+
+		setSearchTerm((previous) => (previous.trim().length > 0 ? previous : highlightedGlobalTerm));
+	}, [highlightedGlobalTerm, highlightedOpportunityCode]);
+
 	const dashboardStats = useMemo(() => {
 		const abertas = items.filter((item) => item.lifecycleStatus === "aberta").length;
 		const candidaturas = items.filter((item) => item.applicationStatus === "candidatura-enviada").length;
@@ -78,8 +148,8 @@ export const RecreadorOportunidadesPage = () => {
 		const confirmadas = items.filter((item) => item.lifecycleStatus === "confirmada").length;
 
 		return [
-			{ title: "Abertas agora", value: String(abertas), helper: "Disponiveis para candidatura" },
-			{ title: "Candidaturas", value: String(candidaturas), helper: "Ja enviadas" },
+			{ title: "Abertas agora", value: String(abertas), helper: "Disponíveis para candidatura" },
+			{ title: "Candidaturas", value: String(candidaturas), helper: "Já enviadas" },
 			{ title: "Com convite", value: String(convites), helper: "Gerenciar em Convites" },
 			{ title: "Confirmadas", value: String(confirmadas), helper: "Compromissos futuros" },
 		];
@@ -126,8 +196,8 @@ export const RecreadorOportunidadesPage = () => {
 
 		if (!target) {
 			danger({
-				title: "Oportunidade indisponivel",
-				description: "Nao foi possivel localizar a oportunidade selecionada nesta lista.",
+				title: "Oportunidade indisponível",
+				description: "Não foi possível localizar a oportunidade selecionada nesta lista.",
 			});
 			return;
 		}
@@ -135,15 +205,15 @@ export const RecreadorOportunidadesPage = () => {
 		if (target.lifecycleStatus !== "aberta") {
 			warning({
 				title: "Candidatura bloqueada",
-				description: "Esta oportunidade nao aceita nova candidatura porque nao esta aberta.",
+				description: "Esta oportunidade não aceita nova candidatura porque não está aberta.",
 			});
 			return;
 		}
 
 		if (target.applicationStatus === "candidatura-enviada") {
 			info({
-				title: "Candidatura ja enviada",
-				description: "Este item ja recebeu sua candidatura e segue em acompanhamento.",
+				title: "Candidatura já enviada",
+				description: "Este item já recebeu sua candidatura e segue em acompanhamento.",
 			});
 			return;
 		}
@@ -162,7 +232,7 @@ export const RecreadorOportunidadesPage = () => {
 		dispatch(setLastVisualAction(`Candidatura enviada para ${target.code}.`));
 		success({
 			title: "Candidatura enviada",
-			description: `${target.code} movida para acompanhamento. Se houver convite, a decisao fica em Convites.`,
+			description: `${target.code} movida para acompanhamento. Se houver convite, a decisão fica em Convites.`,
 		});
 	};
 
@@ -175,7 +245,7 @@ export const RecreadorOportunidadesPage = () => {
 		setSearchParams({}, { replace: true });
 		info({
 			title: "Filtros limpos",
-			description: "A listagem voltou para a visao geral de oportunidades.",
+			description: "A listagem voltou para a visão geral de oportunidades.",
 		});
 	};
 
@@ -186,12 +256,14 @@ export const RecreadorOportunidadesPage = () => {
 			stats={dashboardStats}
 		>
 			<S.Wrapper>
-				<S.HeaderCard>
-					<h2>Central de vagas</h2>
-					<p>Filtre vagas e envie candidaturas. Decisoes de convite ficam em Convites.</p>
-				</S.HeaderCard>
-
 				<S.FiltersCard>
+					<S.FiltersHeader>
+						<strong>Filtros locais desta página</strong>
+						<span>
+							A busca global do topo navega no módulo. Os filtros abaixo afetam apenas esta lista.
+						</span>
+					</S.FiltersHeader>
+
 					<S.FiltersGrid>
 						<S.SearchField>
 							<Search size={15} />
@@ -199,7 +271,7 @@ export const RecreadorOportunidadesPage = () => {
 								type="text"
 								value={searchTerm}
 								onChange={(event) => setSearchTerm(event.target.value)}
-								placeholder="Buscar por codigo, origem, funcao ou cidade"
+								placeholder="Filtrar somente esta lista (código, origem, função ou cidade)"
 							/>
 						</S.SearchField>
 
@@ -240,12 +312,14 @@ export const RecreadorOportunidadesPage = () => {
 					</S.FiltersGrid>
 				</S.FiltersCard>
 
-				{highlightedOpportunityCode ? (
+				{highlightedOpportunityCode || highlightedGlobalTerm ? (
 					<S.ContextCard>
 						<p>
-							{contextOpportunity
-								? `Filtro ativo: ${contextOpportunity.code} · ${contextOpportunity.roleLabel}.`
-								: `Codigo ${highlightedOpportunityCode} recebido de Convites e nao encontrado na lista atual.`}
+							{highlightedOpportunityCode
+								? contextOpportunity
+									? `Contexto global ativo: ${contextOpportunity.code} · ${contextOpportunity.roleLabel}.`
+									: `Código ${highlightedOpportunityCode} recebido da busca global e não encontrado na lista atual.`
+								: `Contexto global ativo: termo "${highlightedGlobalTerm}" aplicado para abrir esta lista.`}
 						</p>
 						<S.SecondaryButton
 							type="button"
@@ -254,7 +328,7 @@ export const RecreadorOportunidadesPage = () => {
 								setSearchTerm("");
 								info({
 									title: "Contexto removido",
-									description: "Filtro de contexto removido.",
+									description: "Contexto de busca global removido desta página.",
 								});
 							}}
 						>
@@ -266,6 +340,7 @@ export const RecreadorOportunidadesPage = () => {
 				<S.OpportunitiesGrid>
 					{filteredItems.map((item) => {
 						const isHighlighted = highlightedOpportunityCode.length > 0 && item.code === highlightedOpportunityCode;
+						const decisionHint = getDecisionHint(item);
 
 						const canApply =
 							item.lifecycleStatus === "aberta" &&
@@ -274,20 +349,41 @@ export const RecreadorOportunidadesPage = () => {
 
 						return (
 							<S.OpportunityCard key={item.id} $highlighted={isHighlighted}>
+								<S.OpportunityVisual>
+									<img
+										src={originVisualMap[item.originKind].image}
+										alt={`${item.originName} - ${originVisualMap[item.originKind].label}`}
+										loading="lazy"
+									/>
+									<S.OpportunityVisualOverlay>
+										<strong>{item.originName}</strong>
+										<span>{originVisualMap[item.originKind].label}</span>
+									</S.OpportunityVisualOverlay>
+								</S.OpportunityVisual>
+
 								<S.OpportunityHeader>
 									<S.CodeBadge>{item.code}</S.CodeBadge>
 									<S.OriginBadge $origin={item.originKind}>{originLabel[item.originKind]}</S.OriginBadge>
 								</S.OpportunityHeader>
 
 								<S.RoleTitle>{item.roleLabel}</S.RoleTitle>
-								<S.OriginSummary>{item.originName} · {item.originSummary}</S.OriginSummary>
+								<S.OriginSummary>{item.originSummary}</S.OriginSummary>
+
+								<S.HighlightRow>
+									<S.HighlightPill>
+										<CalendarDays size={13} /> {item.periodLabel}
+									</S.HighlightPill>
+									<S.HighlightPill>
+										<Banknote size={13} /> {item.compensationLabel}
+									</S.HighlightPill>
+								</S.HighlightRow>
 
 								<S.DetailList>
 									<li>
 										<MapPin size={13} /> {item.cityLabel}
 									</li>
 									<li>
-										<Handshake size={13} /> {item.type}
+										<Handshake size={13} /> {typeLabelMap[item.type]}
 									</li>
 									<li>
 										<CalendarDays size={13} /> {item.periodLabel}
@@ -296,8 +392,6 @@ export const RecreadorOportunidadesPage = () => {
 										<Clock3 size={13} /> {item.startDateLabel}
 									</li>
 								</S.DetailList>
-
-								<S.Compensation>{item.compensationLabel}</S.Compensation>
 
 								<S.StateRow>
 									<S.StatePill $tone={item.lifecycleStatus === "aberta" ? "info" : item.lifecycleStatus === "confirmada" ? "success" : "neutral"}>
@@ -322,6 +416,7 @@ export const RecreadorOportunidadesPage = () => {
 								</S.StateRow>
 
 								{item.commitmentLabel ? <S.CommitmentNote>{item.commitmentLabel}</S.CommitmentNote> : null}
+								<S.DecisionHint $tone={decisionHint.tone}>{decisionHint.label}</S.DecisionHint>
 
 								<S.ActionsRow>
 									<S.PrimaryButton type="button" disabled={!canApply} onClick={() => handleApply(item.id)}>

@@ -47,42 +47,42 @@ export interface ModuleTopbarQuickLink {
 export const recreadorSidebarGroups: ModuleSidebarGroupDefinition[] = [
   {
     id: "navegacao",
-    title: "Navegação principal",
+    title: "Principal",
     items: [
       {
         to: "/app/recreador",
         label: "Início",
-        description: "Painel principal do módulo",
+        description: "Visão geral",
         icon: House,
       },
       {
         to: "/app/recreador/perfil",
         label: "Perfil",
-        description: "Agregado completo: dados, vitrine e reputacao",
+        description: "Dados profissionais",
         icon: UserRound,
       },
       {
         to: "/app/recreador/disponibilidade",
         label: "Disponibilidade",
-        description: "Agenda e blocos de atuação",
+        description: "Agenda e bloqueios",
         icon: CalendarDays,
       },
     ],
   },
   {
     id: "operacao",
-    title: "Operação",
+    title: "Operação diária",
     items: [
       {
         to: "/app/recreador/oportunidades",
         label: "Oportunidades",
-        description: "Rede de hotéis e vagas abertas",
+        description: "Vagas para candidatura",
         icon: Map,
       },
       {
         to: "/app/recreador/convites",
         label: "Convites",
-        description: "Respostas operacionais em andamento",
+        description: "Respostas pendentes",
         icon: Briefcase,
       },
       {
@@ -94,13 +94,13 @@ export const recreadorSidebarGroups: ModuleSidebarGroupDefinition[] = [
       {
         to: "/app/recreador/configuracoes",
         label: "Configurações",
-        description: "Preferências da conta",
+        description: "Conta e preferências",
         icon: Settings,
       },
       {
         to: "/app/recreador/suporte",
         label: "Suporte",
-        description: "Ajuda e atendimento",
+        description: "Ajuda e contato",
         icon: Headphones,
       },
     ],
@@ -115,7 +115,7 @@ export const recreadorTopbarQuickLinks: ModuleTopbarQuickLink[] = [
   },
   {
     id: "oportunidades",
-    label: "Oportunidades",
+    label: "Vagas",
     to: "/app/recreador/oportunidades",
   },
   {
@@ -133,7 +133,7 @@ export const hotelariaSidebarGroups: ModuleSidebarGroupDefinition[] = [
       {
         to: "/app/hotelaria",
         label: "Painel principal",
-        description: "Visão geral e estatisticas",
+        description: "Visão geral e estatísticas",
         icon: Home,
       },
     ],
@@ -367,18 +367,18 @@ export const empresarioTopbarQuickLinks: ModuleTopbarQuickLink[] = [
 export const empresarioSidebarGroups: ModuleSidebarGroupDefinition[] = [
   {
     id: "modo-visualizacao",
-    title: "Modo de visualizacao",
+    title: "Modo de visualização",
     items: [
       {
         to: "/app/empresa/perfil",
         label: "Perfil da empresa",
-        description: "Visualizacao institucional",
+        description: "Visualização institucional",
         icon: Building2,
       },
       {
         to: "/app/empresa/recreador",
         label: "Perfil do recreador",
-        description: "Visualizacao profissional",
+        description: "Visualização profissional",
         icon: UserRound,
       },
     ],
@@ -408,13 +408,13 @@ export const empresarioSidebarGroups: ModuleSidebarGroupDefinition[] = [
       {
         to: "/app/empresa/equipe",
         label: "Equipe da empresa",
-        description: "Recreadores e alocacoes",
+        description: "Recreadores e alocações",
         icon: Users,
       },
       {
         to: "/app/empresa/vagas",
         label: "Vagas",
-        description: "Captacao e selecao de talentos",
+        description: "Captação e seleção de talentos",
         icon: Briefcase,
       },
     ],
@@ -449,7 +449,7 @@ export const empresarioSidebarGroups: ModuleSidebarGroupDefinition[] = [
     items: [
       {
         to: "/app/empresa/financas",
-        label: "Financas e pagamentos",
+        label: "Finanças e pagamentos",
         description: "Controle financeiro da operação",
         icon: DollarSign,
       },

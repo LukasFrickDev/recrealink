@@ -122,7 +122,7 @@ acceptedInvites.forEach((invite) => {
     commitmentsByOpportunity.set(invite.opportunityId, {
       ...current,
       sourceOrigins: [...current.sourceOrigins, "convite-aceito"],
-      helper: "Compromisso pronto para bloqueio automatico futuro (convite aceito + oportunidade confirmada).",
+      helper: "Compromisso pronto para bloqueio automático futuro (convite aceito + oportunidade confirmada).",
     });
     return;
   }
@@ -140,21 +140,21 @@ acceptedInvites.forEach((invite) => {
     endTime: "17:00",
     sourceOrigins: ["convite-aceito"],
     status: "pendente-ajuste",
-    helper: "Convite aceito aguardando janela final para bloqueio automatico.",
+    helper: "Convite aceito aguardando janela final para bloqueio automático.",
   });
 });
 
 export const recreadorDisponibilidadeMock = {
   title: "Disponibilidade",
   description:
-    "Central operacional para definir disponibilidade manual, bloqueios, recorrencia e conflitos.",
+    "Central operacional para definir disponibilidade manual, bloqueios, recorrência e conflitos.",
   stats: [],
   intro:
-    "A disponibilidade organiza quando voce pode atuar, o que ja esta comprometido e onde existem conflitos para ajuste.",
+    "A disponibilidade organiza quando você pode atuar, o que já está comprometido e onde existem conflitos para ajuste.",
   stateLegend: [
     {
       id: "disponivel",
-      label: "Disponivel",
+      label: "Disponível",
       helper: "Janela aberta para novas oportunidades.",
     },
     {
@@ -165,12 +165,12 @@ export const recreadorDisponibilidadeMock = {
     {
       id: "bloqueio-compromisso",
       label: "Bloqueado por compromisso",
-      helper: "Janela reservada por aceite/confirmacao.",
+      helper: "Janela reservada por aceite/confirmação.",
     },
     {
       id: "conflito",
       label: "Conflito detectado",
-      helper: "Sobreposicao de janelas que exige ajuste.",
+      helper: "Sobreposição de janelas que exige ajuste.",
     },
   ],
   slots: [
@@ -207,7 +207,7 @@ export const recreadorDisponibilidadeMock = {
     {
       id: "slot-4",
       dateLabel: "19 Mai 2026",
-      weekdayLabel: "Terca-feira",
+      weekdayLabel: "Terça-feira",
       period: "tarde",
       startTime: "13:00",
       endTime: "17:00",
@@ -263,7 +263,7 @@ export const recreadorDisponibilidadeMock = {
       kind: "sobreposicao-parcial",
       sourceA: "Bloqueio manual",
       sourceB: "Compromisso confirmado",
-      helper: "Exemplo de conflito que deve virar bloqueio automatico na camada futura.",
+      helper: "Exemplo de conflito que deve virar bloqueio automático na camada futura.",
     },
   ] as ConflictPreviewItem[],
 } as const;

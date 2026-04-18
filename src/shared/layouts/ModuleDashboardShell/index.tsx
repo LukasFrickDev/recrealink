@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useMemo, type KeyboardEvent, type ReactNode } from "react";
 import {
   Bell,
   LogOut,
@@ -11,7 +11,6 @@ import {
   SidebarOpen,
   X,
 } from "lucide-react";
-import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { setMobileMenuOpen, toggleSidebarCollapsed } from "@/app/store/slices/uiSlice";
@@ -63,11 +62,14 @@ export interface ModuleDashboardProfileMode {
   options: [ModuleDashboardProfileModeOption, ModuleDashboardProfileModeOption];
 }
 
+export type ModuleDashboardHeaderMode = "hero" | "contextual";
+
 interface ModuleDashboardShellProps {
   tone: ModuleDashboardTone;
   areaSubLabel: string;
   pageTitle: string;
   pageDescription: string;
+  headerMode?: ModuleDashboardHeaderMode;
   stats?: ModuleDashboardStatItem[];
   compactContent?: boolean;
   userName: string;
@@ -82,10 +84,14 @@ interface ModuleDashboardShellProps {
   logoutRoute: string;
   sidebarGroups: ModuleDashboardNavGroup[];
   quickLinks: ModuleDashboardQuickLink[];
+  showQuickLinks?: boolean;
+  quickLinksLimit?: number;
   showSearch?: boolean;
   searchValue: string;
   searchPlaceholder: string;
+  searchAriaLabel?: string;
   onSearchChange: (value: string) => void;
+  onSearchSubmit?: (value: string) => void;
   onChatNavigation?: () => void;
   onNotificationsNavigation?: () => void;
   onSettingsNavigation?: () => void;
@@ -104,6 +110,7 @@ export const ModuleDashboardShell = ({
   areaSubLabel,
   pageTitle,
   pageDescription,
+  headerMode = "hero",
   stats = [],
   compactContent = false,
   userName,
@@ -118,10 +125,14 @@ export const ModuleDashboardShell = ({
   logoutRoute,
   sidebarGroups,
   quickLinks,
+  showQuickLinks = true,
+  quickLinksLimit = 2,
   showSearch = true,
   searchValue,
   searchPlaceholder,
+  searchAriaLabel,
   onSearchChange,
+  onSearchSubmit,
   onChatNavigation,
   onNotificationsNavigation,
   onSettingsNavigation,
@@ -149,6 +160,24 @@ export const ModuleDashboardShell = ({
   };
 
   const theme = moduleDashboardThemeByTone[tone];
+
+  const visibleQuickLinks = useMemo(() => {
+    if (!showQuickLinks) {
+      return [];
+    }
+
+    return quickLinks.slice(0, Math.max(0, quickLinksLimit));
+  }, [quickLinks, quickLinksLimit, showQuickLinks]);
+
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") {
+      return;
+    }
+
+    onSearchSubmit?.(searchValue.trim());
+  };
+
+  const formatUnreadCount = (value: number) => (value > 99 ? "99+" : String(value));
 
   return (
     <S.Page
@@ -229,7 +258,9 @@ export const ModuleDashboardShell = ({
 
             return (
               <S.GroupSection key={group.id}>
-                <S.GroupTitle $collapsed={isSidebarCollapsed}>{group.title}</S.GroupTitle>
+                <S.GroupTitle $collapsed={isSidebarCollapsed} title={group.title}>
+                  {isSidebarCollapsed ? group.title.split(" ")[0] : group.title}
+                </S.GroupTitle>
 
                 <S.NavList $collapsed={isSidebarCollapsed}>
                   {group.items.map((item) => (
@@ -290,62 +321,77 @@ export const ModuleDashboardShell = ({
 
             {showSearch ? (
               <S.SearchWrap>
-                <Search size={16} />
-                <input
-                  type="text"
-                  value={searchValue}
-                  onChange={(event) => onSearchChange(event.target.value)}
-                  placeholder={searchPlaceholder}
-                />
+                <S.SearchInputWrap>
+                  <Search size={16} />
+                  <input
+                    type="text"
+                    value={searchValue}
+                    onChange={(event) => onSearchChange(event.target.value)}
+                    onKeyDown={handleSearchKeyDown}
+                    placeholder={searchPlaceholder}
+                    aria-label={searchAriaLabel ?? "Busca global"}
+                  />
+                </S.SearchInputWrap>
               </S.SearchWrap>
             ) : null}
           </S.TopbarMain>
 
           <S.TopbarActions>
-            {quickLinks.map((link) => (
-              <S.QuickButton key={link.id} type="button" onClick={() => navigateInsideModule(link.to)}>
-                {link.label}
-              </S.QuickButton>
-            ))}
+            {visibleQuickLinks.length > 0 ? (
+              <S.QuickLinksGroup role="navigation" aria-label="Atalhos de navegação">
+                {visibleQuickLinks.map((link) => (
+                  <S.QuickButton key={link.id} type="button" onClick={() => navigateInsideModule(link.to)}>
+                    {link.label}
+                  </S.QuickButton>
+                ))}
+              </S.QuickLinksGroup>
+            ) : null}
 
-            <S.IconButton
+            <S.ActionButton
               type="button"
               aria-label="Chat"
               onClick={() => navigateInsideModule(chatRoute, onChatNavigation)}
             >
-              <MessageCircle size={17} />
-              <S.CounterBadge>{String(unreadMessages)}</S.CounterBadge>
-            </S.IconButton>
+              <MessageCircle size={16} />
+              <S.ActionLabel>Chat</S.ActionLabel>
+              {unreadMessages > 0 ? <S.ActionCount>{formatUnreadCount(unreadMessages)}</S.ActionCount> : null}
+            </S.ActionButton>
 
-            <S.IconButton
+            <S.ActionButton
               type="button"
               aria-label="Notificações"
               onClick={() => navigateInsideModule(notificationsRoute, onNotificationsNavigation)}
             >
-              <Bell size={17} />
-              <S.CounterBadge>{String(unreadNotifications)}</S.CounterBadge>
-            </S.IconButton>
+              <Bell size={16} />
+              <S.ActionLabel>Notificações</S.ActionLabel>
+              {unreadNotifications > 0 ? (
+                <S.ActionCount>{formatUnreadCount(unreadNotifications)}</S.ActionCount>
+              ) : null}
+            </S.ActionButton>
 
-            <S.IconButton
+            <S.ActionButton
               type="button"
               aria-label="Configurações"
               onClick={() => navigateInsideModule(settingsRoute, onSettingsNavigation)}
             >
-              <Settings size={17} />
-            </S.IconButton>
+              <Settings size={16} />
+              <S.ActionLabel>Configurações</S.ActionLabel>
+            </S.ActionButton>
 
-            <S.LogoutButton
+            <S.LogoutActionButton
               type="button"
               aria-label="Sair"
               onClick={() => navigateInsideModule(logoutRoute, onLogout)}
             >
-              <LogOut size={17} />
-            </S.LogoutButton>
+              <LogOut size={16} />
+              <S.ActionLabel>Sair</S.ActionLabel>
+            </S.LogoutActionButton>
           </S.TopbarActions>
         </S.Topbar>
 
         <S.Main $compact={compactContent}>
-          <S.PageHeader $compact={compactContent}>
+          <S.PageHeader $compact={compactContent} $mode={headerMode}>
+            {headerMode === "contextual" ? <S.PageHeaderEyebrow>{areaSubLabel}</S.PageHeaderEyebrow> : null}
             <h1>{pageTitle}</h1>
             <p>{pageDescription}</p>
           </S.PageHeader>

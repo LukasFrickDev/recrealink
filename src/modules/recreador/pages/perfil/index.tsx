@@ -120,7 +120,7 @@ const parseHighlights = (rawValue: string): string[] =>
     .filter(Boolean);
 
 const certificationStatusLabel: Record<ProfileCertificationItem["status"], string> = {
-  valido: "Valido",
+  valido: "Válido",
   atualizar: "Atualizar",
 };
 
@@ -279,7 +279,7 @@ export const RecreadorPerfilPage = () => {
       window.location.assign(recreadorPerfilMock.publicProfileRoute);
     }
 
-    dispatch(setLastVisualAction("Perfil publico aberto para visualizacao externa."));
+    dispatch(setLastVisualAction("Perfil público aberto para visualização externa."));
   };
 
   const resetTransientForms = () => {
@@ -331,12 +331,12 @@ export const RecreadorPerfilPage = () => {
 
   const confirmRemoval = (itemLabel: string) => {
     const confirmed = window.confirm(
-      `Confirmar remocao: ${itemLabel}? Esta acao afeta o rascunho atual do perfil.`,
+      `Confirmar remoção: ${itemLabel}? Esta ação afeta o rascunho atual do perfil.`,
     );
 
     if (!confirmed) {
       info({
-        title: "Remocao cancelada",
+        title: "Remoção cancelada",
         description: "O item foi mantido na lista atual do perfil.",
       });
     }
@@ -347,8 +347,8 @@ export const RecreadorPerfilPage = () => {
   const handleSalvar = () => {
     if (!fullName.trim() || !roleTitle.trim() || !city.trim()) {
       warning({
-        title: "Campos obrigatorios",
-        description: "Preencha nome, titulo profissional e cidade antes de salvar o perfil.",
+        title: "Campos obrigatórios",
+        description: "Preencha nome, título profissional e cidade antes de salvar o perfil.",
       });
       return;
     }
@@ -390,7 +390,7 @@ export const RecreadorPerfilPage = () => {
     dispatch(setLastVisualAction("Perfil do recreador atualizado."));
     success({
       title: "Perfil salvo",
-      description: "Dados principais e conteudo operacional do perfil foram atualizados.",
+      description: "Dados principais e conteúdo operacional do perfil foram atualizados.",
     });
   };
 
@@ -416,11 +416,11 @@ export const RecreadorPerfilPage = () => {
 
     if (
       (hasSnapshotChanges || hasDraftChanges) &&
-      !window.confirm("Descartar alteracoes nao salvas do perfil e restaurar o ultimo estado salvo?")
+      !window.confirm("Descartar alterações não salvas do perfil e restaurar o último estado salvo?")
     ) {
       info({
         title: "Cancelamento interrompido",
-        description: "As alteracoes permanecem na tela para revisao.",
+        description: "As alterações permanecem na tela para revisão.",
       });
       return;
     }
@@ -428,8 +428,8 @@ export const RecreadorPerfilPage = () => {
     applySnapshot(savedSnapshot);
     resetTransientForms();
     info({
-      title: "Alteracoes descartadas",
-      description: "O perfil voltou para o ultimo estado salvo nesta sessao.",
+      title: "Alterações descartadas",
+      description: "O perfil voltou para o último estado salvo nesta sessão.",
     });
   };
 
@@ -457,13 +457,13 @@ export const RecreadorPerfilPage = () => {
       );
       success({
         title: "Link atualizado",
-        description: "O link do portfolio foi atualizado na lista local.",
+        description: "O link do portfólio foi atualizado na lista local.",
       });
     } else {
       setLinks((previous) => [...previous, { id: createLocalId("link"), url: normalizedUrl }]);
       success({
         title: "Link adicionado",
-        description: "Novo link de portfolio incluido para proximo salvamento do perfil.",
+        description: "Novo link de portfólio incluído para próximo salvamento do perfil.",
       });
     }
 
@@ -481,13 +481,13 @@ export const RecreadorPerfilPage = () => {
 
     if (!target) {
       warning({
-        title: "Link indisponivel",
-        description: "Nao foi possivel localizar este link para remocao.",
+        title: "Link indisponível",
+        description: "Não foi possível localizar este link para remoção.",
       });
       return;
     }
 
-    if (!confirmRemoval("este link do portfolio")) {
+    if (!confirmRemoval("este link do portfólio")) {
       return;
     }
 
@@ -500,7 +500,7 @@ export const RecreadorPerfilPage = () => {
 
     info({
       title: "Link removido",
-      description: "O link foi removido da lista local do portfolio.",
+      description: "O link foi removido da lista local do portfólio.",
     });
   };
 
@@ -513,8 +513,8 @@ export const RecreadorPerfilPage = () => {
 
     if (!title || !location || !dateLabel || !audienceLabel) {
       warning({
-        title: "Experiencia incompleta",
-        description: "Preencha titulo, local, data e publico para salvar a experiencia.",
+        title: "Experiência incompleta",
+        description: "Preencha título, local, data e público para salvar a experiência.",
       });
       return;
     }
@@ -535,8 +535,8 @@ export const RecreadorPerfilPage = () => {
         ),
       );
       success({
-        title: "Experiencia atualizada",
-        description: "A experiencia selecionada foi atualizada com sucesso.",
+        title: "Experiência atualizada",
+        description: "A experiência selecionada foi atualizada com sucesso.",
       });
     } else {
       setExperienceItems((previous) => [
@@ -551,8 +551,8 @@ export const RecreadorPerfilPage = () => {
         },
       ]);
       success({
-        title: "Experiencia adicionada",
-        description: "Nova experiencia incluida na vitrine interna do perfil.",
+        title: "Experiência adicionada",
+        description: "Nova experiência incluída na vitrine interna do perfil.",
       });
     }
 
@@ -576,13 +576,13 @@ export const RecreadorPerfilPage = () => {
 
     if (!target) {
       warning({
-        title: "Experiencia indisponivel",
-        description: "Nao foi possivel localizar esta experiencia para remocao.",
+        title: "Experiência indisponível",
+        description: "Não foi possível localizar esta experiência para remoção.",
       });
       return;
     }
 
-    if (!confirmRemoval(`a experiencia ${target.title}`)) {
+    if (!confirmRemoval(`a experiência ${target.title}`)) {
       return;
     }
 
@@ -594,8 +594,8 @@ export const RecreadorPerfilPage = () => {
     }
 
     info({
-      title: "Experiencia removida",
-      description: "A experiencia foi removida da lista operacional do perfil.",
+      title: "Experiência removida",
+      description: "A experiência foi removida da lista operacional do perfil.",
     });
   };
 
@@ -606,8 +606,8 @@ export const RecreadorPerfilPage = () => {
 
     if (!title || !institution || !validityLabel) {
       warning({
-        title: "Certificacao incompleta",
-        description: "Preencha titulo, instituicao e validade para salvar a certificacao.",
+        title: "Certificação incompleta",
+        description: "Preencha título, instituição e validade para salvar a certificação.",
       });
       return;
     }
@@ -627,8 +627,8 @@ export const RecreadorPerfilPage = () => {
         ),
       );
       success({
-        title: "Certificacao atualizada",
-        description: "A certificacao selecionada foi atualizada na lista atual.",
+        title: "Certificação atualizada",
+        description: "A certificação selecionada foi atualizada na lista atual.",
       });
     } else {
       setCertificationItems((previous) => [
@@ -642,8 +642,8 @@ export const RecreadorPerfilPage = () => {
         },
       ]);
       success({
-        title: "Certificacao adicionada",
-        description: "Nova certificacao registrada no perfil operacional.",
+        title: "Certificação adicionada",
+        description: "Nova certificação registrada no perfil operacional.",
       });
     }
 
@@ -666,13 +666,13 @@ export const RecreadorPerfilPage = () => {
 
     if (!target) {
       warning({
-        title: "Certificacao indisponivel",
-        description: "Nao foi possivel localizar esta certificacao para remocao.",
+        title: "Certificação indisponível",
+        description: "Não foi possível localizar esta certificação para remoção.",
       });
       return;
     }
 
-    if (!confirmRemoval(`a certificacao ${target.title}`)) {
+    if (!confirmRemoval(`a certificação ${target.title}`)) {
       return;
     }
 
@@ -684,8 +684,8 @@ export const RecreadorPerfilPage = () => {
     }
 
     info({
-      title: "Certificacao removida",
-      description: "A certificacao foi removida da lista atual do perfil.",
+      title: "Certificação removida",
+      description: "A certificação foi removida da lista atual do perfil.",
     });
   };
 
@@ -696,7 +696,7 @@ export const RecreadorPerfilPage = () => {
     if (!description) {
       warning({
         title: "Galeria incompleta",
-        description: "Informe ao menos a descricao para salvar um item da galeria.",
+        description: "Informe ao menos a descrição para salvar um item da galeria.",
       });
       return;
     }
@@ -717,7 +717,7 @@ export const RecreadorPerfilPage = () => {
       );
       success({
         title: "Item da galeria atualizado",
-        description: "A imagem selecionada foi atualizada no portfolio.",
+        description: "A imagem selecionada foi atualizada no portfólio.",
       });
     } else {
       setGalleryItems((previous) => [
@@ -730,7 +730,7 @@ export const RecreadorPerfilPage = () => {
       ]);
       success({
         title: "Item da galeria adicionado",
-        description: "Novo item incluido na galeria para o proximo salvamento do perfil.",
+        description: "Novo item incluído na galeria para o próximo salvamento do perfil.",
       });
     }
 
@@ -751,8 +751,8 @@ export const RecreadorPerfilPage = () => {
 
     if (!target) {
       warning({
-        title: "Item indisponivel",
-        description: "Nao foi possivel localizar este item da galeria para remocao.",
+        title: "Item indisponível",
+        description: "Não foi possível localizar este item da galeria para remoção.",
       });
       return;
     }
@@ -780,15 +780,15 @@ export const RecreadorPerfilPage = () => {
     if (!response) {
       warning({
         title: "Resposta vazia",
-        description: "Escreva uma resposta antes de salvar o comentario da avaliacao.",
+        description: "Escreva uma resposta antes de salvar o comentário da avaliação.",
       });
       return;
     }
 
-    dispatch(setLastVisualAction(`Resposta registrada para avaliacao ${reviewId}.`));
+    dispatch(setLastVisualAction(`Resposta registrada para avaliação ${reviewId}.`));
     success({
       title: "Resposta registrada",
-      description: "A resposta foi salva para este item de avaliacao.",
+      description: "A resposta foi salva para este item de avaliação.",
     });
   };
 
@@ -822,7 +822,7 @@ export const RecreadorPerfilPage = () => {
             </S.SummaryIdentity>
 
             <S.SecondaryButton type="button" onClick={handleAbrirPerfilPublico}>
-              <ExternalLink size={15} /> Visualizar perfil publico
+              <ExternalLink size={15} /> Visualizar perfil público
             </S.SecondaryButton>
           </S.SummaryTop>
 
@@ -833,11 +833,11 @@ export const RecreadorPerfilPage = () => {
             </S.SummaryStat>
             <S.SummaryStat>
               <strong>{recreadorPerfilMock.reputationSummary.ratingAverage.toFixed(1)}</strong>
-              <span>avaliacao media</span>
+              <span>avaliação média</span>
             </S.SummaryStat>
             <S.SummaryStat>
               <strong>{recreadorPerfilMock.reputationSummary.totalReviews}</strong>
-              <span>avaliacoes recebidas</span>
+              <span>avaliações recebidas</span>
             </S.SummaryStat>
           </S.SummaryStats>
         </S.SummaryCard>
@@ -853,12 +853,12 @@ export const RecreadorPerfilPage = () => {
             </S.Field>
 
             <S.Field>
-              <span>Titulo profissional</span>
+              <span>Título profissional</span>
               <input value={roleTitle} onChange={(event) => setRoleTitle(event.target.value)} />
             </S.Field>
 
             <S.Field>
-              <span>Cidade de atuacao</span>
+              <span>Cidade de atuação</span>
               <input value={city} onChange={(event) => setCity(event.target.value)} />
             </S.Field>
 
@@ -876,16 +876,16 @@ export const RecreadorPerfilPage = () => {
 
         <S.SectionCard>
           <S.SectionTitle>
-            <BriefcaseBusiness size={18} /> Descricao e apresentacao
+            <BriefcaseBusiness size={18} /> Descrição e apresentação
           </S.SectionTitle>
           <S.FormGrid>
             <S.Field>
-              <span>Descricao profissional</span>
+              <span>Descrição profissional</span>
               <textarea value={shortBio} onChange={(event) => setShortBio(event.target.value)} />
             </S.Field>
 
             <S.Field>
-              <span>Resumo de portfolio</span>
+              <span>Resumo de portfólio</span>
               <textarea
                 value={portfolioHeadline}
                 onChange={(event) => setPortfolioHeadline(event.target.value)}
@@ -894,7 +894,7 @@ export const RecreadorPerfilPage = () => {
 
             <S.Field>
               <span>
-                <Link2 size={16} /> Links do portfolio
+                <Link2 size={16} /> Links do portfólio
               </span>
 
               <S.InlineRow>
@@ -922,7 +922,7 @@ export const RecreadorPerfilPage = () => {
 
               {links.length === 0 ? (
                 <S.EmptyInlineList>
-                  Nenhum link cadastrado no portfolio. Adicione ao menos um canal para facilitar contato.
+                  Nenhum link cadastrado no portfólio. Adicione ao menos um canal para facilitar contato.
                 </S.EmptyInlineList>
               ) : (
                 <S.ManagedList>
@@ -953,12 +953,12 @@ export const RecreadorPerfilPage = () => {
 
         <S.SectionCard>
           <S.SectionTitle>
-            <Wallet size={18} /> Experiencia, especialidades e atuacao
+            <Wallet size={18} /> Experiência, especialidades e atuação
           </S.SectionTitle>
 
           <S.FormGrid>
             <S.Field>
-              <span>Anos de experiencia</span>
+              <span>Anos de experiência</span>
               <input
                 value={experienceYears}
                 onChange={(event) => setExperienceYears(event.target.value)}
@@ -983,7 +983,7 @@ export const RecreadorPerfilPage = () => {
             </S.Field>
 
             <S.Field>
-              <span>Faixa etaria de atuacao</span>
+              <span>Faixa etária de atuação</span>
               <S.ChipsGrid>
                 {recreadorPerfilMock.ageGroupOptions.map((option) => (
                   <S.ChipButton
@@ -999,7 +999,7 @@ export const RecreadorPerfilPage = () => {
             </S.Field>
 
             <S.Field>
-              <span>Faixa de caches</span>
+              <span>Faixa de cachês</span>
               <S.OptionsGrid>
                 {recreadorPerfilMock.cacheRangeOptions.map((option) => (
                   <S.OptionButton
@@ -1017,11 +1017,11 @@ export const RecreadorPerfilPage = () => {
             </S.Field>
           </S.FormGrid>
 
-          <S.SubsectionTitle>Experiencias</S.SubsectionTitle>
+          <S.SubsectionTitle>Experiências</S.SubsectionTitle>
           <S.FormGrid>
             <S.FormColumns>
               <S.Field>
-                <span>Titulo da experiencia</span>
+                <span>Título da experiência</span>
                 <input
                   value={experienceDraft.title}
                   onChange={(event) =>
@@ -1061,7 +1061,7 @@ export const RecreadorPerfilPage = () => {
               </S.Field>
 
               <S.Field>
-                <span>Publico</span>
+                <span>Público</span>
                 <input
                   value={experienceDraft.audienceLabel}
                   onChange={(event) =>
@@ -1076,7 +1076,7 @@ export const RecreadorPerfilPage = () => {
             </S.FormColumns>
 
             <S.Field>
-              <span>Destaques (separar por virgula)</span>
+              <span>Destaques (separar por vírgula)</span>
               <input
                 value={experienceDraft.highlights}
                 onChange={(event) =>
@@ -1085,13 +1085,13 @@ export const RecreadorPerfilPage = () => {
                     highlights: event.target.value,
                   }))
                 }
-                placeholder="Gincana aquatica, Oficina criativa, Apresentacao final"
+                placeholder="Gincana aquática, Oficina criativa, Apresentação final"
               />
             </S.Field>
 
             <S.InlineActions>
               <S.MinorButton type="button" onClick={handleSaveExperience}>
-                <Plus size={14} /> {editingExperienceId ? "Atualizar experiencia" : "Adicionar experiencia"}
+                <Plus size={14} /> {editingExperienceId ? "Atualizar experiência" : "Adicionar experiência"}
               </S.MinorButton>
               {editingExperienceId ? (
                 <S.MinorButton
@@ -1102,14 +1102,14 @@ export const RecreadorPerfilPage = () => {
                     setExperienceDraft(EXPERIENCE_DRAFT_INITIAL);
                   }}
                 >
-                  <X size={14} /> Cancelar edicao
+                  <X size={14} /> Cancelar edição
                 </S.MinorButton>
               ) : null}
             </S.InlineActions>
 
             {experienceItems.length === 0 ? (
               <S.EmptyInlineList>
-                Nenhuma experiencia cadastrada. Registre ao menos uma experiencia para fortalecer seu perfil.
+                Nenhuma experiência cadastrada. Registre ao menos uma experiência para fortalecer seu perfil.
               </S.EmptyInlineList>
             ) : (
               <S.ManagedList>
@@ -1143,11 +1143,11 @@ export const RecreadorPerfilPage = () => {
             )}
           </S.FormGrid>
 
-          <S.SubsectionTitle>Certificacoes</S.SubsectionTitle>
+          <S.SubsectionTitle>Certificações</S.SubsectionTitle>
           <S.FormGrid>
             <S.FormColumns>
               <S.Field>
-                <span>Titulo da certificacao</span>
+                <span>Título da certificação</span>
                 <input
                   value={certificationDraft.title}
                   onChange={(event) =>
@@ -1160,7 +1160,7 @@ export const RecreadorPerfilPage = () => {
               </S.Field>
 
               <S.Field>
-                <span>Instituicao</span>
+                <span>Instituição</span>
                 <input
                   value={certificationDraft.institution}
                   onChange={(event) =>
@@ -1182,7 +1182,7 @@ export const RecreadorPerfilPage = () => {
                       validityLabel: event.target.value,
                     }))
                   }
-                  placeholder="Valido ate Dez 2026"
+                  placeholder="Válido até Dez 2026"
                 />
               </S.Field>
 
@@ -1197,7 +1197,7 @@ export const RecreadorPerfilPage = () => {
                     }))
                   }
                 >
-                  <option value="valido">Valido</option>
+                  <option value="valido">Válido</option>
                   <option value="atualizar">Atualizar</option>
                 </select>
               </S.Field>
@@ -1205,7 +1205,7 @@ export const RecreadorPerfilPage = () => {
 
             <S.InlineActions>
               <S.MinorButton type="button" onClick={handleSaveCertification}>
-                <Plus size={14} /> {editingCertificationId ? "Atualizar certificacao" : "Adicionar certificacao"}
+                <Plus size={14} /> {editingCertificationId ? "Atualizar certificação" : "Adicionar certificação"}
               </S.MinorButton>
               {editingCertificationId ? (
                 <S.MinorButton
@@ -1216,14 +1216,14 @@ export const RecreadorPerfilPage = () => {
                     setCertificationDraft(CERTIFICATION_DRAFT_INITIAL);
                   }}
                 >
-                  <X size={14} /> Cancelar edicao
+                  <X size={14} /> Cancelar edição
                 </S.MinorButton>
               ) : null}
             </S.InlineActions>
 
             {certificationItems.length === 0 ? (
               <S.EmptyInlineList>
-                Nenhuma certificacao cadastrada. Inclua certificacoes para apoiar sua credibilidade.
+                Nenhuma certificação cadastrada. Inclua certificações para apoiar sua credibilidade.
               </S.EmptyInlineList>
             ) : (
               <S.ManagedList>
@@ -1282,7 +1282,7 @@ export const RecreadorPerfilPage = () => {
               </S.Field>
 
               <S.Field>
-                <span>Descricao da imagem</span>
+                <span>Descrição da imagem</span>
                 <input
                   value={galleryDraft.description}
                   onChange={(event) =>
@@ -1291,7 +1291,7 @@ export const RecreadorPerfilPage = () => {
                       description: event.target.value,
                     }))
                   }
-                  placeholder="Atividade com familias em area externa"
+                  placeholder="Atividade com famílias em área externa"
                 />
               </S.Field>
             </S.FormColumns>
@@ -1309,7 +1309,7 @@ export const RecreadorPerfilPage = () => {
                     setGalleryDraft(GALLERY_DRAFT_INITIAL);
                   }}
                 >
-                  <X size={14} /> Cancelar edicao
+                  <X size={14} /> Cancelar edição
                 </S.MinorButton>
               ) : null}
             </S.InlineActions>
@@ -1317,7 +1317,7 @@ export const RecreadorPerfilPage = () => {
 
           {galleryItems.length === 0 ? (
             <S.EmptyInlineList>
-              Nenhum item na galeria. Inclua fotos ou descricoes para enriquecer sua apresentacao publica.
+              Nenhum item na galeria. Inclua fotos ou descrições para enriquecer sua apresentação pública.
             </S.EmptyInlineList>
           ) : null}
 
@@ -1341,14 +1341,14 @@ export const RecreadorPerfilPage = () => {
 
         <S.SectionCard>
           <S.SectionTitle>
-            <Star size={18} /> Avaliacoes
+            <Star size={18} /> Avaliações
           </S.SectionTitle>
 
           <S.ReputationCard>
             <S.ReputationLine>
               <strong>{recreadorPerfilMock.reputationSummary.ratingAverage.toFixed(1)}</strong>
               {renderStars(recreadorPerfilMock.reputationSummary.ratingAverage, "perfil")}
-              <span>{recreadorPerfilMock.reputationSummary.totalReviews} avaliacoes recebidas</span>
+              <span>{recreadorPerfilMock.reputationSummary.totalReviews} avaliações recebidas</span>
             </S.ReputationLine>
 
             <S.MetricsGrid>
@@ -1390,7 +1390,7 @@ export const RecreadorPerfilPage = () => {
                         [item.id]: event.target.value,
                       }))
                     }
-                    placeholder="Escreva uma resposta para esta avaliacao"
+                    placeholder="Escreva uma resposta para esta avaliação"
                   />
                   <S.SecondaryButton type="button" onClick={() => handleSalvarResposta(item.id)}>
                     Salvar resposta
@@ -1406,7 +1406,7 @@ export const RecreadorPerfilPage = () => {
             <Save size={15} /> Salvar perfil
           </S.PrimaryButton>
           <S.SecondaryButton type="button" onClick={handleCancelarAlteracoes}>
-            <X size={15} /> Cancelar alteracoes
+            <X size={15} /> Cancelar alterações
           </S.SecondaryButton>
         </S.ActionsRow>
       </S.Wrapper>

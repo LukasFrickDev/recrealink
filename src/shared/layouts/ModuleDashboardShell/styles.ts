@@ -34,54 +34,73 @@ export const Page = styled.div<{
   --badge-brand-bg: var(--shell-accent-soft);
   --badge-brand-color: var(--shell-accent-hover);
   --statcard-icon-color: var(--shell-accent);
+  --shell-surface-base: ${({ theme }) => theme.surfaces.panel};
+  --shell-surface-soft: ${({ theme }) => theme.surfaces.panelSoft};
+  --shell-surface-elevated: ${({ theme }) => theme.surfaces.panelElevated};
+  --shell-border-default: ${({ theme }) => theme.colors.border};
+  --shell-border-strong: ${({ theme }) => theme.colors.borderStrong};
+  --shell-shadow-soft: ${({ theme }) => theme.shadows.sm};
 
   min-height: 100vh;
   display: grid;
   grid-template-columns: auto 1fr;
   background:
     radial-gradient(circle at 100% -6%, var(--shell-accent-soft) 0%, rgba(255, 255, 255, 0) 36%),
-    radial-gradient(circle at -10% 106%, rgba(28, 38, 64, 0.05) 0%, rgba(28, 38, 64, 0) 42%),
-    ${({ theme }) => theme.colors.background};
+    radial-gradient(circle at -10% 106%, rgba(249, 111, 38, 0.08) 0%, rgba(249, 111, 38, 0) 44%),
+    ${({ theme }) => theme.surfaces.canvas};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-template-columns: 1fr;
   }
 
-  ${({ $tone }) =>
-    $tone === "hotelaria"
-      ? css`
-          button:focus-visible,
-          a:focus-visible,
-          input:focus-visible,
-          textarea:focus-visible,
-          select:focus-visible {
-            outline: 2px solid rgba(249, 111, 38, 0.58);
-            outline-offset: 2px;
-          }
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--shell-accent);
+    outline-offset: 2px;
+  }
 
-          button:disabled,
-          input:disabled,
-          textarea:disabled,
-          select:disabled {
-            opacity: 0.72;
-            cursor: not-allowed;
-          }
-        `
-      : null}
+  button:disabled,
+  input:disabled,
+  textarea:disabled,
+  select:disabled {
+    opacity: 0.64;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    filter: none;
+  }
 `;
 
 export const Sidebar = styled.aside<{ $collapsed: boolean; $mobileOpen: boolean }>`
-  width: ${({ $collapsed }) => ($collapsed ? "88px" : "306px")};
-  border-right: 1px solid ${({ theme }) => theme.colors.border};
+  width: ${({ $collapsed }) => ($collapsed ? "104px" : "306px")};
+  border-right: 1px solid var(--shell-border-strong);
   background:
     radial-gradient(circle at 0% 0%, var(--shell-sidebar-radial) 0%, rgba(255, 255, 255, 0) 45%),
     linear-gradient(180deg, #ffffff 0%, var(--shell-sidebar-linear) 50%, #ffffff 100%);
-  padding: 16px;
+  padding: ${({ theme }) => theme.spacing.md};
   display: grid;
   grid-template-rows: auto auto 1fr;
-  gap: 14px;
+  gap: ${({ theme }) => theme.spacing.sm};
   transition: width 0.2s ease, transform 0.2s ease;
   box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.55);
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     position: fixed;
@@ -90,8 +109,8 @@ export const Sidebar = styled.aside<{ $collapsed: boolean; $mobileOpen: boolean 
     z-index: 30;
     min-height: 100vh;
     transform: translateX(${({ $mobileOpen }) => ($mobileOpen ? "0" : "-100%")});
-    width: min(292px, calc(100vw - 20px));
-    padding: 14px 12px;
+    width: min(304px, calc(100vw - 20px));
+    padding: ${({ theme }) => theme.spacing.sm};
   }
 `;
 
@@ -101,7 +120,7 @@ export const SidebarTop = styled.div<{ $collapsed: boolean }>`
   justify-content: ${({ $collapsed }) => ($collapsed ? "center" : "space-between")};
   gap: 8px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  padding-bottom: 12px;
+  padding-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const BrandBlock = styled.div<{ $collapsed: boolean }>`
@@ -110,7 +129,7 @@ export const BrandBlock = styled.div<{ $collapsed: boolean }>`
 
   strong {
     font-family: ${({ theme }) => theme.fonts.title};
-    font-size: 20px;
+    font-size: ${({ theme }) => theme.typography.sectionTitle};
     line-height: 1;
     display: ${({ $collapsed }) => ($collapsed ? "none" : "block")};
     background: var(--shell-brand-gradient);
@@ -120,7 +139,7 @@ export const BrandBlock = styled.div<{ $collapsed: boolean }>`
   }
 
   span {
-    font-size: 11px;
+    font-size: ${({ theme }) => theme.typography.micro};
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--shell-accent-sub-label);
@@ -130,11 +149,11 @@ export const BrandBlock = styled.div<{ $collapsed: boolean }>`
 `;
 
 export const IconButton = styled.button`
-  min-width: 34px;
-  min-height: 34px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  min-width: 36px;
+  min-height: 36px;
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: #fff;
+  background: var(--shell-surface-base);
   color: ${({ theme }) => theme.colors.text};
   display: inline-flex;
   align-items: center;
@@ -167,32 +186,15 @@ export const MobileCloseButton = styled(IconButton)`
   }
 `;
 
-export const CounterBadge = styled.span`
-  min-width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  background: var(--shell-accent);
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px;
-  position: absolute;
-  top: -6px;
-  right: -6px;
-`;
-
 export const ProfileCard = styled.section<{ $collapsed: boolean }>`
-  border: ${({ $collapsed, theme }) => ($collapsed ? "none" : `1px solid ${theme.colors.border}`)};
+  border: ${({ $collapsed, theme }) => ($collapsed ? "none" : theme.borders.subtle)};
   border-radius: ${({ theme }) => theme.radii.md};
   background:
     ${({ $collapsed }) =>
       $collapsed
         ? "transparent"
         : "linear-gradient(170deg, rgba(255, 255, 255, 0.98) 0%, var(--shell-accent-soft) 118%)"};
-  padding: ${({ $collapsed }) => ($collapsed ? "0" : "14px")};
+  padding: ${({ $collapsed, theme }) => ($collapsed ? "0" : theme.spacing.md)};
   display: grid;
   gap: ${({ $collapsed }) => ($collapsed ? "8px" : "12px")};
 `;
@@ -223,7 +225,7 @@ export const ProfileMeta = styled.div<{ $collapsed: boolean }>`
   justify-items: ${({ $collapsed }) => ($collapsed ? "center" : "start")};
 
   strong {
-    font-size: ${({ $collapsed }) => ($collapsed ? "12px" : "13px")};
+    font-size: ${({ $collapsed, theme }) => ($collapsed ? theme.typography.meta : theme.typography.label)};
     color: ${({ theme }) => theme.colors.text};
     letter-spacing: 0.01em;
     line-height: 1.2;
@@ -231,19 +233,19 @@ export const ProfileMeta = styled.div<{ $collapsed: boolean }>`
 
   p {
     margin: 0;
-    font-size: 11px;
+    font-size: ${({ theme }) => theme.typography.meta};
     color: ${({ theme }) => theme.colors.textMuted};
     display: ${({ $collapsed }) => ($collapsed ? "none" : "block")};
   }
 `;
 
 export const ProfileAction = styled.button<{ $collapsed: boolean }>`
-  min-height: 34px;
+  min-height: 36px;
   border-radius: ${({ theme }) => theme.radii.md};
   border: 1px solid var(--shell-accent-border);
   background: var(--shell-accent-soft);
   color: var(--shell-accent);
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.meta};
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -268,20 +270,20 @@ export const ProfileAction = styled.button<{ $collapsed: boolean }>`
 `;
 
 export const SecondaryIdentity = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
   background: rgba(255, 255, 255, 0.88);
-  padding: 8px 10px;
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
   display: grid;
   gap: 3px;
 
   strong {
-    font-size: 12px;
+    font-size: ${({ theme }) => theme.typography.label};
     color: ${({ theme }) => theme.colors.text};
   }
 
   span {
-    font-size: 11px;
+    font-size: ${({ theme }) => theme.typography.meta};
     color: var(--shell-accent);
     font-weight: 700;
   }
@@ -293,20 +295,9 @@ export const GroupList = styled.div`
   align-items: stretch;
   align-content: flex-start;
   justify-content: flex-start;
-  gap: 12px;
-  overflow-y: auto;
+  gap: ${({ theme }) => theme.spacing.sm};
   min-height: 0;
-  padding-right: 2px;
-  padding-bottom: 12px;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(101, 112, 138, 0.3);
-    border-radius: 999px;
-  }
+  padding-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const GroupSection = styled.section`
@@ -318,12 +309,13 @@ export const GroupSection = styled.section`
 
 export const GroupTitle = styled.h4<{ $collapsed: boolean }>`
   margin: 0;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: ${({ $collapsed, theme }) => ($collapsed ? theme.typography.micro : theme.typography.meta)};
+  text-transform: ${({ $collapsed }) => ($collapsed ? "uppercase" : "none")};
+  letter-spacing: ${({ $collapsed }) => ($collapsed ? "0.08em" : "0.01em")};
   color: ${({ theme }) => theme.colors.textMuted};
-  padding: 0 6px;
-  display: ${({ $collapsed }) => ($collapsed ? "none" : "block")};
+  font-weight: ${({ $collapsed }) => ($collapsed ? 800 : 700)};
+  padding: ${({ $collapsed }) => ($collapsed ? "0" : "0 6px")};
+  text-align: ${({ $collapsed }) => ($collapsed ? "center" : "left")};
 `;
 
 export const NavList = styled.nav<{ $collapsed: boolean }>`
@@ -341,14 +333,14 @@ export const NavList = styled.nav<{ $collapsed: boolean }>`
       ? css`
           a > div {
             justify-content: center;
-            padding: 10px;
+            padding: 8px 6px;
           }
         `
       : null}
 `;
 
 export const ProfileModeCard = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
   background: rgba(255, 255, 255, 0.92);
   padding: 8px;
@@ -358,12 +350,12 @@ export const ProfileModeCard = styled.div`
 `;
 
 export const ProfileModeButton = styled.button<{ $active: boolean }>`
-  min-height: 34px;
+  min-height: 36px;
   border-radius: ${({ theme }) => theme.radii.md};
   border: 1px solid ${({ $active, theme }) => ($active ? "var(--shell-accent)" : theme.colors.border)};
   background: ${({ $active }) => ($active ? "var(--shell-accent-soft)" : "#fff")};
   color: ${({ $active, theme }) => ($active ? "var(--shell-accent)" : theme.colors.text)};
-  font-size: 11px;
+  font-size: ${({ theme }) => theme.typography.meta};
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -381,7 +373,7 @@ export const MobileOverlay = styled.button<{ $open: boolean }>`
     position: fixed;
     inset: 0;
     border: none;
-    background: rgba(28, 38, 64, 0.54);
+    background: ${({ theme }) => theme.colors.overlay};
     z-index: 20;
   }
 `;
@@ -393,14 +385,14 @@ export const Content = styled.div`
 `;
 
 export const Topbar = styled.header`
-  min-height: 78px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  background: rgba(255, 255, 255, 0.92);
-  padding: 12px 20px;
+  min-height: 74px;
+  border-bottom: 1px solid var(--shell-border-strong);
+  background: rgba(255, 255, 255, 0.96);
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.lg}`};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing.sm};
   position: sticky;
   top: 0;
   z-index: 15;
@@ -408,25 +400,15 @@ export const Topbar = styled.header`
   backdrop-filter: blur(8px);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
-    padding: 10px 14px;
+    padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.md}`};
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--shell-accent) 0%, rgba(255, 255, 255, 0) 52%);
+    gap: 6px;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding: 8px 10px 10px;
-    gap: 8px;
+    padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm} ${theme.spacing.sm}`};
+    gap: ${({ theme }) => theme.spacing.xs};
   }
 `;
 
@@ -443,7 +425,7 @@ export const TopbarMain = styled.div`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 100%;
-    gap: 6px;
+    gap: ${({ theme }) => theme.spacing.xs};
   }
 `;
 
@@ -458,12 +440,12 @@ export const MobileMenuButton = styled(IconButton)`
 `;
 
 export const TopbarLogoButton = styled.button`
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 999px;
   padding: 0;
-  border: 1px solid #fff;
-  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  background: var(--shell-surface-base);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -471,8 +453,8 @@ export const TopbarLogoButton = styled.button`
   cursor: pointer;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
   }
 `;
 
@@ -482,38 +464,16 @@ export const TopbarLogoImage = styled.img`
   object-fit: cover;
 `;
 
-export const ContextBlock = styled.div`
-  display: grid;
-  gap: 2px;
-
-  h2 {
-    margin: 0;
-    font-size: 17px;
-    line-height: 1.1;
-  }
-
-  p {
-    margin: 0;
-    font-size: 12px;
-    color: ${({ theme }) => theme.colors.textMuted};
-  }
-
-  @media (max-width: 1050px) {
-    display: none;
-  }
-`;
-
-export const SearchWrap = styled.label`
-  max-width: 460px;
+export const SearchInputWrap = styled.span`
   width: 100%;
   min-height: 38px;
   border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 12px;
-  background: rgba(255, 255, 255, 0.84);
+  gap: ${({ theme }) => theme.spacing.xs};
+  padding: 0 ${({ theme }) => theme.spacing.sm};
+  background: var(--shell-surface-base);
   color: ${({ theme }) => theme.colors.textMuted};
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
@@ -528,23 +488,38 @@ export const SearchWrap = styled.label`
     width: 100%;
     font-family: ${({ theme }) => theme.fonts.body};
     background: transparent;
+    color: ${({ theme }) => theme.colors.text};
+    font-size: ${({ theme }) => theme.typography.bodySm};
+
+    &::placeholder {
+      color: ${({ theme }) => theme.colors.textMuted};
+    }
   }
+`;
+
+export const SearchWrap = styled.label`
+  max-width: 640px;
+  width: 100%;
+  min-width: 0;
+  flex: 1;
+  display: block;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     max-width: none;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    max-width: none;
-    width: auto;
-    min-width: 0;
+    width: 100%;
     flex: 1;
-    min-height: 32px;
-    padding: 0 8px;
-    gap: 6px;
+    max-width: none;
 
-    input {
-      font-size: 12px;
+    ${SearchInputWrap} {
+      min-height: 34px;
+      padding: 0 ${({ theme }) => theme.spacing.xs};
+
+      input {
+        font-size: ${({ theme }) => theme.typography.meta};
+      }
     }
   }
 `;
@@ -552,7 +527,7 @@ export const SearchWrap = styled.label`
 export const TopbarActions = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
@@ -578,15 +553,29 @@ export const TopbarActions = styled.div`
   }
 `;
 
+export const QuickLinksGroup = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    margin-right: auto;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    display: none;
+  }
+`;
+
 export const QuickButton = styled.button`
   min-height: 34px;
   border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  background: linear-gradient(180deg, #ffffff 0%, rgba(246, 250, 255, 0.96) 100%);
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 12px;
-  font-weight: 700;
-  padding: 0 10px;
+  border: ${({ theme }) => theme.borders.subtle};
+  background: var(--shell-surface-soft);
+  color: ${({ theme }) => theme.colors.textStrong};
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  font-weight: 600;
+  padding: 0 11px;
   cursor: pointer;
   transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 
@@ -595,17 +584,57 @@ export const QuickButton = styled.button`
     color: var(--shell-accent);
     transform: translateY(-1px);
   }
+`;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
-    display: none;
+export const ActionButton = styled.button`
+  min-height: 36px;
+  border-radius: ${({ theme }) => theme.radii.md};
+  border: ${({ theme }) => theme.borders.subtle};
+  background: var(--shell-surface-base);
+  color: ${({ theme }) => theme.colors.text};
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  font-size: ${({ theme }) => theme.typography.meta};
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    border-color: var(--shell-accent);
+    color: var(--shell-accent);
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    min-height: 32px;
+    padding: 0 8px;
+  }
+`;
+
+export const ActionLabel = styled.span`
+  white-space: nowrap;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     display: none;
   }
 `;
 
-export const LogoutButton = styled(IconButton)`
+export const ActionCount = styled.span`
+  min-width: 18px;
+  height: 18px;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  background: var(--shell-accent-soft);
+  color: var(--shell-accent-hover);
+  font-size: ${({ theme }) => theme.typography.micro};
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+`;
+
+export const LogoutActionButton = styled(ActionButton)`
   border-color: var(--shell-accent);
   background: var(--shell-accent);
   color: #fff;
@@ -618,57 +647,79 @@ export const LogoutButton = styled(IconButton)`
 `;
 
 export const Main = styled.main<{ $compact?: boolean }>`
-  padding: ${({ $compact }) => ($compact ? "8px 20px 18px" : "14px 20px 20px")};
+  padding: ${({ $compact, theme }) =>
+    $compact
+      ? `${theme.spacing.xs} ${theme.spacing.lg} ${theme.spacing.lg}`
+      : `${theme.spacing.sm} ${theme.spacing.lg} ${theme.spacing.lg}`};
   display: grid;
-  gap: ${({ $compact }) => ($compact ? "8px" : "10px")};
+  gap: ${({ $compact, theme }) => ($compact ? theme.spacing.sm : theme.spacing.md)};
   width: 100%;
   max-width: 1540px;
   margin: 0 auto;
-  height: 45%;
+  min-height: 0;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
-    padding: ${({ $compact }) => ($compact ? "8px 14px 14px" : "12px 14px 16px")};
+    padding: ${({ $compact, theme }) =>
+      $compact
+        ? `${theme.spacing.xs} ${theme.spacing.md} ${theme.spacing.md}`
+        : `${theme.spacing.sm} ${theme.spacing.md} ${theme.spacing.md}`};
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding: ${({ $compact }) => ($compact ? "6px 10px 12px" : "10px")};
-    gap: ${({ $compact }) => ($compact ? "6px" : "8px")};
+    padding: ${({ $compact, theme }) => ($compact ? `${theme.spacing.xs} ${theme.spacing.sm}` : theme.spacing.sm)};
+    gap: ${({ $compact, theme }) => ($compact ? theme.spacing.xs : theme.spacing.sm)};
 
   }
 `;
-export const PageHeader = styled.section<{ $compact?: boolean }>`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+export const PageHeader = styled.section<{ $compact?: boolean; $mode: "hero" | "contextual" }>`
+  border: 1px solid var(--shell-border-strong);
   border-radius: ${({ theme }) => theme.radii.lg};
-  background: linear-gradient(160deg, var(--shell-accent-soft) 0%, rgba(255, 255, 255, 0.96) 56%);
-  padding: ${({ $compact }) => ($compact ? "10px 14px" : "12px 16px")};
-  box-shadow: 0 10px 22px rgba(28, 38, 64, 0.07);
+  background: ${({ $mode, theme }) => ($mode === "hero" ? theme.surfaces.panelAccent : theme.surfaces.panel)};
+  padding: ${({ $compact, $mode, theme }) =>
+    $mode === "hero"
+      ? $compact
+        ? `${theme.spacing.sm} ${theme.spacing.md}`
+        : `${theme.spacing.md} ${theme.spacing.lg}`
+      : `${theme.spacing.sm} ${theme.spacing.md}`};
+  box-shadow: ${({ $mode }) => ($mode === "hero" ? "var(--shell-shadow-soft)" : "none")};
 
   h1 {
     margin: 0;
-    font-size: clamp(24px, 4vw, 34px);
+    font-size: ${({ $mode, theme }) => ($mode === "hero" ? theme.typography.pageTitle : theme.typography.sectionTitle)};
     font-family: ${({ theme }) => theme.fonts.title};
-    line-height: 1.1;
+    line-height: 1.18;
   }
 
   p {
-    margin: ${({ $compact }) => ($compact ? "1px 0 0" : "4px 0 0")};
+    margin: ${({ $compact, theme }) => ($compact ? `${theme.spacing.xs} 0 0` : `${theme.spacing.xs} 0 0`)};
     color: ${({ theme }) => theme.colors.textMuted};
-    font-size: 15px;
+    font-size: ${({ $mode, theme }) => ($mode === "hero" ? theme.typography.body : theme.typography.bodySm)};
+    line-height: 1.5;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding: ${({ $compact }) => ($compact ? "10px 12px" : "12px")};
+    padding: ${({ $compact, theme }) => ($compact ? `${theme.spacing.sm} ${theme.spacing.sm}` : theme.spacing.sm)};
 
     p {
-      font-size: 13px;
-      line-height: 1.45;
+      font-size: ${({ theme }) => theme.typography.bodySm};
     }
   }
 `;
 
+export const PageHeaderEyebrow = styled.span`
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 4px;
+  font-size: ${({ theme }) => theme.typography.micro};
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-weight: 700;
+`;
+
 export const StatsGrid = styled.section`
   display: grid;
-  gap: 14px;
+  gap: ${({ theme }) => theme.spacing.sm};
   grid-template-columns: repeat(4, minmax(0, 1fr));
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
@@ -682,7 +733,7 @@ export const StatsGrid = styled.section`
 
 export const Body = styled.section<{ $compact?: boolean }>`
   display: grid;
-  gap: ${({ $compact }) => ($compact ? "8px" : "10px")};
+  gap: ${({ $compact, theme }) => ($compact ? theme.spacing.sm : theme.spacing.md)};
 
   > :first-child {
     margin-top: 0;

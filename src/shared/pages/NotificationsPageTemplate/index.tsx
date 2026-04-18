@@ -7,7 +7,7 @@ import * as S from "./styles";
 
 interface NotificationsPageTemplateProps {
   data: NotificationsPageTemplateData;
-  tone?: "default" | "hotelaria" | "pais";
+  tone?: "default" | "hotelaria" | "pais" | "recreador";
 }
 
 export const NotificationsPageTemplate = ({ data, tone = "default" }: NotificationsPageTemplateProps) => {

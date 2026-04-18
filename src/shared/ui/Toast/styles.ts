@@ -53,9 +53,9 @@ export const ToastViewport = styled.div`
   position: fixed;
   top: 0.95rem;
   right: 0.95rem;
-  width: min(360px, calc(100vw - 1.6rem));
+  width: min(380px, calc(100vw - 1.6rem));
   display: grid;
-  gap: 0.56rem;
+  gap: ${({ theme }) => theme.spacing.xs};
   z-index: 1500;
   pointer-events: none;
 
@@ -74,11 +74,11 @@ export const ToastCard = styled.article<{ $tone: ToastTone }>`
   border: 1px solid ${({ $tone }) => tonePalette($tone).border};
   background: ${({ $tone }) => tonePalette($tone).background};
   box-shadow: ${({ theme }) => theme.shadows.sm};
-  padding: 0.6rem 0.65rem;
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: start;
-  gap: 0.5rem;
+  gap: ${({ theme }) => theme.spacing.xs};
   animation: ${slideIn} 190ms ease-out;
 `;
 
@@ -95,16 +95,17 @@ export const IconWrap = styled.span<{ $tone: ToastTone }>`
 
 export const Content = styled.div`
   display: grid;
-  gap: 0.22rem;
+  gap: 0.18rem;
 
   strong {
-    font-size: 0.76rem;
+    font-size: ${({ theme }) => theme.typography.meta};
+    line-height: 1.25;
     color: ${({ theme }) => theme.colors.text};
   }
 
   p {
     margin: 0;
-    font-size: 0.74rem;
+    font-size: ${({ theme }) => theme.typography.meta};
     color: ${({ theme }) => theme.colors.textMuted};
     line-height: 1.4;
   }
@@ -121,8 +122,14 @@ export const CloseButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.16s ease, color 0.16s ease;
 
   &:hover {
     background: rgba(100, 116, 139, 0.12);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.brandBlue};
+    outline-offset: 2px;
   }
 `;

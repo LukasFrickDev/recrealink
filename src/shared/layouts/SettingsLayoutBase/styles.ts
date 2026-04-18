@@ -55,7 +55,7 @@ export const Wrapper = styled.section<{ $tone: "default" | "hotelaria" | "pais" 
 export const BodyLayout = styled.div`
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  gap: 10px;
+  gap: ${({ theme }) => theme.spacing.sm};
   align-items: start;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
@@ -65,12 +65,12 @@ export const BodyLayout = styled.div`
 
 export const Sidebar = styled.nav`
   display: grid;
-  gap: 9px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  gap: ${({ theme }) => theme.spacing.xs};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
   background: rgba(255, 255, 255, 0.9);
-  padding: 10px;
-  box-shadow: 0 8px 18px rgba(28, 38, 64, 0.08);
+  padding: ${({ theme }) => theme.spacing.sm};
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 
   @media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
     position: sticky;
@@ -101,23 +101,23 @@ export const Sidebar = styled.nav`
 
 export const TabButton = styled.button<{ $active: boolean }>`
   border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   background: rgba(255, 255, 255, 0.94);
   color: ${({ theme }) => theme.colors.text};
   text-align: left;
-  padding: 11px 12px;
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.sm}`};
   cursor: pointer;
   display: grid;
   gap: 4px;
   transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 
   strong {
-    font-size: 13px;
+    font-size: ${({ theme }) => theme.typography.label};
     line-height: 1.2;
   }
 
   span {
-    font-size: 11px;
+    font-size: ${({ theme }) => theme.typography.meta};
     color: ${({ theme }) => theme.colors.textMuted};
     line-height: 1.4;
   }
@@ -150,17 +150,17 @@ export const TabButton = styled.button<{ $active: boolean }>`
 `;
 
 export const Content = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: linear-gradient(170deg, rgba(255, 255, 255, 0.98) 0%, rgba(246, 250, 255, 0.94) 100%);
-  padding: 14px;
+  background: ${({ theme }) => theme.surfaces.panelElevated};
+  padding: ${({ theme }) => theme.spacing.md};
   display: grid;
-  gap: 10px;
+  gap: ${({ theme }) => theme.spacing.sm};
   min-height: 320px;
-  box-shadow: 0 12px 24px rgba(28, 38, 64, 0.1);
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    padding: 12px;
+    padding: ${({ theme }) => theme.spacing.sm};
     min-height: 0;
   }
 `;

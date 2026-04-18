@@ -44,9 +44,9 @@ const toneIconMap: Record<ToastTone, LucideIcon> = {
 };
 
 const defaultTitleByTone: Record<ToastTone, string> = {
-  success: "Atualizacao concluida",
-  info: "Atualizacao visual",
-  warning: "Atencao",
+  success: "Atualização concluída",
+  info: "Atualização visual",
+  warning: "Atenção",
   danger: "Falha visual",
 };
 

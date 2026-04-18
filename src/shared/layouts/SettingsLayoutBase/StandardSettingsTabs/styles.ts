@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 export const Section = styled.section`
   display: grid;
-  gap: 12px;
+  gap: ${({ theme }) => theme.spacing.sm};
   align-content: start;
 `;
 
@@ -12,15 +12,15 @@ export const PreferenceList = styled.div`
 `;
 
 export const PreferenceItem = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
   background: rgba(255, 255, 255, 0.92);
-  padding: 11px 12px;
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.sm}`};
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 6px 14px rgba(28, 38, 64, 0.06);
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     align-items: flex-start;
@@ -33,12 +33,12 @@ export const PreferenceText = styled.div`
   gap: 2px;
 
   strong {
-    font-size: 13px;
+    font-size: ${({ theme }) => theme.typography.label};
   }
 
   p {
     margin: 0;
-    font-size: 12px;
+    font-size: ${({ theme }) => theme.typography.bodySm};
     color: ${({ theme }) => theme.colors.textMuted};
   }
 `;
@@ -70,13 +70,13 @@ export const UserList = styled.div`
 `;
 
 export const UserItem = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
   background: rgba(255, 255, 255, 0.92);
-  padding: 11px 12px;
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.sm}`};
   display: grid;
   gap: 7px;
-  box-shadow: 0 6px 14px rgba(28, 38, 64, 0.06);
+  box-shadow: ${({ theme }) => theme.shadows.sm};
 `;
 
 export const UserTop = styled.div`
@@ -86,7 +86,7 @@ export const UserTop = styled.div`
   gap: 8px;
 
   strong {
-    font-size: 13px;
+    font-size: ${({ theme }) => theme.typography.label};
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -98,7 +98,7 @@ export const UserMeta = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: 11px;
+  font-size: ${({ theme }) => theme.typography.meta};
   color: ${({ theme }) => theme.colors.textMuted};
 `;
 
@@ -114,12 +114,12 @@ export const StatusTag = styled.span<{ $active: boolean }>`
 `;
 
 export const OutlineButton = styled.button`
-  min-height: 34px;
+  min-height: 36px;
   border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   background: #fff;
   color: ${({ theme }) => theme.colors.text};
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   font-weight: 700;
   padding: 0 10px;
   display: inline-flex;
@@ -154,15 +154,15 @@ export const Field = styled.label`
   gap: 6px;
 
   span {
-    font-size: 12px;
+    font-size: ${({ theme }) => theme.typography.bodySm};
     font-weight: 700;
   }
 
   input {
-    border: 1px solid ${({ theme }) => theme.colors.border};
+    border: ${({ theme }) => theme.borders.subtle};
     border-radius: ${({ theme }) => theme.radii.md};
     padding: 10px;
-    font-size: 13px;
+    font-size: ${({ theme }) => theme.typography.bodySm};
     font-family: ${({ theme }) => theme.fonts.body};
     background: rgba(255, 255, 255, 0.94);
 
@@ -181,7 +181,7 @@ export const SecurityTips = styled.ul`
   gap: 5px;
 
   li {
-    font-size: 12px;
+    font-size: ${({ theme }) => theme.typography.bodySm};
     color: ${({ theme }) => theme.colors.textMuted};
   }
 `;
@@ -200,12 +200,12 @@ export const ActionsRow = styled.div`
 `;
 
 export const PrimaryButton = styled.button`
-  min-height: 36px;
+  min-height: 38px;
   border-radius: ${({ theme }) => theme.radii.md};
   border: none;
   background: linear-gradient(120deg, var(--settings-accent), rgba(138, 97, 212, 0.88));
   color: #fff;
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   font-weight: 700;
   padding: 0 12px;
   display: inline-flex;
@@ -222,7 +222,7 @@ export const PrimaryButton = styled.button`
 
 export const Feedback = styled.p<{ $success?: boolean }>`
   margin: 0;
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   font-weight: 700;
   color: ${({ $success, theme }) => ($success ? theme.colors.success : theme.colors.brandOrange)};
 `;
@@ -234,7 +234,7 @@ export const RestrictedNotice = styled.p`
   background: var(--settings-warning-bg, rgba(249, 111, 38, 0.1));
   color: ${({ theme }) => theme.colors.text};
   padding: 8px 10px;
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   line-height: 1.45;
 `;
 
@@ -244,10 +244,10 @@ export const DataList = styled.div`
 `;
 
 export const DataItem = styled.article`
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
   background: rgba(255, 255, 255, 0.9);
-  padding: 9px;
+  padding: ${({ theme }) => theme.spacing.xs};
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -260,13 +260,13 @@ export const DataItem = styled.article`
   }
 
   span {
-    font-size: 11px;
+    font-size: ${({ theme }) => theme.typography.meta};
     color: ${({ theme }) => theme.colors.textMuted};
   }
 
   p {
     margin: 0;
-    font-size: 11px;
+    font-size: ${({ theme }) => theme.typography.meta};
     color: ${({ theme }) => theme.colors.textMuted};
   }
 
@@ -278,10 +278,10 @@ export const DataItem = styled.article`
 
 export const DataInput = styled.input`
   min-height: 32px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
   padding: 0 10px;
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   text-align: right;
   width: min(280px, 100%);
   color: ${({ theme }) => theme.colors.text};
@@ -338,7 +338,7 @@ export const HeaderPrimaryAction = styled.button`
   border: 1px solid var(--settings-action-border, rgba(249, 111, 38, 0.35));
   background: var(--settings-action-bg, rgba(249, 111, 38, 0.08));
   color: var(--settings-action-color, ${({ theme }) => theme.colors.brandOrange});
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -356,10 +356,10 @@ export const HeaderPrimaryAction = styled.button`
 export const HeaderSecondaryAction = styled.button`
   min-height: 34px;
   border-radius: ${({ theme }) => theme.radii.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.subtle};
   background: #fff;
   color: ${({ theme }) => theme.colors.text};
-  font-size: 12px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -380,7 +380,7 @@ export const HeaderBadge = styled.span<{ $tone: "warning" | "neutral" }>`
   padding: 0 10px;
   display: inline-flex;
   align-items: center;
-  font-size: 11px;
+  font-size: ${({ theme }) => theme.typography.meta};
   font-weight: 700;
 
   ${({ $tone }) =>
