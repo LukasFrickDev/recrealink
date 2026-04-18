@@ -19,6 +19,7 @@ import {
   type OperationalAlertSeverity,
   type OperationalPriorityTone,
 } from "@/modules/recreador/mocks/dashboard";
+import { recreadorPerfilMock } from "@/modules/recreador/mocks/perfil";
 import * as S from "./styles";
 
 const priorityIconMap: Record<OperationalPriorityTone, LucideIcon> = {
@@ -98,7 +99,7 @@ export const RecreadorDashboardPage = () => {
     <RecreadorDashboardShell
       pageTitle={recreadorDashboardMock.title}
       pageDescription={recreadorDashboardMock.description}
-      stats={[...recreadorDashboardMock.stats]}
+      stats={[]}
     >
       <S.Wrapper>
         <S.HeroRow>
@@ -484,6 +485,12 @@ export const RecreadorDashboardPage = () => {
               <ArrowRight size={14} />
             </S.HeaderActionButton>
           </S.SectionHeader>
+
+          <S.ReviewSummaryLine>
+            <strong>{recreadorPerfilMock.dashboardReviewSummary.ratingAverage.toFixed(1)}</strong>
+            {renderRatingStars(recreadorPerfilMock.dashboardReviewSummary.ratingAverage, "dashboard-summary")}
+            <span>{recreadorPerfilMock.dashboardReviewSummary.totalReviews} avaliações</span>
+          </S.ReviewSummaryLine>
 
           <S.ReviewList>
             {recreadorDashboardMock.recentReviews.map((item) => (

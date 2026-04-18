@@ -1,6 +1,6 @@
 import type { OpportunityOriginKind } from "@/modules/recreador/mocks/oportunidades";
 
-export type ConviteStatus = "pendente" | "aceito" | "recusado";
+export type ConviteStatus = "aguardando" | "pendente" | "aceito" | "recusado";
 
 export interface ConviteTimelineEvent {
   id: string;
@@ -31,17 +31,23 @@ export interface ConviteItem {
 export const recreadorConvitesMock = {
   title: "Convites",
   description:
-    "Central dedicada para decidir convites recebidos, com separação clara entre pendentes, aceitos e recusados.",
+    "Central dedicada para acompanhar candidaturas aguardando retorno e decidir convites diretos recebidos.",
   stats: [
-    { title: "Pendentes", value: "1", helper: "Aguardando decisão" },
+    { title: "Aguardando", value: "1", helper: "Candidaturas em análise" },
+    { title: "Pendentes", value: "1", helper: "Convites diretos para decidir" },
     { title: "Aceitos", value: "1", helper: "Com compromisso previsto" },
     { title: "Recusados", value: "1", helper: "Histórico da decisão" },
   ],
   statusLegend: [
     {
+      id: "aguardando",
+      title: "Aguardando",
+      helper: "Candidatura enviada e aguardando retorno da empresa.",
+    },
+    {
       id: "pendente",
       title: "Pendente",
-      helper: "Convite recebido e aguardando aceite ou recusa.",
+      helper: "Convite direto recebido e aguardando aceite ou recusa.",
     },
     {
       id: "aceito",
@@ -68,12 +74,31 @@ export const recreadorConvitesMock = {
       compensationLabel: "R$ 460 por diária",
       inviteDateLabel: "17 Abr 2026",
       responseDeadlineLabel: "Até 19 Abr 2026",
-      relationshipLabel: "Derivado de candidatura enviada",
+      relationshipLabel: "Convite direto da empresa",
       status: "pendente",
-      statusReason: "Aguardando validação da agenda antes do aceite.",
+      statusReason: "Convite direto recebido. Decida se aceita ou recusa.",
       timeline: [
-        { id: "invite-001-t1", label: "Candidatura enviada", dateLabel: "15 Abr 2026" },
-        { id: "invite-001-t2", label: "Convite recebido", dateLabel: "17 Abr 2026" },
+        { id: "invite-001-t1", label: "Convite recebido", dateLabel: "17 Abr 2026" },
+      ],
+    },
+    {
+      id: "invite-004",
+      opportunityId: "opp-evt-001",
+      opportunityCode: "EVT-001",
+      originKind: "eventos",
+      originName: "Conecta Eventos",
+      originSummary: "Programação de entretenimento para evento corporativo familiar.",
+      roleLabel: "Recreador de dinâmicas interativas",
+      cityLabel: "São Paulo - SP",
+      periodLabel: "30 Abr a 02 Mai 2026",
+      compensationLabel: "R$ 1.680 pacote",
+      inviteDateLabel: "16 Abr 2026",
+      responseDeadlineLabel: "Aguardando retorno",
+      relationshipLabel: "Originado de candidatura enviada",
+      status: "aguardando",
+      statusReason: "Candidatura enviada. Aguardando retorno da empresa para possível convite.",
+      timeline: [
+        { id: "invite-004-t1", label: "Candidatura enviada", dateLabel: "16 Abr 2026" },
       ],
     },
     {

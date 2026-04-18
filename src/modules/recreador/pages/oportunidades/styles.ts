@@ -123,13 +123,73 @@ export const ContextCard = styled.div`
   }
 `;
 
+export const DetailOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  background: rgba(15, 23, 42, 0.52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+`;
+
+export const DetailModal = styled.article`
+  width: min(760px, 100%);
+  max-height: min(84dvh, 100%);
+  overflow: auto;
+  border: 1px solid ${({ theme }) => theme.colors.borderStrong};
+  border-radius: ${({ theme }) => theme.radii.lg};
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(238, 246, 255, 0.86));
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  padding: ${({ theme }) => theme.spacing.md};
+  display: grid;
+  gap: 0.6rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: min(760px, calc(100vw - 1rem));
+    padding: ${({ theme }) => theme.spacing.sm};
+  }
+`;
+
+export const DetailModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+`;
+
+export const DetailModalTitleWrap = styled.div`
+  display: grid;
+  gap: 0.12rem;
+
+  strong {
+    color: ${({ theme }) => theme.colors.textStrong};
+    font-size: ${({ theme }) => theme.typography.cardTitle};
+    line-height: 1.3;
+  }
+
+  span {
+    color: ${({ theme }) => theme.colors.textMuted};
+    font-size: ${({ theme }) => theme.typography.bodySm};
+    line-height: 1.45;
+  }
+`;
+
+export const DetailModalActions = styled.div`
+  display: flex;
+  gap: 0.42rem;
+  flex-wrap: wrap;
+`;
+
 export const OpportunitiesGrid = styled.div`
   display: grid;
   gap: ${({ theme }) => theme.spacing.sm};
   grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
 `;
 
-export const OpportunityCard = styled.article<{ $highlighted?: boolean }>`
+export const OpportunityCard = styled.article<{ $highlighted?: boolean; $interactive?: boolean }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
   background: linear-gradient(164deg, rgba(255, 255, 255, 0.94), rgba(244, 249, 255, 0.78));
@@ -137,12 +197,31 @@ export const OpportunityCard = styled.article<{ $highlighted?: boolean }>`
   display: grid;
   gap: 0.42rem;
   overflow: hidden;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 
   ${({ $highlighted }) =>
     $highlighted
       ? `
     border-color: rgba(46, 127, 240, 0.44);
     box-shadow: 0 10px 20px rgba(46, 127, 240, 0.12);
+  `
+      : ""}
+
+  ${({ $interactive }) =>
+    $interactive
+      ? `
+    cursor: pointer;
+
+    &:hover {
+      border-color: rgba(46, 127, 240, 0.34);
+      box-shadow: 0 12px 20px rgba(46, 127, 240, 0.16);
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(46, 127, 240, 0.6);
+      outline-offset: 2px;
+    }
   `
       : ""}
 `;

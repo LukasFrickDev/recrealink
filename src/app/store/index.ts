@@ -3,6 +3,7 @@ import uiReducer from "./slices/uiSlice";
 import profileReducer from "./slices/profileSlice";
 import mockReducer from "./slices/mockSlice";
 import recreadorReducer from "./slices/recreadorSlice";
+import recreadorFlowReducer from "./slices/recreadorFlowSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     profile: profileReducer,
     mock: mockReducer,
     recreador: recreadorReducer,
+    recreadorFlow: recreadorFlowReducer,
   },
 });
 

@@ -154,6 +154,16 @@ export const SettingsPageTemplate = ({
     setFeedback(null);
   };
 
+  const resolvedFeedbackMessage =
+    feedback?.success === false
+      ? feedback.message
+      : showFeedback
+        ? feedback?.message ?? null
+        : null;
+
+  const resolvedFeedbackSuccess =
+    feedback?.success === false ? false : showFeedback ? feedback?.success : undefined;
+
   return (
     <S.Wrapper>
       <StandardSettingsTabs
@@ -214,8 +224,8 @@ export const SettingsPageTemplate = ({
             [optionKey]: value,
           }));
         }}
-        feedbackMessage={showFeedback ? feedback?.message ?? null : null}
-        feedbackSuccess={showFeedback ? feedback?.success : undefined}
+        feedbackMessage={resolvedFeedbackMessage}
+        feedbackSuccess={resolvedFeedbackSuccess}
       />
     </S.Wrapper>
   );

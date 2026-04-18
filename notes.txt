@@ -314,3 +314,215 @@ preparar o Recreador para virar base dos outros módulos
 Resumo curto
 
 fechar o módulo visualmente e deixar pronto para replicação
+
+Etapa de Testes — Recreador
+Fase T1 — Auditoria de teste + mapa de cenários
+
+Objetivo:
+
+mapear o que precisa ser testado no Recreador hoje
+separar:
+fluxo crítico
+fluxo complementar
+shared impactando o módulo
+o que é mockado/visual
+o que já é funcionalmente confiável
+montar checklist de cenários por página e por fluxo
+Resumo curto
+
+definir o que realmente precisa ser validado para considerar o Recreador confiável
+
+Fase T2 — Smoke test do núcleo do módulo
+
+Objetivo:
+
+validar os fluxos mais críticos do Recreador ponta a ponta
+
+Foco:
+
+perfil e perfil público
+oportunidades
+convites
+disponibilidade
+dashboard
+conexões entre essas páginas
+Resumo curto
+
+testar o coração do Recreador e garantir que o núcleo não está quebrando
+
+Fase T3 — Complementares + shared no contexto do Recreador
+
+Objetivo:
+
+validar:
+checklist
+suporte
+configurações
+chat
+notificações
+revisar comportamento de modais, toasts, empty states e navegação compartilhada
+Resumo curto
+
+garantir que o restante do módulo acompanha o nível do núcleo
+
+Fase T4 — Regressão visual/funcional e responsividade
+
+Objetivo:
+
+passar novamente no módulo com olhar de regressão
+validar:
+desktop
+notebook
+tablet
+mobile
+checar que os refinamentos visuais não quebraram fluxo, leitura ou interação
+Resumo curto
+
+garantir que o que ficou bonito e funcional continua estável em todas as variações importantes
+
+Fase T5 — Fechamento de testes + decisão de passagem
+
+Objetivo:
+
+consolidar:
+bugs encontrados
+bugs corrigidos
+pendências aceitas conscientemente
+itens que ficam para backend/testes futuros
+marcar o Recreador como pronto para ir para a etapa de documentação e liberar o próximo módulo
+Resumo curto
+
+fechar o Recreador com confiança e decidir oficialmente a passagem para o próximo módulo
+
+------DOCUMENTAÇÕES------
+1. Documento mestre do projeto
+
+É o documento principal, com visão geral da RecreaLink:
+
+objetivo do produto
+perfis
+módulos
+etapas
+o que entrou em cada fase
+o que ficou para depois
+
+Esse documento funciona como a “fonte de verdade” para você e para os agentes.
+
+2. Sitemap / mapa de rotas
+
+Aqui entra a estrutura completa de navegação:
+
+rotas públicas
+rotas de acesso
+rotas por perfil
+rotas do Recreador
+rotas da Hotelaria
+rotas da Empresa/Eventos
+páginas complementares
+páginas futuras
+
+Esse documento ajuda muito porque o método do projeto pede atualizar sitemap como parte da documentação de módulo.
+
+3. Documento por módulo
+
+Um arquivo para cada módulo:
+
+Recreador
+Empresa Hotelaria
+Empresa Eventos
+Pais
+
+Em cada um, eu colocaria:
+
+páginas do módulo
+função de cada página
+o que é núcleo
+o que é complementar
+o que é futuro
+quais relações existem com outros módulos
+quais dados o módulo consome
+4. Documento de arquitetura técnica
+
+Um resumo técnico de:
+
+stack usada
+organização de pastas
+shared vs específico por módulo
+estado global
+convenções de nomes
+padrão de componentes
+padrão de páginas
+
+Esse documento é útil para os próximos módulos não voltarem a reinventar estrutura.
+
+5. Documento de testes
+
+Como vocês fizeram uma suíte forte de teste do Recreador, vale documentar:
+
+o que foi testado
+quais fases de teste existiram
+o que passou
+o que foi corrigido
+o que ficou aceito conscientemente
+quais scripts rodam os testes
+
+Isso é ótimo para reexecução futura sem depender de prompt solto.
+
+6. Guia “como rodar o projeto”
+
+Esse é bem prático:
+
+instalar dependências
+rodar local
+rodar build
+rodar testes
+rodar Playwright/Vitest
+rodar fase específica
+rodar suíte completa
+7. Changelog / histórico por fase
+
+Um registro em ordem cronológica:
+
+fase estrutural
+fase funcional
+fase visual
+fase testes
+fase documentação
+
+Esse documento ajuda muito na apresentação para cliente e também para revisão futura.
+
+8. Documento de entrega / aceite
+
+Um texto mais comercial e objetivo:
+
+o que foi entregue
+o que foi validado
+o que ficou para depois
+qual é o status atual
+qual é o próximo passo
+
+A proposta comercial já trabalha com aceitação por etapa, então isso combina muito com o fluxo do projeto.
+
+Como eu organizaria a documentação na prática
+
+Eu faria em 3 camadas:
+
+Camada 1 — documentação do projeto inteiro
+README
+Sitemap
+Arquitetura Técnica
+Como Rodar
+Changelog Geral
+Camada 2 — documentação por módulo
+Recreador
+Hotelaria
+Eventos
+Pais
+Camada 3 — documentação por fase
+Estrutural
+Funcional
+Visual
+Testes
+Documentação
+
+Isso evita confusão e deixa claro o que mudou em cada parte. O método oficial do projeto pede exatamente essa continuidade por módulo, com documentação como última etapa de cada ciclo.

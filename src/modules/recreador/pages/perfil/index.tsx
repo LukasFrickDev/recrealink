@@ -29,7 +29,7 @@ import {
 import {
   readPublicProfileSnapshot,
   savePublicProfileSnapshot,
-} from "@/modules/recreador/utils/publicProfileSnapshot";
+} from "@/modules/recreador/pages/perfil/publicProfileSnapshot";
 import { useToast } from "@/shared/ui/Toast";
 import * as S from "./styles";
 

@@ -51,8 +51,9 @@ const tonePalette = (tone: ToastTone) => {
 
 export const ToastViewport = styled.div`
   position: fixed;
-  top: 0.95rem;
+  top: auto;
   right: 0.95rem;
+  bottom: 0.95rem;
   width: min(380px, calc(100vw - 1.6rem));
   display: grid;
   gap: ${({ theme }) => theme.spacing.xs};

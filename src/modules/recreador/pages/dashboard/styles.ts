@@ -860,6 +860,24 @@ export const ReviewList = styled.div`
   }
 `;
 
+export const ReviewSummaryLine = styled.div`
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
+  strong {
+    font-size: clamp(1.02rem, 2vw, 1.2rem);
+    color: ${({ theme }) => theme.colors.warning};
+    line-height: 1;
+  }
+
+  span {
+    font-size: ${({ theme }) => theme.typography.bodySm};
+    color: ${({ theme }) => theme.colors.textMuted};
+  }
+`;
+
 export const ReviewCard = styled.article`
   border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};

@@ -12,7 +12,13 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { useAppDispatch } from "@/app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { useNavigate } from "react-router-dom";
+import {
+  saveAvailabilitySnapshot as saveAvailabilitySnapshotAction,
+  selectRecreadorFlowAvailabilitySnapshot,
+  selectRecreadorFlowFutureCommitments,
+} from "@/app/store/slices/recreadorFlowSlice";
 import { setLastVisualAction } from "@/app/store/slices/recreadorSlice";
 import {
   recreadorDisponibilidadeMock,
@@ -20,6 +26,7 @@ import {
   type AvailabilitySlotItem,
   type AvailabilitySlotState,
   type ConflictPreviewItem,
+  type FutureCommitmentItem,
   type ManualBlockItem,
   type RecurrenceRuleItem,
 } from "@/modules/recreador/mocks/disponibilidade";
@@ -69,12 +76,47 @@ type CalendarEventItem = {
   title: string;
   note: string;
   tone: CalendarEventTone;
+  relatedOpportunityCode?: string;
+  isOpportunityRelated: boolean;
 };
 
 type DayDetailsState = {
   date: Date;
   events: CalendarEventItem[];
 };
+
+type ConfirmActionDraft =
+  | {
+      kind: "remove-manual-block";
+      blockId: string;
+      title: string;
+      description: string;
+      confirmLabel: string;
+      tone: "danger" | "primary";
+    }
+  | {
+      kind: "remove-recurrence";
+      ruleId: string;
+      title: string;
+      description: string;
+      confirmLabel: string;
+      tone: "danger" | "primary";
+    }
+  | {
+      kind: "resolve-conflict";
+      conflictId: string;
+      title: string;
+      description: string;
+      confirmLabel: string;
+      tone: "danger" | "primary";
+    }
+  | {
+      kind: "discard-changes";
+      title: string;
+      description: string;
+      confirmLabel: string;
+      tone: "danger" | "primary";
+    };
 
 const slotStateLabel: Record<AvailabilitySlotState, string> = {
   disponivel: "Disponível",
@@ -285,7 +327,7 @@ const getWeekdayIndex = (label: string) => {
   return weekdayIndexByLabel[normalized] ?? null;
 };
 
-const getCommitmentTitle = (item: (typeof recreadorDisponibilidadeMock.futureCommitments)[number]) => {
+const getCommitmentTitle = (item: FutureCommitmentItem) => {
   const hasInviteAcceptance = item.sourceOrigins.includes("convite-aceito");
   const hasConfirmedOpportunity = item.sourceOrigins.includes("oportunidade-confirmada");
 
@@ -347,13 +389,16 @@ const slotIdFromManualBlock = (blockId: string) => `manual-slot-${blockId}`;
 
 export const RecreadorDisponibilidadePage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { success, info, warning } = useToast();
+  const availabilitySnapshot = useAppSelector(selectRecreadorFlowAvailabilitySnapshot);
+  const futureCommitments = useAppSelector(selectRecreadorFlowFutureCommitments);
 
   const [savedSnapshot, setSavedSnapshot] = useState<AvailabilitySnapshot>(() => ({
-    slots: cloneSlots(recreadorDisponibilidadeMock.slots),
-    manualBlocks: cloneManualBlocks(recreadorDisponibilidadeMock.manualBlocks),
-    recurrenceRules: cloneRecurrenceRules(recreadorDisponibilidadeMock.recurrenceRules),
-    conflicts: cloneConflicts(recreadorDisponibilidadeMock.seededConflictPreview),
+    slots: cloneSlots(availabilitySnapshot.slots),
+    manualBlocks: cloneManualBlocks(availabilitySnapshot.manualBlocks),
+    recurrenceRules: cloneRecurrenceRules(availabilitySnapshot.recurrenceRules),
+    conflicts: cloneConflicts(availabilitySnapshot.conflicts),
   }));
 
   const [slots, setSlots] = useState<AvailabilitySlotItem[]>(savedSnapshot.slots);
@@ -370,12 +415,13 @@ export const RecreadorDisponibilidadePage = () => {
 
   const [calendarViewMode, setCalendarViewMode] = useState<CalendarViewMode>("mes");
   const [calendarCursorDate, setCalendarCursorDate] = useState<Date>(() =>
-    parseDateLabel(recreadorDisponibilidadeMock.slots[0]?.dateLabel ?? "") ?? new Date(),
+    parseDateLabel(availabilitySnapshot.slots[0]?.dateLabel ?? "") ?? new Date(),
   );
   const [dayDetailsState, setDayDetailsState] = useState<DayDetailsState | null>(null);
 
   const [recurrenceDraft, setRecurrenceDraft] = useState<RecurrenceDraft>(RECURRENCE_DRAFT_INITIAL);
   const [editingRecurrenceId, setEditingRecurrenceId] = useState<string | null>(null);
+  const [confirmDraft, setConfirmDraft] = useState<ConfirmActionDraft | null>(null);
 
   const dynamicStats = useMemo(() => {
     const disponiveis = slots.filter((item) => item.state === "disponivel").length;
@@ -452,7 +498,7 @@ export const RecreadorDisponibilidadePage = () => {
 
   const commitmentEntries = useMemo(
     () =>
-      recreadorDisponibilidadeMock.futureCommitments
+      futureCommitments
         .map((item) => ({
           ...item,
           parsedDate: parseDateLabel(item.dateLabel),
@@ -472,7 +518,7 @@ export const RecreadorDisponibilidadePage = () => {
 
           return left.parsedDate.getTime() - right.parsedDate.getTime();
         }),
-    [],
+    [futureCommitments],
   );
 
   const scheduledCommitments = useMemo(
@@ -511,8 +557,15 @@ export const RecreadorDisponibilidadePage = () => {
 
   const calendarEvents = useMemo(() => {
     const events: CalendarEventItem[] = [];
+    const conflictWindowKeySet = new Set(
+      conflicts.map((item) => `${item.dateLabel}|${item.startTime}|${item.endTime}`),
+    );
 
     slots.forEach((slot) => {
+      if (slot.state !== "disponivel") {
+        return;
+      }
+
       const parsedDate = parseDateLabel(slot.dateLabel);
 
       if (!parsedDate) {
@@ -534,10 +587,15 @@ export const RecreadorDisponibilidadePage = () => {
         title: slotStateLabel[slot.state],
         note: `${periodLabel[slot.period]} · ${slot.helper}`,
         tone: toneByState[slot.state],
+        isOpportunityRelated: false,
       });
     });
 
     manualBlocks.forEach((block) => {
+      if (conflictWindowKeySet.has(`${block.dateLabel}|${block.startTime}|${block.endTime}`)) {
+        return;
+      }
+
       const parsedDate = parseDateLabel(block.dateLabel);
 
       if (!parsedDate) {
@@ -552,6 +610,7 @@ export const RecreadorDisponibilidadePage = () => {
         title: "Bloqueio manual",
         note: `${periodLabel[block.period]} · ${block.reason}`,
         tone: "manual",
+        isOpportunityRelated: false,
       });
     });
 
@@ -570,6 +629,7 @@ export const RecreadorDisponibilidadePage = () => {
         title: "Conflito da operação",
         note: `${conflict.sourceA} x ${conflict.sourceB}`,
         tone: "conflito",
+        isOpportunityRelated: false,
       });
     });
 
@@ -586,6 +646,8 @@ export const RecreadorDisponibilidadePage = () => {
         title: getCommitmentTitle(item),
         note: `${item.opportunityCode} · ${item.roleLabel}`,
         tone: item.status === "confirmado" ? "compromisso" : "pendente",
+        relatedOpportunityCode: item.opportunityCode,
+        isOpportunityRelated: true,
       });
     });
 
@@ -622,6 +684,7 @@ export const RecreadorDisponibilidadePage = () => {
               : "Recorrência: disponibilidade",
           note: `${rule.weekdayLabel} · ${periodLabel[rule.period]}`,
           tone: "recorrencia",
+          isOpportunityRelated: false,
         });
       });
     });
@@ -709,6 +772,10 @@ export const RecreadorDisponibilidadePage = () => {
     setDayDetailsState(null);
   };
 
+  const handleOpenRelatedOpportunity = (opportunityCode: string) => {
+    navigate(`/app/recreador/oportunidades?codigo=${encodeURIComponent(opportunityCode)}`);
+  };
+
   const resetManualBlockDraft = () => {
     setManualBlockDraft(MANUAL_BLOCK_DRAFT_INITIAL);
     setEditingManualBlockId(null);
@@ -726,17 +793,37 @@ export const RecreadorDisponibilidadePage = () => {
     setConflicts(cloneConflicts(snapshot.conflicts));
   };
 
-  const confirmAction = (message: string) => {
-    const confirmed = window.confirm(message);
+  const handleCancelConfirmDraft = () => {
+    setConfirmDraft(null);
+    info({
+      title: "Ação cancelada",
+      description: "Nenhuma alteração foi aplicada.",
+    });
+  };
 
-    if (!confirmed) {
-      info({
-        title: "Ação cancelada",
-        description: "Nenhuma alteração foi aplicada.",
-      });
+  const handleConfirmDraft = () => {
+    if (!confirmDraft) {
+      return;
     }
 
-    return confirmed;
+    switch (confirmDraft.kind) {
+      case "remove-manual-block":
+        executeRemoveManualBlock(confirmDraft.blockId);
+        break;
+      case "remove-recurrence":
+        executeRemoveRecurrence(confirmDraft.ruleId);
+        break;
+      case "resolve-conflict":
+        executeResolveConflict(confirmDraft.conflictId);
+        break;
+      case "discard-changes":
+        executeDiscardChanges();
+        break;
+      default:
+        break;
+    }
+
+    setConfirmDraft(null);
   };
 
   const handleSaveManualBlock = () => {
@@ -878,7 +965,7 @@ export const RecreadorDisponibilidadePage = () => {
     });
   };
 
-  const handleRemoveManualBlock = (blockId: string) => {
+  const executeRemoveManualBlock = (blockId: string) => {
     const target = manualBlocks.find((item) => item.id === blockId);
 
     if (!target) {
@@ -886,14 +973,6 @@ export const RecreadorDisponibilidadePage = () => {
         title: "Bloqueio indisponível",
         description: "Não foi possível localizar este bloqueio para remoção.",
       });
-      return;
-    }
-
-    if (
-      !confirmAction(
-        `Remover o bloqueio manual de ${target.dateLabel} (${target.startTime}-${target.endTime})?`,
-      )
-    ) {
       return;
     }
 
@@ -943,6 +1022,27 @@ export const RecreadorDisponibilidadePage = () => {
     info({
       title: "Bloqueio removido",
       description: "Bloqueio manual removido da agenda operacional.",
+    });
+  };
+
+  const handleRemoveManualBlock = (blockId: string) => {
+    const target = manualBlocks.find((item) => item.id === blockId);
+
+    if (!target) {
+      warning({
+        title: "Bloqueio indisponível",
+        description: "Não foi possível localizar este bloqueio para remoção.",
+      });
+      return;
+    }
+
+    setConfirmDraft({
+      kind: "remove-manual-block",
+      blockId,
+      title: "Remover bloqueio manual",
+      description: `${target.dateLabel} · ${target.startTime}-${target.endTime}. Esta ação remove o bloqueio e libera a janela.`,
+      confirmLabel: "Confirmar remoção",
+      tone: "danger",
     });
   };
 
@@ -1003,7 +1103,7 @@ export const RecreadorDisponibilidadePage = () => {
     });
   };
 
-  const handleRemoveRecurrence = (ruleId: string) => {
+  const executeRemoveRecurrence = (ruleId: string) => {
     const target = recurrenceRules.find((item) => item.id === ruleId);
 
     if (!target) {
@@ -1011,14 +1111,6 @@ export const RecreadorDisponibilidadePage = () => {
         title: "Recorrência indisponível",
         description: "Não foi possível localizar esta regra para remoção.",
       });
-      return;
-    }
-
-    if (
-      !confirmAction(
-        `Remover a recorrência de ${target.weekdayLabel} (${target.startTime}-${target.endTime})?`,
-      )
-    ) {
       return;
     }
 
@@ -1031,6 +1123,27 @@ export const RecreadorDisponibilidadePage = () => {
     info({
       title: "Recorrência removida",
       description: "A regra foi removida da configuração atual.",
+    });
+  };
+
+  const handleRemoveRecurrence = (ruleId: string) => {
+    const target = recurrenceRules.find((item) => item.id === ruleId);
+
+    if (!target) {
+      warning({
+        title: "Recorrência indisponível",
+        description: "Não foi possível localizar esta regra para remoção.",
+      });
+      return;
+    }
+
+    setConfirmDraft({
+      kind: "remove-recurrence",
+      ruleId,
+      title: "Remover recorrência",
+      description: `${target.weekdayLabel} · ${target.startTime}-${target.endTime}. Esta ação remove a regra da configuração atual.`,
+      confirmLabel: "Confirmar remoção",
+      tone: "danger",
     });
   };
 
@@ -1062,7 +1175,7 @@ export const RecreadorDisponibilidadePage = () => {
     });
   };
 
-  const handleResolveConflict = (conflictId: string) => {
+  const executeResolveConflict = (conflictId: string) => {
     const target = conflicts.find((item) => item.id === conflictId);
 
     if (!target) {
@@ -1070,14 +1183,6 @@ export const RecreadorDisponibilidadePage = () => {
         title: "Conflito indisponível",
         description: "Não foi possível localizar o conflito para resolução.",
       });
-      return;
-    }
-
-    if (
-      !confirmAction(
-        "Resolver este conflito priorizando o compromisso confirmado? O bloqueio manual sobreposto sera removido.",
-      )
-    ) {
       return;
     }
 
@@ -1116,6 +1221,28 @@ export const RecreadorDisponibilidadePage = () => {
     success({
       title: "Conflito resolvido",
       description: "O conflito foi ajustado e o compromisso confirmado foi mantido.",
+    });
+  };
+
+  const handleResolveConflict = (conflictId: string) => {
+    const target = conflicts.find((item) => item.id === conflictId);
+
+    if (!target) {
+      warning({
+        title: "Conflito indisponível",
+        description: "Não foi possível localizar o conflito para resolução.",
+      });
+      return;
+    }
+
+    setConfirmDraft({
+      kind: "resolve-conflict",
+      conflictId,
+      title: "Resolver conflito operacional",
+      description:
+        "Esta ação prioriza o compromisso confirmado e remove o bloqueio manual sobreposto deste período.",
+      confirmLabel: "Resolver conflito",
+      tone: "primary",
     });
   };
 
@@ -1164,6 +1291,7 @@ export const RecreadorDisponibilidadePage = () => {
     };
 
     setSavedSnapshot(snapshot);
+    dispatch(saveAvailabilitySnapshotAction(snapshot));
     dispatch(
       setLastVisualAction(
         "Disponibilidade atualizada com bloqueios, recorrência e compromissos.",
@@ -1172,6 +1300,16 @@ export const RecreadorDisponibilidadePage = () => {
     success({
       title: "Disponibilidade salva",
       description: "Bloqueios, recorrências e conflitos foram salvos.",
+    });
+  };
+
+  const executeDiscardChanges = () => {
+    applySnapshot(savedSnapshot);
+    resetManualBlockDraft();
+    resetRecurrenceDraft();
+    info({
+      title: "Alterações descartadas",
+      description: "Disponibilidade restaurada para o último estado salvo.",
     });
   };
 
@@ -1196,19 +1334,18 @@ export const RecreadorDisponibilidadePage = () => {
       recurrenceDraft.endTime.trim().length > 0 ||
       editingRecurrenceId !== null;
 
-    if (
-      (hasSnapshotChanges || hasDraftChanges) &&
-      !confirmAction("Descartar alterações não salvas de disponibilidade?")
-    ) {
+    if (!(hasSnapshotChanges || hasDraftChanges)) {
+      executeDiscardChanges();
       return;
     }
 
-    applySnapshot(savedSnapshot);
-    resetManualBlockDraft();
-    resetRecurrenceDraft();
-    info({
-      title: "Alterações descartadas",
-      description: "Disponibilidade restaurada para o último estado salvo.",
+    setConfirmDraft({
+      kind: "discard-changes",
+      title: "Descartar alterações não salvas",
+      description:
+        "As alterações atuais em bloqueios, recorrências e conflitos serão perdidas e o último estado salvo será restaurado.",
+      confirmLabel: "Descartar alterações",
+      tone: "danger",
     });
   };
 
@@ -1367,7 +1504,36 @@ export const RecreadorDisponibilidadePage = () => {
                     {firstEvent === null ? (
                       <S.DayEventEmpty>Sem agenda configurada.</S.DayEventEmpty>
                     ) : (
-                      <S.DayEventItem key={firstEvent.id} $tone={firstEvent.tone}>
+                      <S.DayEventItem
+                        key={firstEvent.id}
+                        $tone={firstEvent.tone}
+                        $interactive={firstEvent.isOpportunityRelated && Boolean(firstEvent.relatedOpportunityCode)}
+                        role={
+                          firstEvent.isOpportunityRelated && firstEvent.relatedOpportunityCode
+                            ? "button"
+                            : undefined
+                        }
+                        tabIndex={
+                          firstEvent.isOpportunityRelated && firstEvent.relatedOpportunityCode
+                            ? 0
+                            : undefined
+                        }
+                        onClick={() => {
+                          if (firstEvent.relatedOpportunityCode) {
+                            handleOpenRelatedOpportunity(firstEvent.relatedOpportunityCode);
+                          }
+                        }}
+                        onKeyDown={(event) => {
+                          if (!firstEvent.relatedOpportunityCode) {
+                            return;
+                          }
+
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            handleOpenRelatedOpportunity(firstEvent.relatedOpportunityCode);
+                          }
+                        }}
+                      >
                         <S.DayEventTop>
                           <S.DayEventTime>
                             {firstEvent.startTime} - {firstEvent.endTime}
@@ -1726,6 +1892,7 @@ export const RecreadorDisponibilidadePage = () => {
               <S.DayDetailsList>
                 {dayDetailsState.events.map((event) => {
                   const priority = eventPriorityLabel[event.tone];
+                  const relatedOpportunityCode = event.relatedOpportunityCode;
 
                   return (
                     <S.DayDetailsItem key={event.id} $tone={event.tone}>
@@ -1744,10 +1911,47 @@ export const RecreadorDisponibilidadePage = () => {
 
                       <strong>{event.title}</strong>
                       <p>{event.note}</p>
+
+                      {event.isOpportunityRelated && relatedOpportunityCode ? (
+                        <S.SecondaryButton
+                          type="button"
+                          onClick={() => handleOpenRelatedOpportunity(relatedOpportunityCode)}
+                        >
+                          Abrir oportunidade {relatedOpportunityCode}
+                        </S.SecondaryButton>
+                      ) : null}
                     </S.DayDetailsItem>
                   );
                 })}
               </S.DayDetailsList>
+            </S.DayDetailsModal>
+          </S.DayDetailsOverlay>
+        ) : null}
+
+        {confirmDraft ? (
+          <S.DayDetailsOverlay onClick={handleCancelConfirmDraft}>
+            <S.DayDetailsModal onClick={(event) => event.stopPropagation()}>
+              <S.DayDetailsHeader>
+                <div>
+                  <h3>{confirmDraft.title}</h3>
+                  <p>{confirmDraft.description}</p>
+                </div>
+              </S.DayDetailsHeader>
+
+              <S.RowButtons>
+                <S.SecondaryButton type="button" onClick={handleCancelConfirmDraft}>
+                  Cancelar
+                </S.SecondaryButton>
+                {confirmDraft.tone === "danger" ? (
+                  <S.DangerButton type="button" onClick={handleConfirmDraft}>
+                    {confirmDraft.confirmLabel}
+                  </S.DangerButton>
+                ) : (
+                  <S.PrimaryButton type="button" onClick={handleConfirmDraft}>
+                    {confirmDraft.confirmLabel}
+                  </S.PrimaryButton>
+                )}
+              </S.RowButtons>
             </S.DayDetailsModal>
           </S.DayDetailsOverlay>
         ) : null}

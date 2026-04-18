@@ -1,31 +1,128 @@
 import { MessageCircle, Send } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { uiMessages } from "@/shared/constants/uiMessages";
-import type { ChatPageTemplateData, ChatTemplateMessage } from "./data";
+import type {
+  ChatPageTemplateData,
+  ChatTemplateExternalContext,
+  ChatTemplateMessage,
+} from "./data";
 import * as S from "./styles";
 
 interface ChatPageTemplateProps {
   data: ChatPageTemplateData;
   tone?: "default" | "hotelaria" | "pais" | "recreador";
+  onUnreadCountChange?: (count: number) => void;
+  externalContext?: ChatTemplateExternalContext;
 }
 
-export const ChatPageTemplate = ({ data, tone = "default" }: ChatPageTemplateProps) => {
+export const ChatPageTemplate = ({
+  data,
+  tone = "default",
+  onUnreadCountChange,
+  externalContext,
+}: ChatPageTemplateProps) => {
   const [search, setSearch] = useState("");
+  const [conversations, setConversations] = useState(() => data.conversations.map((item) => ({ ...item })));
   const [activeConversationId, setActiveConversationId] = useState(data.conversations[0]?.id ?? "");
   const [draft, setDraft] = useState("");
   const [messagesByConversation, setMessagesByConversation] = useState<
     Record<string, ChatTemplateMessage[]>
   >(data.messagesByConversation);
 
+  const contextContactName = externalContext?.contactName?.trim() ?? "";
+  const contextOpportunityCode = externalContext?.opportunityCode?.trim() ?? "";
+  const contextSource = externalContext?.source?.trim() ?? "";
+
+  useEffect(() => {
+    if (!contextContactName) {
+      return;
+    }
+
+    const normalizedTarget = contextContactName.toLowerCase();
+
+    if (!normalizedTarget) {
+      return;
+    }
+
+    setConversations((previous) => {
+      const existing = previous.find((item) => item.name.trim().toLowerCase() === normalizedTarget);
+
+      if (existing) {
+        setActiveConversationId(existing.id);
+        return previous;
+      }
+
+      const generatedId = `ctx-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      const nextConversation = {
+        id: generatedId,
+        name: contextContactName || "Contato",
+        subtitle: contextSource ? `Contato via ${contextSource}` : "Contato direto",
+        detail: contextOpportunityCode
+          ? `Oportunidade ${contextOpportunityCode}`
+          : "Sem codigo de oportunidade",
+        lastMessage: contextOpportunityCode
+          ? `Conversa iniciada para ${contextOpportunityCode}`
+          : "Conversa iniciada",
+        lastTime: "Agora",
+        unread: 0,
+        online: true,
+      };
+
+      setMessagesByConversation((prevMessages) => ({
+        ...prevMessages,
+        [generatedId]: [
+          {
+            id: `ctx-msg-${Date.now()}`,
+            author: "Sistema",
+            content: contextOpportunityCode
+              ? `Contato iniciado a partir de ${contextSource || "origem desconhecida"} para ${contextOpportunityCode}.`
+              : `Contato iniciado a partir de ${contextSource || "origem desconhecida"}.`,
+            time: "Agora",
+            mine: false,
+          },
+        ],
+      }));
+      setActiveConversationId(generatedId);
+
+      return [nextConversation, ...previous];
+    });
+  }, [contextContactName, contextOpportunityCode, contextSource]);
+
+  const unreadCount = useMemo(
+    () => conversations.reduce((total, item) => total + Math.max(0, item.unread), 0),
+    [conversations],
+  );
+
   const filteredConversations = useMemo(
     () =>
-      data.conversations.filter((item) =>
+      conversations.filter((item) =>
         `${item.name} ${item.subtitle} ${item.detail ?? ""}`
           .toLowerCase()
           .includes(search.toLowerCase()),
       ),
-    [data.conversations, search],
+    [conversations, search],
   );
+
+  useEffect(() => {
+    if (!activeConversationId) {
+      return;
+    }
+
+    setConversations((previous) =>
+      previous.map((item) =>
+        item.id === activeConversationId && item.unread > 0
+          ? {
+              ...item,
+              unread: 0,
+            }
+          : item,
+      ),
+    );
+  }, [activeConversationId]);
+
+  useEffect(() => {
+    onUnreadCountChange?.(unreadCount);
+  }, [onUnreadCountChange, unreadCount]);
 
   useEffect(() => {
     if (filteredConversations.length === 0) {
@@ -47,12 +144,12 @@ export const ChatPageTemplate = ({ data, tone = "default" }: ChatPageTemplatePro
   );
 
   const emptyPanelMessage = useMemo(() => {
-    if (data.conversations.length === 0) {
+    if (conversations.length === 0) {
       return uiMessages.conversationsEmptyInitial;
     }
 
     return uiMessages.conversationsEmptyFilter;
-  }, [data.conversations.length]);
+  }, [conversations.length]);
 
   const currentMessages = activeConversation ? messagesByConversation[activeConversation.id] ?? [] : [];
 

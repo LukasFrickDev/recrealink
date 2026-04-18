@@ -3,7 +3,7 @@ import { ArrowLeft, Globe2, Link2, MapPin, ShieldCheck, Star } from "lucide-reac
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/app/store/hooks";
 import { recreadorPerfilMock } from "@/modules/recreador/mocks/perfil";
-import { readPublicProfileSnapshot } from "@/modules/recreador/utils/publicProfileSnapshot";
+import { readPublicProfileSnapshot } from "@/modules/recreador/pages/perfil/publicProfileSnapshot";
 import * as S from "./styles";
 
 const buildInitials = (value: string) =>
@@ -49,14 +49,27 @@ export const RecreadorPerfilPublicoPage = () => {
 
   const { reviews, reputationSummary } = recreadorPerfilMock;
 
+  const effectiveSpecialties =
+    profile.specialties.length > 0
+      ? profile.specialties
+      : snapshot && snapshot.specialties.length > 0
+        ? snapshot.specialties
+        : [];
+
+  const effectivePortfolioLinks =
+    profile.portfolioLinks.length > 0
+      ? profile.portfolioLinks
+      : snapshot && snapshot.portfolioLinks.length > 0
+        ? snapshot.portfolioLinks
+        : [];
+
   const publicProfile = {
-    displayName: snapshot?.displayName ?? profile.fullName,
-    roleLabel: snapshot?.roleLabel ?? profile.roleTitle,
-    headline: snapshot?.headline ?? profile.portfolioHeadline,
-    bio: snapshot?.bio ?? profile.shortBio,
-    city: snapshot?.city ?? profile.city,
-    specialties:
-      snapshot && snapshot.specialties.length > 0 ? snapshot.specialties : profile.specialties,
+    displayName: profile.fullName,
+    roleLabel: profile.roleTitle,
+    headline: profile.portfolioHeadline,
+    bio: profile.shortBio,
+    city: profile.city,
+    specialties: effectiveSpecialties,
     ageGroups:
       snapshot && snapshot.ageGroups.length > 0
         ? snapshot.ageGroups
@@ -65,15 +78,9 @@ export const RecreadorPerfilPublicoPage = () => {
       snapshot && snapshot.cacheRangeLabel.length > 0
         ? snapshot.cacheRangeLabel
         : recreadorPerfilMock.publicProfile.cacheRangeLabel,
-    galleryHighlights:
-      snapshot && snapshot.specialties.length > 0
-        ? snapshot.specialties.slice(0, 3)
-        : profile.specialties.slice(0, 3),
+    galleryHighlights: effectiveSpecialties.slice(0, 3),
     visibilityRules: recreadorPerfilMock.publicProfile.visibilityRules,
-    portfolioLinks:
-      snapshot && snapshot.portfolioLinks.length > 0
-        ? snapshot.portfolioLinks
-        : profile.portfolioLinks,
+    portfolioLinks: effectivePortfolioLinks,
   };
 
   const updatedLabel = useMemo(() => {

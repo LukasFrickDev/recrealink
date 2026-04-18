@@ -1,8 +1,13 @@
 import styled, { css } from "styled-components";
 
-type DecisionTone = "pendente" | "aceito" | "recusado";
+type DecisionTone = "aguardando" | "pendente" | "aceito" | "recusado";
 
 const decisionToneMap = {
+  aguardando: css`
+    border-left-color: ${({ theme }) => theme.colors.brandBlue};
+    background: rgba(46, 127, 240, 0.12);
+    color: ${({ theme }) => theme.colors.brandBlue};
+  `,
   pendente: css`
     border-left-color: ${({ theme }) => theme.colors.warning};
     background: rgba(227, 154, 18, 0.12);
@@ -46,7 +51,7 @@ export const Wrapper = styled.section`
 export const StatusTabs = styled.nav`
   display: grid;
   gap: ${({ theme }) => theme.spacing.xs};
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     grid-template-columns: minmax(0, 1fr);

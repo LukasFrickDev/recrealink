@@ -656,7 +656,7 @@ export const Main = styled.main<{ $compact?: boolean }>`
   width: 100%;
   max-width: 1540px;
   margin: 0 auto;
-  min-height: 0;
+  height: 45%;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     padding: ${({ $compact, theme }) =>

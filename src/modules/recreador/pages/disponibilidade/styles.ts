@@ -592,7 +592,7 @@ export const DayEventEmpty = styled.p`
   background: rgba(255, 255, 255, 0.65);
 `;
 
-export const DayEventItem = styled.article<{ $tone: CalendarEventTone }>`
+export const DayEventItem = styled.article<{ $tone: CalendarEventTone; $interactive?: boolean }>`
   border: 1px solid rgba(91, 104, 136, 0.2);
   border-left: 4px solid transparent;
   border-radius: ${({ theme }) => theme.radii.sm};
@@ -626,6 +626,23 @@ export const DayEventItem = styled.article<{ $tone: CalendarEventTone }>`
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  ${({ $interactive }) =>
+    $interactive
+      ? css`
+          cursor: pointer;
+
+          &:hover {
+            border-color: rgba(46, 127, 240, 0.38);
+            box-shadow: 0 0 0 2px rgba(46, 127, 240, 0.12);
+          }
+
+          &:focus-visible {
+            outline: 2px solid rgba(46, 127, 240, 0.55);
+            outline-offset: 2px;
+          }
+        `
+      : ""}
 
   ${({ $tone }) => calendarEventToneMap[$tone]}
 `;

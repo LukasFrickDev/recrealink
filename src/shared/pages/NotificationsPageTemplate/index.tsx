@@ -1,5 +1,5 @@
 import { BellRing, CheckCheck } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { uiMessages } from "@/shared/constants/uiMessages";
 import type { NotificationsPageTemplateData, NotificationsTemplateItem } from "./data";
@@ -8,15 +8,24 @@ import * as S from "./styles";
 interface NotificationsPageTemplateProps {
   data: NotificationsPageTemplateData;
   tone?: "default" | "hotelaria" | "pais" | "recreador";
+  onUnreadCountChange?: (count: number) => void;
 }
 
-export const NotificationsPageTemplate = ({ data, tone = "default" }: NotificationsPageTemplateProps) => {
+export const NotificationsPageTemplate = ({
+  data,
+  tone = "default",
+  onUnreadCountChange,
+}: NotificationsPageTemplateProps) => {
   const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState(data.filters[0]?.id ?? "todas");
   const [search, setSearch] = useState("");
   const [items, setItems] = useState<NotificationsTemplateItem[]>(data.items);
 
   const unreadCount = useMemo(() => items.filter((item) => !item.read).length, [items]);
+
+  useEffect(() => {
+    onUnreadCountChange?.(unreadCount);
+  }, [onUnreadCountChange, unreadCount]);
 
   const filteredItems = useMemo(() => {
     const byFilter = items.filter((item) => {

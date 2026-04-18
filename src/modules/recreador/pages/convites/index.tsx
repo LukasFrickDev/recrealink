@@ -1,12 +1,34 @@
 import { useEffect, useMemo, useState } from "react";
-import { Banknote, CalendarDays, CheckCircle2, Clock3, MapPin, XCircle } from "lucide-react";
+import {
+  Banknote,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  MapPin,
+  MessageCircle,
+  XCircle,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "@/app/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import {
+  selectRecreadorFlowInvites,
+  selectRecreadorFlowState,
+  updateInviteStatus,
+  validateInviteStatusTransition,
+} from "@/app/store/slices/recreadorFlowSlice";
 import { setLastVisualAction } from "@/app/store/slices/recreadorSlice";
 import { RecreadorDashboardShell } from "@/modules/recreador/layout/RecreadorDashboardShell/index";
 import { recreadorConvitesMock, type ConviteItem, type ConviteStatus } from "@/modules/recreador/mocks/convites";
 import { useToast } from "@/shared/ui/Toast";
 import * as S from "./styles";
+
+type InviteBucket = ConviteStatus;
+
+type InviteConflictDraft = {
+  inviteId: string;
+  opportunityCode: string;
+  roleLabel: string;
+};
 
 const originLabel = {
   hotelaria: "Hotelaria",
@@ -17,51 +39,48 @@ const originVisualMap = {
   hotelaria: {
     image:
       "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop",
-    label: "Operação em hotelaria",
+    label: "Operacao em hotelaria",
   },
   eventos: {
     image:
       "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop",
-    label: "Operação em eventos",
+    label: "Operacao em eventos",
   },
 } as const;
 
 const columnDescription: Record<ConviteStatus, string> = {
-  pendente: "Convites que exigem decisão agora para não perder o prazo.",
-  aceito: "Aceites já registrados e prontos para acompanhamento da agenda.",
-  recusado: "Histórico de recusas para rastreabilidade operacional.",
+  aguardando: "Candidaturas enviadas aguardando retorno da empresa.",
+  pendente: "Convites que exigem decisao agora para nao perder o prazo.",
+  aceito: "Aceites ja registrados e prontos para acompanhamento da agenda.",
+  recusado: "Historico de recusas para rastreabilidade operacional.",
 };
 
 const statusTabs = [
+  { status: "aguardando", label: "Aguardando", icon: Clock3 },
   { status: "pendente", label: "Pendentes", icon: Clock3 },
   { status: "aceito", label: "Aceitos", icon: CheckCircle2 },
   { status: "recusado", label: "Recusados", icon: XCircle },
 ] as const;
-
-type InviteDecisionDraft = {
-  inviteId: string;
-  nextStatus: ConviteStatus;
-  opportunityCode: string;
-  roleLabel: string;
-};
 
 export const RecreadorConvitesPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { success, info, warning } = useToast();
 
-  const [items, setItems] = useState<ConviteItem[]>(recreadorConvitesMock.items);
-  const [decisionDraft, setDecisionDraft] = useState<InviteDecisionDraft | null>(null);
-  const [activeStatus, setActiveStatus] = useState<ConviteStatus>("pendente");
+  const flowState = useAppSelector(selectRecreadorFlowState);
+  const items = useAppSelector(selectRecreadorFlowInvites);
+
+  const [conflictDraft, setConflictDraft] = useState<InviteConflictDraft | null>(null);
+  const [activeStatus, setActiveStatus] = useState<InviteBucket>("aguardando");
 
   useEffect(() => {
-    if (!decisionDraft) {
+    if (!conflictDraft) {
       return;
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setDecisionDraft(null);
+        setConflictDraft(null);
       }
     };
 
@@ -70,22 +89,25 @@ export const RecreadorConvitesPage = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [decisionDraft]);
+  }, [conflictDraft]);
 
   const stats = useMemo(() => {
+    const aguardando = items.filter((item) => item.status === "aguardando").length;
     const pendentes = items.filter((item) => item.status === "pendente").length;
     const aceitos = items.filter((item) => item.status === "aceito").length;
     const recusados = items.filter((item) => item.status === "recusado").length;
 
     return [
-      { title: "Pendentes", value: String(pendentes), helper: "Aguardando decisão" },
+      { title: "Aguardando", value: String(aguardando), helper: "Candidaturas em analise" },
+      { title: "Pendentes", value: String(pendentes), helper: "Convites diretos para decidir" },
       { title: "Aceitos", value: String(aceitos), helper: "Com compromisso previsto" },
-      { title: "Recusados", value: String(recusados), helper: "Histórico da decisão" },
+      { title: "Recusados", value: String(recusados), helper: "Historico da decisao" },
     ];
   }, [items]);
 
   const grouped = useMemo(
     () => ({
+      aguardando: items.filter((item) => item.status === "aguardando"),
       pendente: items.filter((item) => item.status === "pendente"),
       aceito: items.filter((item) => item.status === "aceito"),
       recusado: items.filter((item) => item.status === "recusado"),
@@ -94,54 +116,16 @@ export const RecreadorConvitesPage = () => {
   );
 
   const activeStatusLabel =
-    statusTabs.find((item) => item.status === activeStatus)?.label ?? "Pendentes";
+    statusTabs.find((item) => item.status === activeStatus)?.label ?? "Aguardando";
 
   const activeItems = grouped[activeStatus];
 
-  const handleUpdateStatus = (inviteId: string, nextStatus: ConviteStatus) => {
-    const current = items.find((item) => item.id === inviteId);
-
-    if (!current) {
-      warning({
-        title: "Convite indisponível",
-        description: "Não foi possível localizar este convite para atualizar o status.",
-      });
-      return;
-    }
-
-    if (current.status === nextStatus) {
-      info({
-        title: "Status sem alteração",
-        description: `O convite ${current.opportunityCode} já está com este status.`,
-      });
-      return;
-    }
-
-    setItems((previous) =>
-      previous.map((item) => {
-        if (item.id !== inviteId) {
-          return item;
-        }
-
-        const timelineLabel = nextStatus === "aceito" ? "Convite aceito" : "Convite recusado";
-        const dateLabel = "Atualizado agora";
-
-        return {
-          ...item,
-          status: nextStatus,
-          statusReason:
-            nextStatus === "aceito"
-              ? "Aceite registrado e compromisso encaminhado para disponibilidade."
-              : "Recusa registrada no histórico de convites.",
-          commitmentPreview:
-            nextStatus === "aceito"
-              ? item.commitmentPreview ?? "Compromisso futuro aguardando consolidação de agenda."
-              : undefined,
-          timeline: [...item.timeline, { id: `${item.id}-${nextStatus}-now`, label: timelineLabel, dateLabel }],
-        };
-      }),
-    );
-
+  const performStatusUpdate = (
+    inviteId: string,
+    nextStatus: ConviteStatus,
+    withConflictWarning: boolean,
+  ) => {
+    dispatch(updateInviteStatus({ inviteId, nextStatus }));
     dispatch(
       setLastVisualAction(
         nextStatus === "aceito"
@@ -151,40 +135,69 @@ export const RecreadorConvitesPage = () => {
     );
 
     if (nextStatus === "aceito") {
-      success({
-        title: "Convite aceito",
-        description: `${current.opportunityCode} movido para Aceitos e preparado para disponibilidade.`,
-      });
+      if (withConflictWarning) {
+        warning({
+          title: "Convite aceito com conflito",
+          description:
+            "Aceite confirmado mesmo com conflito de compromisso confirmado ou bloqueio manual no periodo.",
+        });
+      } else {
+        success({
+          title: "Convite aceito",
+          description: "Convite movido para Aceitos e integrado a disponibilidade.",
+        });
+      }
       return;
     }
 
     warning({
       title: "Convite recusado",
-      description: `${current.opportunityCode} movido para Recusados com histórico preservado.`,
+      description: "Convite movido para Recusados com historico preservado.",
     });
   };
 
-  const handleRequestDecision = (item: ConviteItem, nextStatus: ConviteStatus) => {
-    if (item.status !== "pendente") {
-      info({
-        title: "Convite já decidido",
-        description: `Este convite já está marcado como ${item.status}.`,
+  const handleUpdateStatus = (inviteId: string, nextStatus: ConviteStatus) => {
+    const validation = validateInviteStatusTransition(flowState, inviteId, nextStatus);
+
+    if (validation.status === "not-found") {
+      warning({
+        title: "Convite indisponivel",
+        description: "Nao foi possivel localizar este convite para atualizar o status.",
       });
       return;
     }
 
-    setDecisionDraft({
-      inviteId: item.id,
-      nextStatus,
-      opportunityCode: item.opportunityCode,
-      roleLabel: item.roleLabel,
-    });
+    if (validation.status === "unchanged") {
+      info({
+        title: "Status sem alteracao",
+        description: `O convite ${validation.invite.opportunityCode} ja esta com este status.`,
+      });
+      return;
+    }
+
+    if (validation.nextStatus === "aceito" && validation.commitmentConflictDetected) {
+      setConflictDraft({
+        inviteId,
+        opportunityCode: validation.invite.opportunityCode,
+        roleLabel: validation.invite.roleLabel,
+      });
+      return;
+    }
+
+    performStatusUpdate(inviteId, nextStatus, false);
   };
 
-  const renderStatusPanel = (status: ConviteStatus, title: string, itemsList: ConviteItem[]) => (
+  const handleOpenContact = (item: ConviteItem) => {
+    navigate(
+      `/app/recreador/chat?contato=${encodeURIComponent(item.originName)}&codigo=${encodeURIComponent(item.opportunityCode)}&origem=convite`,
+    );
+  };
+
+  const renderStatusPanel = (status: InviteBucket, title: string, itemsList: ConviteItem[]) => (
     <S.ColumnCard>
       <S.ColumnHeader>
         <h3>
+          {status === "aguardando" ? <Clock3 size={15} /> : null}
           {status === "pendente" ? <Clock3 size={15} /> : null}
           {status === "aceito" ? <CheckCircle2 size={15} /> : null}
           {status === "recusado" ? <XCircle size={15} /> : null}
@@ -196,11 +209,13 @@ export const RecreadorConvitesPage = () => {
 
       {itemsList.length === 0 ? (
         <S.EmptyState>
-          {status === "pendente"
-            ? "Nenhum convite pendente. Novos convites aparecerão aqui automaticamente."
-            : status === "aceito"
-              ? "Nenhum convite aceito. Aceites aparecerão aqui."
-              : "Nenhum convite recusado. Recusas aparecerão aqui."}
+          {status === "aguardando"
+            ? "Nenhuma candidatura aguardando retorno no momento."
+            : status === "pendente"
+              ? "Nenhum convite direto pendente. Novos convites aparecerao aqui automaticamente."
+              : status === "aceito"
+                ? "Nenhum convite aceito. Aceites aparecerao aqui."
+                : "Nenhum convite recusado. Recusas aparecerao aqui."}
         </S.EmptyState>
       ) : null}
 
@@ -219,7 +234,9 @@ export const RecreadorConvitesPage = () => {
 
                 <S.InviteHeading>
                   <strong>{item.originName}</strong>
-                  <span>{item.opportunityCode} · {item.roleLabel}</span>
+                  <span>
+                    {item.opportunityCode} · {item.roleLabel}
+                  </span>
                 </S.InviteHeading>
               </S.InviteIdentity>
 
@@ -240,37 +257,47 @@ export const RecreadorConvitesPage = () => {
               </S.MetaPill>
             </S.MetaPillRow>
 
-            <S.MetaLine>Recebido em {item.inviteDateLabel} · prazo {item.responseDeadlineLabel}</S.MetaLine>
+            <S.MetaLine>
+              Recebido em {item.inviteDateLabel} · prazo {item.responseDeadlineLabel}
+            </S.MetaLine>
             <S.MetaLine>{item.relationshipLabel}</S.MetaLine>
             <S.MetaLine>{item.statusReason}</S.MetaLine>
 
             <S.DecisionHint $status={status}>
-              {status === "pendente"
-                ? `Responder até ${item.responseDeadlineLabel}.`
-                : status === "aceito"
-                  ? "Aceite registrado. Verifique a coerência com Disponibilidade."
-                  : "Recusa registrada para histórico e aprendizado de triagem."}
+              {status === "aguardando"
+                ? "Candidatura enviada. Aguarde retorno da empresa para possivel convite direto."
+                : status === "pendente"
+                  ? `Responder ate ${item.responseDeadlineLabel}.`
+                  : status === "aceito"
+                    ? "Aceite registrado. Verifique a coerencia com Disponibilidade."
+                    : "Recusa registrada para historico e aprendizado de triagem."}
             </S.DecisionHint>
 
             {item.commitmentPreview ? <S.CommitmentNote>{item.commitmentPreview}</S.CommitmentNote> : null}
 
             <S.TimelineList>
               {item.timeline.map((event) => (
-                <li key={event.id}>{event.label} · {event.dateLabel}</li>
+                <li key={event.id}>
+                  {event.label} · {event.dateLabel}
+                </li>
               ))}
             </S.TimelineList>
 
             <S.ActionsRow>
               {status === "pendente" ? (
                 <>
-                  <S.AcceptButton type="button" onClick={() => handleRequestDecision(item, "aceito")}>
+                  <S.AcceptButton type="button" onClick={() => handleUpdateStatus(item.id, "aceito")}>
                     Aceitar
                   </S.AcceptButton>
-                  <S.RejectButton type="button" onClick={() => handleRequestDecision(item, "recusado")}>
+                  <S.RejectButton type="button" onClick={() => handleUpdateStatus(item.id, "recusado")}>
                     Recusar
                   </S.RejectButton>
                 </>
               ) : null}
+
+              <S.OpenOpportunityButton type="button" onClick={() => handleOpenContact(item)}>
+                <MessageCircle size={14} /> Entrar em contato
+              </S.OpenOpportunityButton>
 
               <S.OpenOpportunityButton
                 type="button"
@@ -314,45 +341,38 @@ export const RecreadorConvitesPage = () => {
           })}
         </S.StatusTabs>
 
-        <S.StatusPanel>
-          {renderStatusPanel(activeStatus, activeStatusLabel, activeItems)}
-        </S.StatusPanel>
+        <S.StatusPanel>{renderStatusPanel(activeStatus, activeStatusLabel, activeItems)}</S.StatusPanel>
 
-        {decisionDraft ? (
-          <S.DecisionOverlay onClick={() => setDecisionDraft(null)}>
+        {conflictDraft ? (
+          <S.DecisionOverlay onClick={() => setConflictDraft(null)}>
             <S.DecisionModal
               role="dialog"
               aria-modal="true"
-              aria-labelledby="convite-decisao-titulo"
+              aria-labelledby="convite-conflito-titulo"
               onClick={(event) => event.stopPropagation()}
             >
-              <h3 id="convite-decisao-titulo">
-                {decisionDraft.nextStatus === "aceito"
-                  ? "Confirmar aceite do convite"
-                  : "Confirmar recusa do convite"}
-              </h3>
+              <h3 id="convite-conflito-titulo">Conflito de agenda detectado</h3>
               <p>
-                {decisionDraft.opportunityCode} · {decisionDraft.roleLabel}
+                {conflictDraft.opportunityCode} · {conflictDraft.roleLabel}
               </p>
               <p>
-                {decisionDraft.nextStatus === "aceito"
-                  ? "Este aceite move o convite para a coluna de aceitos."
-                  : "A recusa move o convite para a coluna de recusados."}
+                Ja existe conflito de agenda para este periodo (compromisso confirmado ou bloqueio
+                manual). Deseja continuar com o aceite mesmo assim?
               </p>
 
               <S.DecisionActions>
-                <S.DecisionCancelButton type="button" onClick={() => setDecisionDraft(null)}>
+                <S.DecisionCancelButton type="button" onClick={() => setConflictDraft(null)}>
                   Cancelar
                 </S.DecisionCancelButton>
                 <S.DecisionConfirmButton
                   type="button"
-                  $tone={decisionDraft.nextStatus === "aceito" ? "aceito" : "recusado"}
+                  $tone="aceito"
                   onClick={() => {
-                    handleUpdateStatus(decisionDraft.inviteId, decisionDraft.nextStatus);
-                    setDecisionDraft(null);
+                    performStatusUpdate(conflictDraft.inviteId, "aceito", true);
+                    setConflictDraft(null);
                   }}
                 >
-                  {decisionDraft.nextStatus === "aceito" ? "Confirmar aceite" : "Confirmar recusa"}
+                  Continuar aceite
                 </S.DecisionConfirmButton>
               </S.DecisionActions>
             </S.DecisionModal>

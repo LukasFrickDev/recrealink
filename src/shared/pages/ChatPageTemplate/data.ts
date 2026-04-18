@@ -27,3 +27,9 @@ export interface ChatPageTemplateData {
   messagesByConversation: Record<string, ChatTemplateMessage[]>;
   quickReplies?: string[];
 }
+
+export interface ChatTemplateExternalContext {
+  contactName?: string;
+  opportunityCode?: string;
+  source?: string;
+}

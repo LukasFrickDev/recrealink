@@ -13,6 +13,8 @@ dist-ssr
 *.local
 bkp.15-04.rar
 bkp.16-04src.rar
+test-results
+temp
 
 # Editor directories and files
 .vscode/*
