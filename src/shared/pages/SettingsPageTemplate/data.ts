@@ -17,11 +17,11 @@ interface SettingsDataValueSource {
 
 export const defaultSettingsTemplateFeedbackMessages: SettingsTemplateFeedbackMessages = {
   notificationsSaved: "Preferências de notificações atualizadas com sucesso.",
-  usersSaved: "Ajustes de usuários salvos para esta sessão visual.",
-  securitySaved: "Solicitação de segurança registrada na camada visual.",
+  usersSaved: "Permissões de usuários atualizadas com sucesso.",
+  securitySaved: "Ajuste de segurança atualizado com sucesso.",
   securityEmpty: "Preencha os três campos de senha para continuar.",
   securityMismatch: "A nova senha e a confirmação precisam ser iguais.",
-  dataSaved: "Dados atualizados na camada visual da configuração.",
+  dataSaved: "Dados de configuração atualizados com sucesso.",
 };
 
 export const createSettingsTemplateDataValueMap = (

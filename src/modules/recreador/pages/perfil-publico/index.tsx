@@ -1,6 +1,8 @@
 import { Link2, MapPin, ShieldCheck, Star } from "lucide-react";
+import { useAppSelector } from "@/app/store/hooks";
 import { RecreadorDashboardShell } from "@/modules/recreador/layout/RecreadorDashboardShell/index";
 import { recreadorPerfilMock } from "@/modules/recreador/mocks/perfil";
+import { readPublicProfileSnapshot } from "@/modules/recreador/utils/publicProfileSnapshot";
 import * as S from "./styles";
 
 const buildInitials = (value: string) =>
@@ -23,7 +25,38 @@ const renderStars = (rating: number, idPrefix: string) => (
 );
 
 export const RecreadorPerfilPublicoPage = () => {
-  const { publicProfile, reviews, reputationSummary } = recreadorPerfilMock;
+  const profile = useAppSelector((state) => state.recreador.profile);
+  const snapshot = readPublicProfileSnapshot();
+
+  const { reviews, reputationSummary } = recreadorPerfilMock;
+
+  const publicProfile = {
+    displayName: snapshot?.displayName ?? profile.fullName,
+    roleLabel: snapshot?.roleLabel ?? profile.roleTitle,
+    headline: snapshot?.headline ?? profile.portfolioHeadline,
+    bio: snapshot?.bio ?? profile.shortBio,
+    city: snapshot?.city ?? profile.city,
+    specialties:
+      snapshot && snapshot.specialties.length > 0 ? snapshot.specialties : profile.specialties,
+    ageGroups:
+      snapshot && snapshot.ageGroups.length > 0
+        ? snapshot.ageGroups
+        : recreadorPerfilMock.publicProfile.ageGroups,
+    cacheRangeLabel:
+      snapshot && snapshot.cacheRangeLabel.length > 0
+        ? snapshot.cacheRangeLabel
+        : recreadorPerfilMock.publicProfile.cacheRangeLabel,
+    galleryHighlights:
+      snapshot && snapshot.specialties.length > 0
+        ? snapshot.specialties.slice(0, 3)
+        : profile.specialties.slice(0, 3),
+    visibilityRules: recreadorPerfilMock.publicProfile.visibilityRules,
+    portfolioLinks:
+      snapshot && snapshot.portfolioLinks.length > 0
+        ? snapshot.portfolioLinks
+        : profile.portfolioLinks,
+  };
+
   const publicReviews = reviews.items.filter((item) => item.visibility === "publica");
 
   return (
@@ -61,28 +94,51 @@ export const RecreadorPerfilPublicoPage = () => {
           <S.Card>
             <S.CardTitle>Especialidades</S.CardTitle>
             <S.Chips>
-              {publicProfile.specialties.map((item) => (
-                <S.Chip key={item}>{item}</S.Chip>
-              ))}
+              {publicProfile.specialties.length === 0 ? (
+                <S.EmptyCopy>Sem especialidades publicadas no momento.</S.EmptyCopy>
+              ) : (
+                publicProfile.specialties.map((item) => <S.Chip key={item}>{item}</S.Chip>)
+              )}
             </S.Chips>
           </S.Card>
 
           <S.Card>
             <S.CardTitle>Faixa etaria de atuacao</S.CardTitle>
             <S.Chips>
-              {publicProfile.ageGroups.map((item) => (
-                <S.Chip key={item}>{item}</S.Chip>
-              ))}
+              {publicProfile.ageGroups.length === 0 ? (
+                <S.EmptyCopy>Sem faixa etaria publicada no momento.</S.EmptyCopy>
+              ) : (
+                publicProfile.ageGroups.map((item) => <S.Chip key={item}>{item}</S.Chip>)
+              )}
             </S.Chips>
           </S.Card>
 
           <S.Card>
             <S.CardTitle>Destaques da galeria</S.CardTitle>
             <S.Chips>
-              {publicProfile.galleryHighlights.map((item) => (
-                <S.Chip key={item}>{item}</S.Chip>
-              ))}
+              {publicProfile.galleryHighlights.length === 0 ? (
+                <S.EmptyCopy>Sem destaques de galeria publicados.</S.EmptyCopy>
+              ) : (
+                publicProfile.galleryHighlights.map((item) => <S.Chip key={item}>{item}</S.Chip>)
+              )}
             </S.Chips>
+          </S.Card>
+
+          <S.Card>
+            <S.CardTitle>Links do portfolio</S.CardTitle>
+            {publicProfile.portfolioLinks.length === 0 ? (
+              <S.EmptyCopy>Sem links publicados no portfolio.</S.EmptyCopy>
+            ) : (
+              <S.LinkList>
+                {publicProfile.portfolioLinks.map((link) => (
+                  <li key={link}>
+                    <a href={link} target="_blank" rel="noreferrer">
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </S.LinkList>
+            )}
           </S.Card>
 
           <S.Card>
@@ -107,20 +163,24 @@ export const RecreadorPerfilPublicoPage = () => {
           <S.Policy>{reviews.policyLabel}</S.Policy>
 
           <S.ReviewGrid>
-            {publicReviews.map((item) => (
-              <S.ReviewCard key={item.id}>
-                <S.ReviewTop>
-                  <strong>{item.author}</strong>
-                  <span>{item.dateLabel}</span>
-                </S.ReviewTop>
-                <S.ReviewMeta>
-                  <span>{item.authorRole}</span>
-                  <span>{item.sourceLabel}</span>
-                </S.ReviewMeta>
-                {renderStars(item.rating, item.id)}
-                <S.ReviewText>{item.comment}</S.ReviewText>
-              </S.ReviewCard>
-            ))}
+            {publicReviews.length === 0 ? (
+              <S.EmptyCopy>Sem avaliacoes publicas disponiveis no momento.</S.EmptyCopy>
+            ) : (
+              publicReviews.map((item) => (
+                <S.ReviewCard key={item.id}>
+                  <S.ReviewTop>
+                    <strong>{item.author}</strong>
+                    <span>{item.dateLabel}</span>
+                  </S.ReviewTop>
+                  <S.ReviewMeta>
+                    <span>{item.authorRole}</span>
+                    <span>{item.sourceLabel}</span>
+                  </S.ReviewMeta>
+                  {renderStars(item.rating, item.id)}
+                  <S.ReviewText>{item.comment}</S.ReviewText>
+                </S.ReviewCard>
+              ))
+            )}
           </S.ReviewGrid>
         </S.Card>
       </S.Wrapper>

@@ -82,6 +82,7 @@ interface ModuleDashboardShellProps {
   logoutRoute: string;
   sidebarGroups: ModuleDashboardNavGroup[];
   quickLinks: ModuleDashboardQuickLink[];
+  showSearch?: boolean;
   searchValue: string;
   searchPlaceholder: string;
   onSearchChange: (value: string) => void;
@@ -117,6 +118,7 @@ export const ModuleDashboardShell = ({
   logoutRoute,
   sidebarGroups,
   quickLinks,
+  showSearch = true,
   searchValue,
   searchPlaceholder,
   onSearchChange,
@@ -286,15 +288,17 @@ export const ModuleDashboardShell = ({
               <S.TopbarLogoImage src={logoColorida} alt="RecreaLink" />
             </S.TopbarLogoButton>
 
-            <S.SearchWrap>
-              <Search size={16} />
-              <input
-                type="text"
-                value={searchValue}
-                onChange={(event) => onSearchChange(event.target.value)}
-                placeholder={searchPlaceholder}
-              />
-            </S.SearchWrap>
+            {showSearch ? (
+              <S.SearchWrap>
+                <Search size={16} />
+                <input
+                  type="text"
+                  value={searchValue}
+                  onChange={(event) => onSearchChange(event.target.value)}
+                  placeholder={searchPlaceholder}
+                />
+              </S.SearchWrap>
+            ) : null}
           </S.TopbarMain>
 
           <S.TopbarActions>

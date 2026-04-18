@@ -1,5 +1,7 @@
 import { BellRing, CheckCheck } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { uiMessages } from "@/shared/constants/uiMessages";
 import type { NotificationsPageTemplateData, NotificationsTemplateItem } from "./data";
 import * as S from "./styles";
 
@@ -9,6 +11,7 @@ interface NotificationsPageTemplateProps {
 }
 
 export const NotificationsPageTemplate = ({ data, tone = "default" }: NotificationsPageTemplateProps) => {
+  const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState(data.filters[0]?.id ?? "todas");
   const [search, setSearch] = useState("");
   const [items, setItems] = useState<NotificationsTemplateItem[]>(data.items);
@@ -82,34 +85,47 @@ export const NotificationsPageTemplate = ({ data, tone = "default" }: Notificati
       </S.Panel>
 
       <S.NotificationList>
-        {filteredItems.map((item) => (
-          <S.NotificationCard key={item.id} $read={item.read}>
-            <S.NotificationTop>
-              <strong>{item.title}</strong>
-              <span>{item.time}</span>
-            </S.NotificationTop>
+        {filteredItems.map((item) => {
+          const actionRoute = item.actionRoute;
 
-            <S.NotificationTypeTag $type={item.type}>{item.type}</S.NotificationTypeTag>
-            <S.NotificationDescription>{item.description}</S.NotificationDescription>
+          return (
+            <S.NotificationCard key={item.id} $read={item.read}>
+              <S.NotificationTop>
+                <strong>{item.title}</strong>
+                <span>{item.time}</span>
+              </S.NotificationTop>
 
-            <S.CardActions>
-              {!item.read ? (
-                <S.MiniButton type="button" onClick={() => markAsRead(item.id)}>
-                  Marcar como lida
-                </S.MiniButton>
-              ) : null}
-              <S.MiniButton type="button">
-                <BellRing size={13} /> {data.detailLabel}
-              </S.MiniButton>
-            </S.CardActions>
-          </S.NotificationCard>
-        ))}
+              <S.NotificationTypeTag $type={item.type}>{item.type}</S.NotificationTypeTag>
+              <S.NotificationDescription>{item.description}</S.NotificationDescription>
+
+              <S.CardActions>
+                {!item.read ? (
+                  <S.MiniButton type="button" onClick={() => markAsRead(item.id)}>
+                    Marcar como lida
+                  </S.MiniButton>
+                ) : null}
+                {actionRoute ? (
+                  <S.MiniButton
+                    type="button"
+                    onClick={() => {
+                      markAsRead(item.id);
+                      navigate(actionRoute);
+                    }}
+                  >
+                    <BellRing size={13} /> {item.actionLabel ?? data.detailLabel}
+                  </S.MiniButton>
+                ) : null}
+              </S.CardActions>
+            </S.NotificationCard>
+          );
+        })}
       </S.NotificationList>
 
       {filteredItems.length === 0 ? (
         <S.EmptyState>
-          {data.emptyMessage}
-          {unreadCount === 0 ? " Caixa limpa no momento." : " Tente outro filtro."}
+          {items.length === 0
+            ? uiMessages.notificationsEmptyInitial
+            : `${data.emptyMessage}${unreadCount === 0 ? " Caixa limpa no momento." : " Tente outro filtro."}`}
         </S.EmptyState>
       ) : null}
     </S.Wrapper>

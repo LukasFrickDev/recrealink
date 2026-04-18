@@ -183,3 +183,50 @@ Fase 6 — complementares
 checklist
 notificações visuais
 refinamentos leves de suporte/configurações
+
+ETAPA 2 - FUNCIONALIDADES
+
+Fase F1 — Auditoria funcional e corte do genérico
+revisar o módulo inteiro com olhar de uso real
+mapear botões, links, cards clicáveis, CTAs, estados e destinos
+remover dashboard genérico, cards genéricos e textos explicativos desnecessários
+decidir o que deve abrir:
+página
+modal
+drawer
+ação inline
+identificar o que falta para o módulo parecer produto real
+Fase F2 — Perfil funcional real
+revisar o perfil como página de edição real
+deixar campos e interações mais realistas
+definir comportamento de salvar, editar, cancelar e visualizar
+alinhar perfil interno, perfil público e avaliações
+remover qualquer informação solta ou artificial que não ajude o uso
+Fase F3 — Oportunidades e convites como fluxo real
+definir a jornada real de descoberta de oportunidade
+decidir como abre o detalhe da oportunidade
+estruturar candidatura com ação clara
+estruturar convite com ação clara de aceitar/recusar
+separar bem:
+explorar vaga
+ver detalhe
+candidatar-se
+decidir convite
+Fase F4 — Disponibilidade como agenda operacional real
+transformar disponibilidade em agenda operacional de verdade
+revisar recorrência, bloqueio manual, bloqueio automático e conflito
+definir como o usuário cria e edita disponibilidade
+definir como compromissos aceitos aparecem
+deixar o comportamento pronto para backend depois
+Fase F5 — Complementares funcionais
+revisar checklist para funcionar como ferramenta real
+revisar notificações visuais mínimas
+revisar chat no contexto do Recreador
+revisar suporte e configurações com foco em uso real
+remover qualquer complementar que esteja só enchendo página
+Fase F6 — Fechamento funcional do módulo
+revisar o módulo inteiro página por página
+validar coerência entre botões, destinos, modais e estados
+remover ações mortas e cards inúteis
+revisar estados vazios e fluxos interrompidos
+fechar o Recreador funcionalmente antes da etapa visual

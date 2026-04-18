@@ -129,6 +129,13 @@ export const Chip = styled.span`
   color: ${({ theme }) => theme.colors.text};
 `;
 
+export const EmptyCopy = styled.p`
+  margin: 0;
+  font-size: 0.74rem;
+  color: ${({ theme }) => theme.colors.textMuted};
+  line-height: 1.45;
+`;
+
 export const RuleList = styled.ul`
   margin: 0;
   padding-left: 1rem;
@@ -139,6 +146,30 @@ export const RuleList = styled.ul`
     color: ${({ theme }) => theme.colors.textMuted};
     font-size: 0.74rem;
     line-height: 1.4;
+  }
+`;
+
+export const LinkList = styled.ul`
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.32rem;
+
+  li {
+    color: ${({ theme }) => theme.colors.textMuted};
+    font-size: 0.74rem;
+    line-height: 1.4;
+    min-width: 0;
+  }
+
+  a {
+    color: ${({ theme }) => theme.colors.brandBlue};
+    text-decoration: none;
+    word-break: break-all;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 

@@ -74,14 +74,15 @@ export const RecreadorDashboardShell = ({
       logoutRoute="/acesso/escolher-perfil"
       sidebarGroups={sidebarGroups}
       quickLinks={quickLinks}
+      showSearch={false}
       searchValue={ui.topbarSearch}
       searchPlaceholder="Buscar oportunidades, convites e disponibilidade..."
       onSearchChange={(value) => dispatch(setTopbarSearch(value))}
-      onChatNavigation={() => dispatch(setLastVisualAction("Chat visual aberto."))}
+      onChatNavigation={() => dispatch(setLastVisualAction("Chat aberto."))}
       onNotificationsNavigation={() =>
-        dispatch(setLastVisualAction("Notificações visuais abertas."))
+        dispatch(setLastVisualAction("Notificacoes abertas."))
       }
-      onLogout={() => dispatch(setLastVisualAction("Sessão encerrada visualmente."))}
+      onLogout={() => dispatch(setLastVisualAction("Sessao encerrada."))}
     >
       {children}
     </ModuleDashboardShell>

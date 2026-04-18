@@ -151,10 +151,3 @@ export const PrimaryButton = styled.button`
   gap: 6px;
   cursor: pointer;
 `;
-
-export const ProfileFeedback = styled.p<{ $success?: boolean }>`
-  margin: 0;
-  font-size: 12px;
-  font-weight: 700;
-  color: ${({ $success, theme }) => ($success ? theme.colors.success : theme.colors.brandOrange)};
-`;

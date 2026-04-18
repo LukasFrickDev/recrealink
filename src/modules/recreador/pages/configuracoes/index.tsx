@@ -11,17 +11,14 @@ import {
 import { RecreadorDashboardShell } from "@/modules/recreador/layout/RecreadorDashboardShell/index";
 import { recreadorPerfilMock } from "@/modules/recreador/mocks/perfil";
 import { recreadorConfiguracoesMock } from "@/modules/recreador/mocks/configuracoes";
+import { useToast } from "@/shared/ui/Toast";
 import * as S from "./styles";
 
 export const RecreadorConfiguracoesPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { success } = useToast();
   const profile = useAppSelector((state) => state.recreador.profile);
-
-  const [profileFeedback, setProfileFeedback] = useState<{
-    message: string;
-    success: boolean;
-  } | null>(null);
 
   const [fullName, setFullName] = useState(profile.fullName);
   const [roleTitle, setRoleTitle] = useState(profile.roleTitle);
@@ -58,10 +55,9 @@ export const RecreadorConfiguracoesPage = () => {
     );
     dispatch(setProfileSpecialties(specialties));
     dispatch(setLastVisualAction("Dados do perfil atualizados em Configurações."));
-
-    setProfileFeedback({
-      message: "Dados do perfil salvos no estado visual da Etapa 1.",
-      success: true,
+    success({
+      title: "Perfil atualizado",
+      description: "Dados do perfil salvos com sucesso.",
     });
   };
 
@@ -74,7 +70,7 @@ export const RecreadorConfiguracoesPage = () => {
     >
       <S.Wrapper>
         <SettingsPageTemplate
-
+          showFeedback={false}
           tabs={recreadorConfiguracoesMock.tabs.map((tab) => ({
             id: tab.id,
             label: tab.label,
@@ -88,9 +84,27 @@ export const RecreadorConfiguracoesPage = () => {
           userAccess={recreadorConfiguracoesMock.userAccess}
           securityTips={recreadorConfiguracoesMock.securityTips}
           feedbackMessages={recreadorConfiguracoesMock.feedbackMessages}
-          onSaveNotifications={() => dispatch(setLastVisualAction("Preferências de notificação atualizadas."))}
-          onSaveUsers={() => dispatch(setLastVisualAction("Permissões de usuário atualizadas."))}
-          onSaveSecurity={() => dispatch(setLastVisualAction("Ajuste de segurança enviado sem persistência real."))}
+          onSaveNotifications={() => {
+            dispatch(setLastVisualAction("Preferencias de notificacao atualizadas."));
+            success({
+              title: "Notificacoes atualizadas",
+              description: "Preferencias de notificacao salvas.",
+            });
+          }}
+          onSaveUsers={() => {
+            dispatch(setLastVisualAction("Permissoes de usuario atualizadas."));
+            success({
+              title: "Usuarios atualizados",
+              description: "Permissoes de acesso salvas.",
+            });
+          }}
+          onSaveSecurity={() => {
+            dispatch(setLastVisualAction("Ajuste de seguranca atualizado."));
+            success({
+              title: "Seguranca atualizada",
+              description: "Alteracao de seguranca registrada.",
+            });
+          }}
           profileTabId="perfil"
           profileContent={
             <S.ProfileGrid>
@@ -170,12 +184,6 @@ export const RecreadorConfiguracoesPage = () => {
                     <CheckCircle2 size={14} /> Salvar dados do perfil
                   </S.PrimaryButton>
                 </S.ActionsRow>
-
-                {profileFeedback ? (
-                  <S.ProfileFeedback $success={profileFeedback.success}>
-                    {profileFeedback.message}
-                  </S.ProfileFeedback>
-                ) : null}
               </S.ProfileForm>
             </S.ProfileGrid>
           }

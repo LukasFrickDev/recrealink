@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Clock3, MapPin, XCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setLastVisualAction } from "@/app/store/slices/recreadorSlice";
 import { RecreadorDashboardShell } from "@/modules/recreador/layout/RecreadorDashboardShell/index";
 import { recreadorConvitesMock, type ConviteItem, type ConviteStatus } from "@/modules/recreador/mocks/convites";
+import { useToast } from "@/shared/ui/Toast";
 import * as S from "./styles";
 
 const originLabel = {
@@ -12,12 +13,38 @@ const originLabel = {
   eventos: "Eventos",
 } as const;
 
+type InviteDecisionDraft = {
+  inviteId: string;
+  nextStatus: ConviteStatus;
+  opportunityCode: string;
+  roleLabel: string;
+};
+
 export const RecreadorConvitesPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { success, info, warning } = useToast();
 
   const [items, setItems] = useState<ConviteItem[]>(recreadorConvitesMock.items);
-  const [feedback, setFeedback] = useState("");
+  const [decisionDraft, setDecisionDraft] = useState<InviteDecisionDraft | null>(null);
+
+  useEffect(() => {
+    if (!decisionDraft) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDecisionDraft(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [decisionDraft]);
 
   const stats = useMemo(() => {
     const pendentes = items.filter((item) => item.status === "pendente").length;
@@ -43,7 +70,19 @@ export const RecreadorConvitesPage = () => {
   const handleUpdateStatus = (inviteId: string, nextStatus: ConviteStatus) => {
     const current = items.find((item) => item.id === inviteId);
 
-    if (!current || current.status === nextStatus) {
+    if (!current) {
+      warning({
+        title: "Convite indisponivel",
+        description: "Nao foi possivel localizar este convite para atualizar o status.",
+      });
+      return;
+    }
+
+    if (current.status === nextStatus) {
+      info({
+        title: "Status sem alteracao",
+        description: `O convite ${current.opportunityCode} ja esta com este status.`,
+      });
       return;
     }
 
@@ -61,8 +100,8 @@ export const RecreadorConvitesPage = () => {
           status: nextStatus,
           statusReason:
             nextStatus === "aceito"
-              ? "Aceite visual registrado para evoluir em disponibilidade na proxima fase."
-              : "Recusa visual registrada para historico operacional.",
+              ? "Aceite registrado e compromisso encaminhado para disponibilidade."
+              : "Recusa registrada no historico de convites.",
           commitmentPreview:
             nextStatus === "aceito"
               ? item.commitmentPreview ?? "Compromisso futuro aguardando consolidacao de agenda."
@@ -75,16 +114,40 @@ export const RecreadorConvitesPage = () => {
     dispatch(
       setLastVisualAction(
         nextStatus === "aceito"
-          ? `Convite ${inviteId} aceito visualmente.`
-          : `Convite ${inviteId} recusado visualmente.`,
+          ? `Convite ${inviteId} aceito.`
+          : `Convite ${inviteId} recusado.`,
       ),
     );
 
-    setFeedback(
-      nextStatus === "aceito"
-        ? "Convite aceito. O item segue para compromisso futuro na proxima fase."
-        : "Convite recusado. Historico mantido para rastreabilidade.",
-    );
+    if (nextStatus === "aceito") {
+      success({
+        title: "Convite aceito",
+        description: `${current.opportunityCode} movido para Aceitos e preparado para disponibilidade.`,
+      });
+      return;
+    }
+
+    warning({
+      title: "Convite recusado",
+      description: `${current.opportunityCode} movido para Recusados com historico preservado.`,
+    });
+  };
+
+  const handleRequestDecision = (item: ConviteItem, nextStatus: ConviteStatus) => {
+    if (item.status !== "pendente") {
+      info({
+        title: "Convite ja decidido",
+        description: `Este convite ja esta marcado como ${item.status}.`,
+      });
+      return;
+    }
+
+    setDecisionDraft({
+      inviteId: item.id,
+      nextStatus,
+      opportunityCode: item.opportunityCode,
+      roleLabel: item.roleLabel,
+    });
   };
 
   const renderColumn = (status: ConviteStatus, title: string, itemsList: ConviteItem[]) => (
@@ -99,7 +162,15 @@ export const RecreadorConvitesPage = () => {
         <span>{itemsList.length}</span>
       </S.ColumnHeader>
 
-      {itemsList.length === 0 ? <S.EmptyState>Nenhum convite neste status.</S.EmptyState> : null}
+      {itemsList.length === 0 ? (
+        <S.EmptyState>
+          {status === "pendente"
+            ? "Nenhum convite pendente. Novos convites aparecerao aqui automaticamente."
+            : status === "aceito"
+              ? "Nenhum convite aceito. Aceites pendentes serao listados nesta coluna."
+              : "Nenhum convite recusado no momento."}
+        </S.EmptyState>
+      ) : null}
 
       <S.InviteList>
         {itemsList.map((item) => (
@@ -130,10 +201,10 @@ export const RecreadorConvitesPage = () => {
             <S.ActionsRow>
               {status === "pendente" ? (
                 <>
-                  <S.AcceptButton type="button" onClick={() => handleUpdateStatus(item.id, "aceito")}>
+                  <S.AcceptButton type="button" onClick={() => handleRequestDecision(item, "aceito")}>
                     Aceitar
                   </S.AcceptButton>
-                  <S.RejectButton type="button" onClick={() => handleUpdateStatus(item.id, "recusado")}>
+                  <S.RejectButton type="button" onClick={() => handleRequestDecision(item, "recusado")}>
                     Recusar
                   </S.RejectButton>
                 </>
@@ -161,28 +232,55 @@ export const RecreadorConvitesPage = () => {
       <S.Wrapper>
         <S.HeaderCard>
           <h2>Central de convites</h2>
-          <p>
-            Aqui ficam somente convites recebidos e suas decisoes. Exploracao e candidatura de vagas
-            permanecem em Oportunidades.
-          </p>
+          <p>Decida convites recebidos. Pesquisa e candidatura continuam em Oportunidades.</p>
         </S.HeaderCard>
-
-        <S.LegendGrid>
-          {recreadorConvitesMock.statusLegend.map((item) => (
-            <S.LegendCard key={item.id}>
-              <strong>{item.title}</strong>
-              <p>{item.helper}</p>
-            </S.LegendCard>
-          ))}
-        </S.LegendGrid>
-
-        {feedback ? <S.Feedback>{feedback}</S.Feedback> : null}
 
         <S.BoardGrid>
           {renderColumn("pendente", "Pendentes", grouped.pendente)}
           {renderColumn("aceito", "Aceitos", grouped.aceito)}
           {renderColumn("recusado", "Recusados", grouped.recusado)}
         </S.BoardGrid>
+
+        {decisionDraft ? (
+          <S.DecisionOverlay onClick={() => setDecisionDraft(null)}>
+            <S.DecisionModal
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="convite-decisao-titulo"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <h3 id="convite-decisao-titulo">
+                {decisionDraft.nextStatus === "aceito"
+                  ? "Confirmar aceite do convite"
+                  : "Confirmar recusa do convite"}
+              </h3>
+              <p>
+                {decisionDraft.opportunityCode} · {decisionDraft.roleLabel}
+              </p>
+              <p>
+                {decisionDraft.nextStatus === "aceito"
+                  ? "Este aceite move o convite para a coluna de aceitos."
+                  : "A recusa move o convite para a coluna de recusados."}
+              </p>
+
+              <S.DecisionActions>
+                <S.DecisionCancelButton type="button" onClick={() => setDecisionDraft(null)}>
+                  Cancelar
+                </S.DecisionCancelButton>
+                <S.DecisionConfirmButton
+                  type="button"
+                  $tone={decisionDraft.nextStatus === "aceito" ? "aceito" : "recusado"}
+                  onClick={() => {
+                    handleUpdateStatus(decisionDraft.inviteId, decisionDraft.nextStatus);
+                    setDecisionDraft(null);
+                  }}
+                >
+                  {decisionDraft.nextStatus === "aceito" ? "Confirmar aceite" : "Confirmar recusa"}
+                </S.DecisionConfirmButton>
+              </S.DecisionActions>
+            </S.DecisionModal>
+          </S.DecisionOverlay>
+        ) : null}
       </S.Wrapper>
     </RecreadorDashboardShell>
   );

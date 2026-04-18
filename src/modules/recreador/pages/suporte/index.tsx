@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { CheckCircle2, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -6,45 +6,73 @@ import { useAppDispatch } from "@/app/store/hooks";
 import { setLastVisualAction } from "@/app/store/slices/recreadorSlice";
 import { RecreadorDashboardShell } from "@/modules/recreador/layout/RecreadorDashboardShell/index";
 import { recreadorSupportMock } from "@/modules/recreador/mocks/suporte";
+import { useToast } from "@/shared/ui/Toast";
 import * as S from "./styles";
 
 export const RecreadorSupportPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { success, warning } = useToast();
+  const knowledgeBaseRef = useRef<HTMLElement | null>(null);
   const [nomeCompleto, setNomeCompleto] = useState("");
   const [email, setEmail] = useState("");
   const [assunto, setAssunto] = useState("");
   const [mensagem, setMensagem] = useState("");
   const [enviado, setEnviado] = useState(false);
 
+  const resetFormulario = () => {
+    setNomeCompleto("");
+    setEmail("");
+    setAssunto("");
+    setMensagem("");
+  };
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
     if (!nomeCompleto || !email || !assunto || !mensagem) {
+      warning({
+        title: "Dados incompletos",
+        description: "Preencha nome, e-mail, assunto e mensagem para enviar o chamado.",
+      });
       return;
     }
 
     setEnviado(true);
-    dispatch(setLastVisualAction("Mensagem enviada para o suporte (simulação)."));
+    dispatch(setLastVisualAction("Chamado enviado para o suporte."));
+    success({
+      title: "Chamado enviado",
+      description: "Sua solicitacao foi registrada e entrou na fila de atendimento.",
+    });
   };
 
   const handleAbrirCanal = (canalId: string) => {
+    if (canalId === "email") {
+      const mailSubject = encodeURIComponent("Suporte Recreador - RecreaLink");
+      const mailBody = encodeURIComponent(
+        "Ola, preciso de ajuda no modulo Recreador.\n\nDescreva abaixo:\n- Tela\n- Acao\n- Resultado esperado\n- Resultado atual",
+      );
+
+      window.location.href = `mailto:suporte@recrealink.com?subject=${mailSubject}&body=${mailBody}`;
+      dispatch(setLastVisualAction("Canal de email aberto para contato com o suporte."));
+      return;
+    }
+
     if (canalId === "chat") {
-      setAssunto("problema-ferramenta");
-      setMensagem("Olá, preciso de apoio para uma funcionalidade visual do módulo do recreador.");
-      setEnviado(false);
+      navigate("/app/recreador/chat");
+      dispatch(setLastVisualAction("Redirecionado para o chat de atendimento do modulo."));
       return;
     }
 
     if (canalId === "base") {
-      navigate("/app/recreador/checklist");
-      dispatch(setLastVisualAction("Redirecionado para checklist como base de apoio prático."));
+      knowledgeBaseRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      dispatch(setLastVisualAction("Base de conhecimento aberta na pagina de suporte."));
       return;
     }
 
     if (canalId === "notifications") {
       navigate("/app/recreador/notificacoes");
-      dispatch(setLastVisualAction("Redirecionado para notificações visuais do módulo."));
+      dispatch(setLastVisualAction("Redirecionado para notificacoes do modulo."));
       return;
     }
 
@@ -69,14 +97,20 @@ export const RecreadorSupportPage = () => {
               <h2>Central de suporte</h2>
               <p>
                 {enviado
-                  ? "Sua mensagem foi enviada com sucesso. Nossa equipe retornará em breve."
-                  : "Precisa de ajuda? Envie sua dúvida técnica ou operacional para o time de suporte."}
+                  ? "Chamado enviado. Abra um novo chamado se precisar complementar informacoes."
+                  : "Envie duvidas tecnicas ou operacionais para o time de suporte."}
               </p>
             </div>
           </S.HeaderTop>
 
           {enviado ? (
-            <S.SubmitButton type="button" onClick={() => setEnviado(false)}>
+            <S.SubmitButton
+              type="button"
+              onClick={() => {
+                resetFormulario();
+                setEnviado(false);
+              }}
+            >
               Enviar novo chamado
             </S.SubmitButton>
           ) : null}
@@ -148,6 +182,21 @@ export const RecreadorSupportPage = () => {
               </S.ChannelCard>
             ))}
           </S.ChannelsGrid>
+        </S.SectionCard>
+
+        <S.SectionCard ref={knowledgeBaseRef}>
+          <S.SectionTitle>Base de conhecimento</S.SectionTitle>
+          <S.KnowledgeGrid>
+            {recreadorSupportMock.knowledgeBase.map((article) => (
+              <S.KnowledgeItem key={article.id}>
+                <strong>{article.title}</strong>
+                <p>{article.description}</p>
+                <S.ChannelButton type="button" onClick={() => navigate(article.route)}>
+                  Abrir artigo
+                </S.ChannelButton>
+              </S.KnowledgeItem>
+            ))}
+          </S.KnowledgeGrid>
         </S.SectionCard>
       </S.Wrapper>
     </RecreadorDashboardShell>

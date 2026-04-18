@@ -46,6 +46,14 @@ export const ChatPageTemplate = ({ data, tone = "default" }: ChatPageTemplatePro
     [activeConversationId, filteredConversations],
   );
 
+  const emptyPanelMessage = useMemo(() => {
+    if (data.conversations.length === 0) {
+      return uiMessages.conversationsEmptyInitial;
+    }
+
+    return uiMessages.conversationsEmptyFilter;
+  }, [data.conversations.length]);
+
   const currentMessages = activeConversation ? messagesByConversation[activeConversation.id] ?? [] : [];
 
   const handleSend = () => {
@@ -130,13 +138,19 @@ export const ChatPageTemplate = ({ data, tone = "default" }: ChatPageTemplatePro
               </S.ChatHeader>
 
               <S.MessageList>
-                {currentMessages.map((message) => (
-                  <S.MessageBubble key={message.id} $mine={message.mine}>
-                    <strong>{message.author}</strong>
-                    <p>{message.content}</p>
-                    <span>{message.time}</span>
-                  </S.MessageBubble>
-                ))}
+                {currentMessages.length === 0 ? (
+                  <S.EmptyMessages>
+                    Sem mensagens nesta conversa. Envie a primeira mensagem para iniciar o atendimento.
+                  </S.EmptyMessages>
+                ) : (
+                  currentMessages.map((message) => (
+                    <S.MessageBubble key={message.id} $mine={message.mine}>
+                      <strong>{message.author}</strong>
+                      <p>{message.content}</p>
+                      <span>{message.time}</span>
+                    </S.MessageBubble>
+                  ))
+                )}
               </S.MessageList>
 
               {data.quickReplies && data.quickReplies.length > 0 ? (
@@ -166,7 +180,7 @@ export const ChatPageTemplate = ({ data, tone = "default" }: ChatPageTemplatePro
               </S.ComposeRow>
             </>
           ) : (
-            <S.EmptyPanel>{uiMessages.conversationsEmptyFilter}</S.EmptyPanel>
+            <S.EmptyPanel>{emptyPanelMessage}</S.EmptyPanel>
           )}
         </S.Panel>
       </S.ChatGrid>

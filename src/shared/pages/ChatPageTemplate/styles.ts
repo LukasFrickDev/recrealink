@@ -269,6 +269,17 @@ export const MessageList = styled.div`
   }
 `;
 
+export const EmptyMessages = styled.p`
+  margin: 0;
+  align-self: center;
+  justify-self: center;
+  max-width: 44ch;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.5;
+  color: ${({ theme }) => theme.colors.textMuted};
+`;
+
 export const MessageBubble = styled.article<{ $mine: boolean }>`
   max-width: 82%;
   border-radius: ${({ theme }) => theme.radii.md};

@@ -63,6 +63,43 @@ export const SectionCard = styled.article`
   gap: 0.62rem;
 `;
 
+export const FormGrid = styled.div`
+  display: grid;
+  gap: 0.62rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+export const FormField = styled.label`
+  display: grid;
+  gap: 0.34rem;
+
+  span {
+    font-size: 0.73rem;
+    font-weight: 700;
+    color: ${({ theme }) => theme.colors.textMuted};
+  }
+
+  input,
+  select {
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radii.md};
+    background: ${({ theme }) => theme.colors.surface};
+    color: ${({ theme }) => theme.colors.text};
+    font-size: 0.76rem;
+    padding: 0.54rem 0.66rem;
+
+    &:focus {
+      outline: none;
+      border-color: ${({ theme }) => theme.colors.brandBlue};
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
+    }
+  }
+`;
+
 export const SectionTitle = styled.h3`
   margin: 0;
   font-size: 0.88rem;
@@ -191,6 +228,12 @@ export const ItemCard = styled.article`
   }
 `;
 
+export const ItemActions = styled.div`
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+`;
+
 export const EmptyState = styled.p`
   margin: 0;
   border: 1px dashed ${({ theme }) => theme.colors.border};
@@ -229,6 +272,15 @@ export const SecondaryButton = styled(BaseButton)`
   }
 `;
 
+export const DangerButton = styled(BaseButton)`
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+`;
+
 export const FooterCard = styled.footer`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
@@ -246,11 +298,4 @@ export const FooterCard = styled.footer`
     color: ${({ theme }) => theme.colors.textMuted};
     line-height: 1.45;
   }
-`;
-
-export const Feedback = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.success};
-  font-size: 0.8rem;
-  font-weight: 700;
 `;

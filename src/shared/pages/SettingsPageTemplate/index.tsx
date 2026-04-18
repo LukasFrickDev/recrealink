@@ -22,6 +22,7 @@ export interface SettingsTemplateDataTabConfig {
 
 interface SettingsPageTemplateProps {
   tone?: "default" | "hotelaria" | "pais";
+  showFeedback?: boolean;
   tabs: SettingsBaseTabConfig[];
   defaultTabId: string;
   notificationsTabId: string;
@@ -41,6 +42,7 @@ interface SettingsPageTemplateProps {
 
 export const SettingsPageTemplate = ({
   tone = "default",
+  showFeedback = true,
   tabs,
   defaultTabId,
   notificationsTabId,
@@ -212,8 +214,8 @@ export const SettingsPageTemplate = ({
             [optionKey]: value,
           }));
         }}
-        feedbackMessage={feedback?.message ?? null}
-        feedbackSuccess={feedback?.success}
+        feedbackMessage={showFeedback ? feedback?.message ?? null : null}
+        feedbackSuccess={showFeedback ? feedback?.success : undefined}
       />
     </S.Wrapper>
   );

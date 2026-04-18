@@ -118,7 +118,8 @@ export const Field = styled.label`
   }
 
   input,
-  textarea {
+  textarea,
+  select {
     border: 1px solid ${({ theme }) => theme.colors.border};
     border-radius: ${({ theme }) => theme.radii.md};
     padding: 0.68rem 0.82rem;
@@ -138,6 +139,176 @@ export const Field = styled.label`
     min-height: 102px;
     resize: vertical;
   }
+`;
+
+export const FormColumns = styled.div`
+  display: grid;
+  gap: 0.72rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+export const SubsectionTitle = styled.h3`
+  margin: 0;
+  font-size: 0.84rem;
+`;
+
+export const InlineRow = styled.div`
+  display: grid;
+  gap: 0.46rem;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+
+  input {
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: ${({ theme }) => theme.radii.md};
+    padding: 0.58rem 0.72rem;
+    background: ${({ theme }) => theme.colors.surface};
+    color: ${({ theme }) => theme.colors.text};
+    font-size: 0.8rem;
+
+    &:focus {
+      outline: none;
+      border-color: ${({ theme }) => theme.colors.brandBlue};
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.14);
+    }
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+export const InlineActions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+`;
+
+export const MinorButton = styled.button<{ $tone?: "default" | "neutral" | "danger" }>`
+  border-radius: ${({ theme }) => theme.radii.md};
+  border: 1px solid
+    ${({ theme, $tone }) => {
+      if ($tone === "danger") {
+        return "rgba(220, 38, 38, 0.35)";
+      }
+
+      if ($tone === "neutral") {
+        return theme.colors.border;
+      }
+
+      return "rgba(29, 78, 216, 0.35)";
+    }};
+  background: ${({ theme, $tone }) => {
+    if ($tone === "danger") {
+      return "rgba(220, 38, 38, 0.1)";
+    }
+
+    if ($tone === "neutral") {
+      return theme.colors.surface;
+    }
+
+    return "rgba(29, 78, 216, 0.08)";
+  }};
+  color: ${({ theme, $tone }) => {
+    if ($tone === "danger") {
+      return "#b91c1c";
+    }
+
+    if ($tone === "neutral") {
+      return theme.colors.text;
+    }
+
+    return theme.colors.brandBlue;
+  }};
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+`;
+
+export const EmptyInlineList = styled.p`
+  margin: 0;
+  border: 1px dashed ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: 0.75rem;
+  padding: 0.62rem 0.68rem;
+`;
+
+export const ManagedList = styled.div`
+  display: grid;
+  gap: 0.58rem;
+`;
+
+export const ManagedItemCard = styled.article`
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: ${({ theme }) => theme.colors.surfaceSoft};
+  padding: 0.65rem;
+  display: grid;
+  gap: 0.34rem;
+`;
+
+export const ManagedItemHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  strong {
+    font-size: 0.8rem;
+  }
+`;
+
+export const ManagedItemActions = styled.div`
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+`;
+
+export const ManagedMeta = styled.p`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: 0.74rem;
+  line-height: 1.4;
+`;
+
+export const Tags = styled.div`
+  display: flex;
+  gap: 0.36rem;
+  flex-wrap: wrap;
+
+  span {
+    border-radius: ${({ theme }) => theme.radii.pill};
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    background: ${({ theme }) => theme.colors.surface};
+    color: ${({ theme }) => theme.colors.textMuted};
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.12rem 0.45rem;
+  }
+`;
+
+export const StatusChip = styled.span<{ $status: "valido" | "atualizar" }>`
+  width: fit-content;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 0.14rem 0.45rem;
+  border: 1px solid
+    ${({ $status }) => ($status === "valido" ? "rgba(5, 150, 105, 0.35)" : "rgba(202, 138, 4, 0.35)")};
+  background: ${({ $status }) => ($status === "valido" ? "rgba(5, 150, 105, 0.12)" : "rgba(202, 138, 4, 0.12)")};
+  color: ${({ $status }) => ($status === "valido" ? "#047857" : "#a16207")};
 `;
 
 export const ChipsGrid = styled.div`
@@ -224,6 +395,7 @@ export const GalleryCard = styled.article`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
   overflow: hidden;
+  background: ${({ theme }) => theme.colors.surface};
 `;
 
 export const GalleryImage = styled.div<{ $image: string }>`
@@ -238,6 +410,13 @@ export const GalleryCaption = styled.p`
   padding: 0.58rem 0.68rem;
   font-size: 0.76rem;
   color: ${({ theme }) => theme.colors.textMuted};
+`;
+
+export const GalleryActions = styled.div`
+  padding: 0 0.68rem 0.68rem;
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
 `;
 
 export const ReputationCard = styled.article`
@@ -390,11 +569,4 @@ export const SecondaryButton = styled(BaseButton)`
   background: ${({ theme }) => theme.colors.surface};
   color: ${({ theme }) => theme.colors.text};
   width: fit-content;
-`;
-
-export const Feedback = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.success};
-  font-size: 0.8rem;
-  font-weight: 600;
 `;

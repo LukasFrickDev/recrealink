@@ -10,6 +10,8 @@ export interface NotificationsTemplateItem {
   description: string;
   time: string;
   read: boolean;
+  actionRoute?: string;
+  actionLabel?: string;
 }
 
 export interface NotificationsPageTemplateData {

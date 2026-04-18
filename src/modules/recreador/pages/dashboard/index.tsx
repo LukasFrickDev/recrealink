@@ -71,7 +71,6 @@ export const RecreadorDashboardPage = () => {
           <S.HeroBadge>{recreadorDashboardMock.hero.badge}</S.HeroBadge>
           <S.HeroTitle>{recreadorDashboardMock.hero.title}</S.HeroTitle>
           <S.HeroDescription>{recreadorDashboardMock.hero.description}</S.HeroDescription>
-          <S.HeroFocus>{recreadorDashboardMock.focusMessage}</S.HeroFocus>
           <S.HeroActions>
             <S.PrimaryButton
               type="button"
@@ -114,10 +113,7 @@ export const RecreadorDashboardPage = () => {
         <S.QuickActionsCard>
           <S.SectionHeader>
             <S.SectionTitleWrap>
-              <S.SectionTitle>Acesso rapido aos eixos do modulo</S.SectionTitle>
-              <S.SectionSubtitle>
-                O dashboard resume e direciona. A execucao detalhada permanece nas paginas nucleo.
-              </S.SectionSubtitle>
+              <S.SectionTitle>Acesso rapido</S.SectionTitle>
             </S.SectionTitleWrap>
           </S.SectionHeader>
 
@@ -143,7 +139,6 @@ export const RecreadorDashboardPage = () => {
             <S.SectionHeader>
               <S.SectionTitleWrap>
                 <S.SectionTitle>Convites pendentes</S.SectionTitle>
-                <S.SectionSubtitle>Decisoes com prazo para aceite ou recusa.</S.SectionSubtitle>
               </S.SectionTitleWrap>
               <S.HeaderActionButton type="button" onClick={() => navigate("/app/recreador/convites")}>
                 Abrir convites
@@ -152,7 +147,9 @@ export const RecreadorDashboardPage = () => {
             </S.SectionHeader>
 
             {recreadorDashboardMock.pendingInvites.length === 0 ? (
-              <S.EmptyState>Sem convites pendentes no momento.</S.EmptyState>
+              <S.EmptyState>
+                Sem convites pendentes no momento. Revise Oportunidades para ampliar novas candidaturas.
+              </S.EmptyState>
             ) : (
               <S.DataList>
                 {recreadorDashboardMock.pendingInvites.map((item) => (
@@ -179,9 +176,6 @@ export const RecreadorDashboardPage = () => {
             <S.SectionHeader>
               <S.SectionTitleWrap>
                 <S.SectionTitle>Alertas importantes</S.SectionTitle>
-                <S.SectionSubtitle>
-                  Itens que exigem ajuste para manter operacao previsivel.
-                </S.SectionSubtitle>
               </S.SectionTitleWrap>
             </S.SectionHeader>
 
@@ -211,9 +205,6 @@ export const RecreadorDashboardPage = () => {
             <S.SectionHeader>
               <S.SectionTitleWrap>
                 <S.SectionTitle>Oportunidades em destaque</S.SectionTitle>
-                <S.SectionSubtitle>
-                  Recorte rapido para iniciar novas candidaturas com contexto.
-                </S.SectionSubtitle>
               </S.SectionTitleWrap>
               <S.HeaderActionButton
                 type="button"
@@ -250,12 +241,13 @@ export const RecreadorDashboardPage = () => {
             <S.SectionHeader>
               <S.SectionTitleWrap>
                 <S.SectionTitle>Candidaturas em andamento</S.SectionTitle>
-                <S.SectionSubtitle>Status do que ja foi enviado no fluxo de vagas.</S.SectionSubtitle>
               </S.SectionTitleWrap>
             </S.SectionHeader>
 
             {recreadorDashboardMock.activeApplications.length === 0 ? (
-              <S.EmptyState>Nenhuma candidatura em andamento no momento.</S.EmptyState>
+              <S.EmptyState>
+                Nenhuma candidatura em andamento no momento. Use Oportunidades para iniciar novos envios.
+              </S.EmptyState>
             ) : (
               <S.DataList>
                 {recreadorDashboardMock.activeApplications.map((item) => (
@@ -284,14 +276,13 @@ export const RecreadorDashboardPage = () => {
             <S.SectionHeader>
               <S.SectionTitleWrap>
                 <S.SectionTitle>Proximos compromissos</S.SectionTitle>
-                <S.SectionSubtitle>
-                  Itens aceitos ou confirmados que impactam a agenda operacional.
-                </S.SectionSubtitle>
               </S.SectionTitleWrap>
             </S.SectionHeader>
 
             {recreadorDashboardMock.nextCommitments.length === 0 ? (
-              <S.EmptyState>Sem compromissos futuros no momento.</S.EmptyState>
+              <S.EmptyState>
+                Sem compromissos futuros no momento. Convites aceitos aparecerao aqui para acompanhamento.
+              </S.EmptyState>
             ) : (
               <S.DataList>
                 {recreadorDashboardMock.nextCommitments.map((item) => (
@@ -320,9 +311,6 @@ export const RecreadorDashboardPage = () => {
             <S.SectionHeader>
               <S.SectionTitleWrap>
                 <S.SectionTitle>Resumo de disponibilidade</S.SectionTitle>
-                <S.SectionSubtitle>
-                  Panorama rapido da agenda para decidir novos convites e candidaturas.
-                </S.SectionSubtitle>
               </S.SectionTitleWrap>
               <S.HeaderActionButton
                 type="button"
@@ -351,9 +339,6 @@ export const RecreadorDashboardPage = () => {
           <S.SectionHeader>
             <S.SectionTitleWrap>
               <S.SectionTitle>Avaliacoes recentes</S.SectionTitle>
-              <S.SectionSubtitle>
-                Sinal de reputacao para orientar ajustes no perfil e na execucao operacional.
-              </S.SectionSubtitle>
             </S.SectionTitleWrap>
             <S.HeaderActionButton type="button" onClick={() => navigate("/app/recreador/perfil")}>
               Abrir perfil

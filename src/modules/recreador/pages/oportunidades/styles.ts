@@ -106,11 +106,23 @@ export const LegendCard = styled.article`
   }
 `;
 
-export const Feedback = styled.p`
-  margin: 0;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.success};
+export const ContextCard = styled.div`
+  border: 1px solid rgba(29, 78, 216, 0.28);
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: rgba(29, 78, 216, 0.08);
+  padding: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+
+  p {
+    margin: 0;
+    font-size: 0.76rem;
+    color: ${({ theme }) => theme.colors.text};
+    line-height: 1.4;
+  }
 `;
 
 export const OpportunitiesGrid = styled.div`
@@ -119,13 +131,21 @@ export const OpportunitiesGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 `;
 
-export const OpportunityCard = styled.article`
+export const OpportunityCard = styled.article<{ $highlighted?: boolean }>`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
   background: ${({ theme }) => theme.colors.surface};
   padding: 0.82rem;
   display: grid;
   gap: 0.5rem;
+
+  ${({ $highlighted }) =>
+    $highlighted
+      ? `
+    border-color: rgba(29, 78, 216, 0.4);
+    box-shadow: 0 8px 16px rgba(29, 78, 216, 0.12);
+  `
+      : ""}
 `;
 
 export const OpportunityHeader = styled.div`
@@ -297,7 +317,13 @@ export const EmptyCard = styled.article`
   border: 1px dashed ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.md};
   background: ${({ theme }) => theme.colors.surface};
-  color: ${({ theme }) => theme.colors.textMuted};
   padding: 1rem;
-  font-size: 0.8rem;
+  display: grid;
+  gap: 0.55rem;
+
+  p {
+    margin: 0;
+    color: ${({ theme }) => theme.colors.textMuted};
+    font-size: 0.8rem;
+  }
 `;

@@ -8,3 +8,4 @@ export { SectionHeader } from "./SectionHeader";
 export { EmptyState } from "./EmptyState";
 export { Avatar } from "./Avatar";
 export { SidebarNavItem } from "./SidebarNavItem";
+export { ToastProvider, useToast } from "./Toast";

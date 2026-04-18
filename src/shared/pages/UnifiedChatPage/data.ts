@@ -18,12 +18,12 @@ interface UnifiedChatModuleConfig {
 export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleConfig> = {
   recreador: {
     pageTitle: "Chat do recreador",
-    pageDescription: "Conversas visuais do módulo para comunicação com hotéis e equipe.",
+    pageDescription: "Conversas do modulo para comunicacao com hoteis e equipe.",
     stats: [
       { title: "Conversas", value: "04", helper: "2 ativas agora" },
       { title: "Não lidas", value: "05", helper: "Priorize respostas" },
       { title: "Tempo médio", value: "7 min", helper: "Últimas 24h" },
-      { title: "Status", value: "Visual", helper: "Sem backend nesta etapa" },
+      { title: "Com retorno pendente", value: "02", helper: "Aguardando resposta" },
     ],
     templateData: {
       sectionTitle: "Conversas",

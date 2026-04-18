@@ -194,11 +194,66 @@ export const OpenOpportunityButton = styled(BaseButton)`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-export const Feedback = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.colors.success};
-  font-size: 0.8rem;
+export const DecisionOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  background: rgba(15, 23, 42, 0.36);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+`;
+
+export const DecisionModal = styled.article`
+  width: min(440px, 100%);
+  border-radius: ${({ theme }) => theme.radii.lg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.surface};
+  box-shadow: ${({ theme }) => theme.shadows.md};
+  padding: 1rem;
+  display: grid;
+  gap: 0.58rem;
+
+  h3 {
+    margin: 0;
+    font-size: 0.96rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.77rem;
+    color: ${({ theme }) => theme.colors.textMuted};
+    line-height: 1.42;
+  }
+`;
+
+export const DecisionActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+`;
+
+const DecisionBaseButton = styled.button`
+  border-radius: ${({ theme }) => theme.radii.md};
+  font-size: 0.75rem;
   font-weight: 700;
+  padding: 0.44rem 0.72rem;
+  cursor: pointer;
+`;
+
+export const DecisionCancelButton = styled(DecisionBaseButton)`
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
+`;
+
+export const DecisionConfirmButton = styled(DecisionBaseButton)<{ $tone: "aceito" | "recusado" }>`
+  border: 1px solid
+    ${({ $tone }) => ($tone === "aceito" ? "rgba(5, 150, 105, 0.45)" : "rgba(148, 163, 184, 0.48)")};
+  background: ${({ $tone }) => ($tone === "aceito" ? "rgba(5, 150, 105, 0.14)" : "rgba(148, 163, 184, 0.15)")};
+  color: ${({ $tone }) => ($tone === "aceito" ? "#047857" : "#475569")};
 `;
 
 export const EmptyState = styled.p`

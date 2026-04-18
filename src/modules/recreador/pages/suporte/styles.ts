@@ -171,3 +171,33 @@ export const ChannelButton = styled.button`
     color: ${({ theme }) => theme.colors.brandBlue};
   }
 `;
+
+export const KnowledgeGrid = styled.div`
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+`;
+
+export const KnowledgeItem = styled.article`
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.md};
+  padding: 10px;
+  background: linear-gradient(180deg, #fff 0%, rgba(238, 244, 255, 0.58) 100%);
+
+  strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 12px;
+    color: ${({ theme }) => theme.colors.textMuted};
+    line-height: 1.45;
+  }
+`;

@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CalendarDays, Clock3, Handshake, MapPin, Search, Send } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setLastVisualAction } from "@/app/store/slices/recreadorSlice";
 import { RecreadorDashboardShell } from "@/modules/recreador/layout/RecreadorDashboardShell/index";
+import { useToast } from "@/shared/ui/Toast";
 import {
 	recreadorOportunidadesMock,
 	type OpportunityCityFilter,
@@ -42,6 +43,8 @@ const originLabel: Record<OpportunityOriginKind, string> = {
 export const RecreadorOportunidadesPage = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	const { success, info, warning, danger } = useToast();
+	const [searchParams, setSearchParams] = useSearchParams();
 
 	const [searchTerm, setSearchTerm] = useState("");
 	const [cityFilter, setCityFilter] = useState<OpportunityCityFilter>("todos");
@@ -49,7 +52,24 @@ export const RecreadorOportunidadesPage = () => {
 	const [dateFilter, setDateFilter] = useState<OpportunityDateFilter>("todos");
 	const [originFilter, setOriginFilter] = useState<"todos" | OpportunityOriginKind>("todos");
 	const [items, setItems] = useState(recreadorOportunidadesMock.items);
-	const [feedback, setFeedback] = useState("");
+
+	const highlightedOpportunityCode = useMemo(() => {
+		const rawCode = searchParams.get("codigo")?.trim() ?? "";
+		return rawCode ? rawCode.toUpperCase() : "";
+	}, [searchParams]);
+
+	const contextOpportunity = useMemo(
+		() => items.find((item) => item.code === highlightedOpportunityCode) ?? null,
+		[highlightedOpportunityCode, items],
+	);
+
+	useEffect(() => {
+		if (!highlightedOpportunityCode) {
+			return;
+		}
+
+		setSearchTerm((previous) => (previous.trim().length > 0 ? previous : highlightedOpportunityCode));
+	}, [highlightedOpportunityCode]);
 
 	const dashboardStats = useMemo(() => {
 		const abertas = items.filter((item) => item.lifecycleStatus === "aberta").length;
@@ -105,16 +125,26 @@ export const RecreadorOportunidadesPage = () => {
 		const target = items.find((item) => item.id === id);
 
 		if (!target) {
+			danger({
+				title: "Oportunidade indisponivel",
+				description: "Nao foi possivel localizar a oportunidade selecionada nesta lista.",
+			});
 			return;
 		}
 
 		if (target.lifecycleStatus !== "aberta") {
-			setFeedback("Esta oportunidade nao aceita nova candidatura porque nao esta aberta.");
+			warning({
+				title: "Candidatura bloqueada",
+				description: "Esta oportunidade nao aceita nova candidatura porque nao esta aberta.",
+			});
 			return;
 		}
 
 		if (target.applicationStatus === "candidatura-enviada") {
-			setFeedback("Candidatura ja enviada para este item.");
+			info({
+				title: "Candidatura ja enviada",
+				description: "Este item ja recebeu sua candidatura e segue em acompanhamento.",
+			});
 			return;
 		}
 
@@ -129,8 +159,24 @@ export const RecreadorOportunidadesPage = () => {
 			),
 		);
 
-		dispatch(setLastVisualAction(`Candidatura enviada visualmente para ${target.code}.`));
-		setFeedback("Candidatura enviada. Se houver convite, a decisao fica na pagina de Convites.");
+		dispatch(setLastVisualAction(`Candidatura enviada para ${target.code}.`));
+		success({
+			title: "Candidatura enviada",
+			description: `${target.code} movida para acompanhamento. Se houver convite, a decisao fica em Convites.`,
+		});
+	};
+
+	const handleResetFilters = () => {
+		setSearchTerm("");
+		setCityFilter("todos");
+		setTypeFilter("todos");
+		setDateFilter("todos");
+		setOriginFilter("todos");
+		setSearchParams({}, { replace: true });
+		info({
+			title: "Filtros limpos",
+			description: "A listagem voltou para a visao geral de oportunidades.",
+		});
 	};
 
 	return (
@@ -142,10 +188,7 @@ export const RecreadorOportunidadesPage = () => {
 			<S.Wrapper>
 				<S.HeaderCard>
 					<h2>Central de vagas</h2>
-					<p>
-						Encontre oportunidades de hotelaria e eventos, filtre por criterio operacional e
-						envie candidatura sem misturar decisao de convite nesta tela.
-					</p>
+					<p>Filtre vagas e envie candidaturas. Decisoes de convite ficam em Convites.</p>
 				</S.HeaderCard>
 
 				<S.FiltersCard>
@@ -197,26 +240,40 @@ export const RecreadorOportunidadesPage = () => {
 					</S.FiltersGrid>
 				</S.FiltersCard>
 
-				<S.LegendGrid>
-					{recreadorOportunidadesMock.journeyLegend.map((item) => (
-						<S.LegendCard key={item.id}>
-							<strong>{item.title}</strong>
-							<p>{item.helper}</p>
-						</S.LegendCard>
-					))}
-				</S.LegendGrid>
-
-				{feedback ? <S.Feedback>{feedback}</S.Feedback> : null}
+				{highlightedOpportunityCode ? (
+					<S.ContextCard>
+						<p>
+							{contextOpportunity
+								? `Filtro ativo: ${contextOpportunity.code} · ${contextOpportunity.roleLabel}.`
+								: `Codigo ${highlightedOpportunityCode} recebido de Convites e nao encontrado na lista atual.`}
+						</p>
+						<S.SecondaryButton
+							type="button"
+							onClick={() => {
+								setSearchParams({}, { replace: true });
+								setSearchTerm("");
+								info({
+									title: "Contexto removido",
+									description: "Filtro de contexto removido.",
+								});
+							}}
+						>
+							Limpar contexto
+						</S.SecondaryButton>
+					</S.ContextCard>
+				) : null}
 
 				<S.OpportunitiesGrid>
 					{filteredItems.map((item) => {
+						const isHighlighted = highlightedOpportunityCode.length > 0 && item.code === highlightedOpportunityCode;
+
 						const canApply =
 							item.lifecycleStatus === "aberta" &&
 							item.applicationStatus === "disponivel" &&
 							item.inviteStatus !== "convite-aceito";
 
 						return (
-							<S.OpportunityCard key={item.id}>
+							<S.OpportunityCard key={item.id} $highlighted={isHighlighted}>
 								<S.OpportunityHeader>
 									<S.CodeBadge>{item.code}</S.CodeBadge>
 									<S.OriginBadge $origin={item.originKind}>{originLabel[item.originKind]}</S.OriginBadge>
@@ -283,7 +340,10 @@ export const RecreadorOportunidadesPage = () => {
 
 					{filteredItems.length === 0 ? (
 						<S.EmptyCard>
-							Nenhuma oportunidade corresponde aos filtros selecionados.
+							<p>Nenhuma oportunidade corresponde aos filtros selecionados.</p>
+							<S.SecondaryButton type="button" onClick={handleResetFilters}>
+								Limpar filtros
+							</S.SecondaryButton>
 						</S.EmptyCard>
 					) : null}
 				</S.OpportunitiesGrid>

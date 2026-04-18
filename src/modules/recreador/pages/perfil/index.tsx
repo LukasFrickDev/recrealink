@@ -4,10 +4,14 @@ import {
   ExternalLink,
   Image,
   Link2,
+  Pencil,
+  Plus,
   Save,
   Star,
+  Trash2,
   UserRound,
   Wallet,
+  X,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import {
@@ -16,47 +20,197 @@ import {
   updateProfile,
 } from "@/app/store/slices/recreadorSlice";
 import { RecreadorDashboardShell } from "@/modules/recreador/layout/RecreadorDashboardShell/index";
-import { recreadorPerfilMock } from "@/modules/recreador/mocks/perfil";
+import {
+  recreadorPerfilMock,
+  type ProfileCertificationItem,
+  type ProfileExperienceItem,
+  type ProfileGalleryItem,
+} from "@/modules/recreador/mocks/perfil";
+import {
+  readPublicProfileSnapshot,
+  savePublicProfileSnapshot,
+} from "@/modules/recreador/utils/publicProfileSnapshot";
+import { useToast } from "@/shared/ui/Toast";
 import * as S from "./styles";
+
+type EditableLinkItem = {
+  id: string;
+  url: string;
+};
+
+type ProfileDraftSnapshot = {
+  fullName: string;
+  roleTitle: string;
+  shortBio: string;
+  city: string;
+  email: string;
+  phone: string;
+  portfolioHeadline: string;
+  experienceYears: string;
+  specialties: string[];
+  ageGroups: string[];
+  cacheRangeId: string;
+  links: EditableLinkItem[];
+  experienceItems: ProfileExperienceItem[];
+  certificationItems: ProfileCertificationItem[];
+  galleryItems: ProfileGalleryItem[];
+};
+
+type ExperienceDraftState = {
+  title: string;
+  location: string;
+  dateLabel: string;
+  audienceLabel: string;
+  highlights: string;
+};
+
+type CertificationDraftState = {
+  title: string;
+  institution: string;
+  validityLabel: string;
+  status: ProfileCertificationItem["status"];
+};
+
+type GalleryDraftState = {
+  image: string;
+  description: string;
+};
+
+const EXPERIENCE_DRAFT_INITIAL: ExperienceDraftState = {
+  title: "",
+  location: "",
+  dateLabel: "",
+  audienceLabel: "",
+  highlights: "",
+};
+
+const CERTIFICATION_DRAFT_INITIAL: CertificationDraftState = {
+  title: "",
+  institution: "",
+  validityLabel: "",
+  status: "valido",
+};
+
+const GALLERY_DRAFT_INITIAL: GalleryDraftState = {
+  image: "",
+  description: "",
+};
+
+const createLocalId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+const cloneExperienceItems = (items: readonly ProfileExperienceItem[]): ProfileExperienceItem[] =>
+  items.map((item) => ({
+    ...item,
+    highlights: [...item.highlights],
+  }));
+
+const cloneCertificationItems = (
+  items: readonly ProfileCertificationItem[],
+): ProfileCertificationItem[] => items.map((item) => ({ ...item }));
+
+const cloneGalleryItems = (items: readonly ProfileGalleryItem[]): ProfileGalleryItem[] =>
+  items.map((item) => ({ ...item }));
+
+const cloneLinks = (links: EditableLinkItem[]): EditableLinkItem[] => links.map((item) => ({ ...item }));
+
+const parseHighlights = (rawValue: string): string[] =>
+  rawValue
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+const certificationStatusLabel: Record<ProfileCertificationItem["status"], string> = {
+  valido: "Valido",
+  atualizar: "Atualizar",
+};
 
 export const RecreadorPerfilPage = () => {
   const dispatch = useAppDispatch();
   const profile = useAppSelector((state) => state.recreador.profile);
+  const { success, info, warning } = useToast();
 
-  const [fullName, setFullName] = useState(profile.fullName);
-  const [roleTitle, setRoleTitle] = useState(profile.roleTitle);
-  const [shortBio, setShortBio] = useState(profile.shortBio);
-  const [city, setCity] = useState(profile.city);
-  const [email, setEmail] = useState(profile.email);
-  const [phone, setPhone] = useState(profile.phone);
-  const [portfolioHeadline, setPortfolioHeadline] = useState(profile.portfolioHeadline);
-  const [experienceYears, setExperienceYears] = useState(String(profile.experienceYears));
-  const [specialties, setSpecialties] = useState<string[]>(profile.specialties);
-  const [ageGroups, setAgeGroups] = useState<string[]>(recreadorPerfilMock.publicProfile.ageGroups);
-  const [cacheRangeId, setCacheRangeId] = useState(recreadorPerfilMock.cacheRangeOptions[0]?.id ?? "");
-  const [links, setLinks] = useState(() =>
-    profile.portfolioLinks.length > 0 ? profile.portfolioLinks.join("\n") : "",
+  const initialPublicProfileSnapshot = useMemo(() => readPublicProfileSnapshot(), []);
+
+  const [savedSnapshot, setSavedSnapshot] = useState<ProfileDraftSnapshot>(() => {
+    const initialLinksSource =
+      profile.portfolioLinks.length > 0
+        ? profile.portfolioLinks
+        : initialPublicProfileSnapshot?.portfolioLinks ?? [];
+
+    return {
+      fullName: profile.fullName,
+      roleTitle: profile.roleTitle,
+      shortBio: profile.shortBio,
+      city: profile.city,
+      email: profile.email,
+      phone: profile.phone,
+      portfolioHeadline: profile.portfolioHeadline,
+      experienceYears: String(profile.experienceYears),
+      specialties: [...profile.specialties],
+      ageGroups: [...(initialPublicProfileSnapshot?.ageGroups ?? recreadorPerfilMock.publicProfile.ageGroups)],
+      cacheRangeId:
+        recreadorPerfilMock.cacheRangeOptions.find(
+          (option) => option.label === initialPublicProfileSnapshot?.cacheRangeLabel,
+        )?.id ?? recreadorPerfilMock.cacheRangeOptions[0]?.id ?? "",
+      links: initialLinksSource.map((url, index) => ({
+        id: `link-initial-${index + 1}`,
+        url,
+      })),
+      experienceItems: cloneExperienceItems(recreadorPerfilMock.experienceItems),
+      certificationItems: cloneCertificationItems(recreadorPerfilMock.certifications),
+      galleryItems: cloneGalleryItems(recreadorPerfilMock.gallery),
+    };
+  });
+
+  const [fullName, setFullName] = useState(savedSnapshot.fullName);
+  const [roleTitle, setRoleTitle] = useState(savedSnapshot.roleTitle);
+  const [shortBio, setShortBio] = useState(savedSnapshot.shortBio);
+  const [city, setCity] = useState(savedSnapshot.city);
+  const [email, setEmail] = useState(savedSnapshot.email);
+  const [phone, setPhone] = useState(savedSnapshot.phone);
+  const [portfolioHeadline, setPortfolioHeadline] = useState(savedSnapshot.portfolioHeadline);
+  const [experienceYears, setExperienceYears] = useState(savedSnapshot.experienceYears);
+  const [specialties, setSpecialties] = useState<string[]>(savedSnapshot.specialties);
+  const [ageGroups, setAgeGroups] = useState<string[]>(savedSnapshot.ageGroups);
+  const [cacheRangeId, setCacheRangeId] = useState<string>(savedSnapshot.cacheRangeId);
+  const [links, setLinks] = useState<EditableLinkItem[]>(savedSnapshot.links);
+  const [experienceItems, setExperienceItems] = useState<ProfileExperienceItem[]>(
+    savedSnapshot.experienceItems,
   );
+  const [certificationItems, setCertificationItems] = useState<ProfileCertificationItem[]>(
+    savedSnapshot.certificationItems,
+  );
+  const [galleryItems, setGalleryItems] = useState<ProfileGalleryItem[]>(savedSnapshot.galleryItems);
+
+  const [linkDraft, setLinkDraft] = useState("");
+  const [editingLinkId, setEditingLinkId] = useState<string | null>(null);
+
+  const [experienceDraft, setExperienceDraft] = useState<ExperienceDraftState>(EXPERIENCE_DRAFT_INITIAL);
+  const [editingExperienceId, setEditingExperienceId] = useState<string | null>(null);
+
+  const [certificationDraft, setCertificationDraft] = useState<CertificationDraftState>(
+    CERTIFICATION_DRAFT_INITIAL,
+  );
+  const [editingCertificationId, setEditingCertificationId] = useState<string | null>(null);
+
+  const [galleryDraft, setGalleryDraft] = useState<GalleryDraftState>(GALLERY_DRAFT_INITIAL);
+  const [editingGalleryId, setEditingGalleryId] = useState<string | null>(null);
+
   const [reviewResponses, setReviewResponses] = useState<Record<string, string>>(() =>
     recreadorPerfilMock.reviews.items.reduce<Record<string, string>>((acc, item) => {
       acc[item.id] = item.suggestedResponse;
       return acc;
     }, {}),
   );
-  const [feedback, setFeedback] = useState("");
-
-  const parsedLinks = useMemo(
-    () =>
-      links
-        .split("\n")
-        .map((item) => item.trim())
-        .filter(Boolean),
-    [links],
-  );
 
   const selectedCacheRange = useMemo(
     () => recreadorPerfilMock.cacheRangeOptions.find((option) => option.id === cacheRangeId),
     [cacheRangeId],
+  );
+
+  const parsedLinks = useMemo(
+    () => links.map((item) => item.url.trim()).filter(Boolean),
+    [links],
   );
 
   const completion = useMemo(() => {
@@ -73,6 +227,9 @@ export const RecreadorPerfilPage = () => {
       specialties.length > 0 ? "ok" : "",
       ageGroups.length > 0 ? "ok" : "",
       parsedLinks.length > 0 ? "ok" : "",
+      experienceItems.length > 0 ? "ok" : "",
+      certificationItems.length > 0 ? "ok" : "",
+      galleryItems.length > 0 ? "ok" : "",
     ];
 
     const done = fields.filter((item) => String(item).trim().length > 0).length;
@@ -80,10 +237,13 @@ export const RecreadorPerfilPage = () => {
   }, [
     ageGroups.length,
     cacheRangeId,
+    certificationItems.length,
     city,
     email,
+    experienceItems.length,
     experienceYears,
     fullName,
+    galleryItems.length,
     parsedLinks.length,
     phone,
     portfolioHeadline,
@@ -93,14 +253,18 @@ export const RecreadorPerfilPage = () => {
   ]);
 
   const toggleSpecialty = (value: string) => {
-    setSpecialties((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value],
+    setSpecialties((previous) =>
+      previous.includes(value)
+        ? previous.filter((item) => item !== value)
+        : [...previous, value],
     );
   };
 
   const toggleAgeGroup = (value: string) => {
-    setAgeGroups((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value],
+    setAgeGroups((previous) =>
+      previous.includes(value)
+        ? previous.filter((item) => item !== value)
+        : [...previous, value],
     );
   };
 
@@ -118,35 +282,514 @@ export const RecreadorPerfilPage = () => {
     dispatch(setLastVisualAction("Perfil publico aberto para visualizacao externa."));
   };
 
+  const resetTransientForms = () => {
+    setLinkDraft("");
+    setEditingLinkId(null);
+    setExperienceDraft(EXPERIENCE_DRAFT_INITIAL);
+    setEditingExperienceId(null);
+    setCertificationDraft(CERTIFICATION_DRAFT_INITIAL);
+    setEditingCertificationId(null);
+    setGalleryDraft(GALLERY_DRAFT_INITIAL);
+    setEditingGalleryId(null);
+  };
+
+  const collectCurrentSnapshot = (): ProfileDraftSnapshot => ({
+    fullName,
+    roleTitle,
+    shortBio,
+    city,
+    email,
+    phone,
+    portfolioHeadline,
+    experienceYears,
+    specialties: [...specialties],
+    ageGroups: [...ageGroups],
+    cacheRangeId,
+    links: cloneLinks(links),
+    experienceItems: cloneExperienceItems(experienceItems),
+    certificationItems: cloneCertificationItems(certificationItems),
+    galleryItems: cloneGalleryItems(galleryItems),
+  });
+
+  const applySnapshot = (snapshot: ProfileDraftSnapshot) => {
+    setFullName(snapshot.fullName);
+    setRoleTitle(snapshot.roleTitle);
+    setShortBio(snapshot.shortBio);
+    setCity(snapshot.city);
+    setEmail(snapshot.email);
+    setPhone(snapshot.phone);
+    setPortfolioHeadline(snapshot.portfolioHeadline);
+    setExperienceYears(snapshot.experienceYears);
+    setSpecialties([...snapshot.specialties]);
+    setAgeGroups([...snapshot.ageGroups]);
+    setCacheRangeId(snapshot.cacheRangeId);
+    setLinks(cloneLinks(snapshot.links));
+    setExperienceItems(cloneExperienceItems(snapshot.experienceItems));
+    setCertificationItems(cloneCertificationItems(snapshot.certificationItems));
+    setGalleryItems(cloneGalleryItems(snapshot.galleryItems));
+  };
+
+  const confirmRemoval = (itemLabel: string) => {
+    const confirmed = window.confirm(
+      `Confirmar remocao: ${itemLabel}? Esta acao afeta o rascunho atual do perfil.`,
+    );
+
+    if (!confirmed) {
+      info({
+        title: "Remocao cancelada",
+        description: "O item foi mantido na lista atual do perfil.",
+      });
+    }
+
+    return confirmed;
+  };
+
   const handleSalvar = () => {
+    if (!fullName.trim() || !roleTitle.trim() || !city.trim()) {
+      warning({
+        title: "Campos obrigatorios",
+        description: "Preencha nome, titulo profissional e cidade antes de salvar o perfil.",
+      });
+      return;
+    }
+
+    const snapshot = collectCurrentSnapshot();
+    const snapshotLinks = snapshot.links.map((item) => item.url.trim()).filter(Boolean);
+
     dispatch(
       updateProfile({
-        fullName,
-        roleTitle,
-        shortBio,
-        city,
-        email,
-        phone,
-        portfolioHeadline,
-        experienceYears: Number(experienceYears) || 0,
-        portfolioLinks: parsedLinks,
+        fullName: snapshot.fullName,
+        roleTitle: snapshot.roleTitle,
+        shortBio: snapshot.shortBio,
+        city: snapshot.city,
+        email: snapshot.email,
+        phone: snapshot.phone,
+        portfolioHeadline: snapshot.portfolioHeadline,
+        experienceYears: Number(snapshot.experienceYears) || 0,
+        portfolioLinks: snapshotLinks,
       }),
     );
-    dispatch(setProfileSpecialties(specialties));
-    dispatch(setLastVisualAction("Perfil salvo visualmente na pagina unica de perfil."));
-    setFeedback("Perfil atualizado. Estrutura pronta para evolucao com dados reais futuramente.");
+    dispatch(setProfileSpecialties(snapshot.specialties));
+
+    savePublicProfileSnapshot({
+      displayName: snapshot.fullName,
+      roleLabel: snapshot.roleTitle,
+      headline: snapshot.portfolioHeadline,
+      bio: snapshot.shortBio,
+      city: snapshot.city,
+      specialties: snapshot.specialties,
+      ageGroups: snapshot.ageGroups,
+      cacheRangeLabel: selectedCacheRange?.label ?? "",
+      portfolioLinks: snapshotLinks,
+      updatedAt: new Date().toISOString(),
+    });
+
+    setSavedSnapshot(snapshot);
+    resetTransientForms();
+
+    dispatch(setLastVisualAction("Perfil do recreador atualizado."));
+    success({
+      title: "Perfil salvo",
+      description: "Dados principais e conteudo operacional do perfil foram atualizados.",
+    });
+  };
+
+  const handleCancelarAlteracoes = () => {
+    const hasSnapshotChanges =
+      JSON.stringify(collectCurrentSnapshot()) !== JSON.stringify(savedSnapshot);
+    const hasDraftChanges =
+      linkDraft.trim().length > 0 ||
+      editingLinkId !== null ||
+      experienceDraft.title.trim().length > 0 ||
+      experienceDraft.location.trim().length > 0 ||
+      experienceDraft.dateLabel.trim().length > 0 ||
+      experienceDraft.audienceLabel.trim().length > 0 ||
+      experienceDraft.highlights.trim().length > 0 ||
+      editingExperienceId !== null ||
+      certificationDraft.title.trim().length > 0 ||
+      certificationDraft.institution.trim().length > 0 ||
+      certificationDraft.validityLabel.trim().length > 0 ||
+      editingCertificationId !== null ||
+      galleryDraft.image.trim().length > 0 ||
+      galleryDraft.description.trim().length > 0 ||
+      editingGalleryId !== null;
+
+    if (
+      (hasSnapshotChanges || hasDraftChanges) &&
+      !window.confirm("Descartar alteracoes nao salvas do perfil e restaurar o ultimo estado salvo?")
+    ) {
+      info({
+        title: "Cancelamento interrompido",
+        description: "As alteracoes permanecem na tela para revisao.",
+      });
+      return;
+    }
+
+    applySnapshot(savedSnapshot);
+    resetTransientForms();
+    info({
+      title: "Alteracoes descartadas",
+      description: "O perfil voltou para o ultimo estado salvo nesta sessao.",
+    });
+  };
+
+  const handleSaveLink = () => {
+    const normalizedUrl = linkDraft.trim();
+
+    if (!normalizedUrl) {
+      warning({
+        title: "Link vazio",
+        description: "Preencha a URL antes de adicionar ou atualizar um link.",
+      });
+      return;
+    }
+
+    if (editingLinkId) {
+      setLinks((previous) =>
+        previous.map((item) =>
+          item.id === editingLinkId
+            ? {
+                ...item,
+                url: normalizedUrl,
+              }
+            : item,
+        ),
+      );
+      success({
+        title: "Link atualizado",
+        description: "O link do portfolio foi atualizado na lista local.",
+      });
+    } else {
+      setLinks((previous) => [...previous, { id: createLocalId("link"), url: normalizedUrl }]);
+      success({
+        title: "Link adicionado",
+        description: "Novo link de portfolio incluido para proximo salvamento do perfil.",
+      });
+    }
+
+    setLinkDraft("");
+    setEditingLinkId(null);
+  };
+
+  const handleEditLink = (item: EditableLinkItem) => {
+    setEditingLinkId(item.id);
+    setLinkDraft(item.url);
+  };
+
+  const handleRemoveLink = (linkId: string) => {
+    const target = links.find((item) => item.id === linkId);
+
+    if (!target) {
+      warning({
+        title: "Link indisponivel",
+        description: "Nao foi possivel localizar este link para remocao.",
+      });
+      return;
+    }
+
+    if (!confirmRemoval("este link do portfolio")) {
+      return;
+    }
+
+    setLinks((previous) => previous.filter((item) => item.id !== linkId));
+
+    if (editingLinkId === linkId) {
+      setEditingLinkId(null);
+      setLinkDraft("");
+    }
+
+    info({
+      title: "Link removido",
+      description: "O link foi removido da lista local do portfolio.",
+    });
+  };
+
+  const handleSaveExperience = () => {
+    const title = experienceDraft.title.trim();
+    const location = experienceDraft.location.trim();
+    const dateLabel = experienceDraft.dateLabel.trim();
+    const audienceLabel = experienceDraft.audienceLabel.trim();
+    const highlights = parseHighlights(experienceDraft.highlights);
+
+    if (!title || !location || !dateLabel || !audienceLabel) {
+      warning({
+        title: "Experiencia incompleta",
+        description: "Preencha titulo, local, data e publico para salvar a experiencia.",
+      });
+      return;
+    }
+
+    if (editingExperienceId) {
+      setExperienceItems((previous) =>
+        previous.map((item) =>
+          item.id === editingExperienceId
+            ? {
+                ...item,
+                title,
+                location,
+                dateLabel,
+                audienceLabel,
+                highlights,
+              }
+            : item,
+        ),
+      );
+      success({
+        title: "Experiencia atualizada",
+        description: "A experiencia selecionada foi atualizada com sucesso.",
+      });
+    } else {
+      setExperienceItems((previous) => [
+        ...previous,
+        {
+          id: createLocalId("exp"),
+          title,
+          location,
+          dateLabel,
+          audienceLabel,
+          highlights,
+        },
+      ]);
+      success({
+        title: "Experiencia adicionada",
+        description: "Nova experiencia incluida na vitrine interna do perfil.",
+      });
+    }
+
+    setExperienceDraft(EXPERIENCE_DRAFT_INITIAL);
+    setEditingExperienceId(null);
+  };
+
+  const handleEditExperience = (item: ProfileExperienceItem) => {
+    setEditingExperienceId(item.id);
+    setExperienceDraft({
+      title: item.title,
+      location: item.location,
+      dateLabel: item.dateLabel,
+      audienceLabel: item.audienceLabel,
+      highlights: item.highlights.join(", "),
+    });
+  };
+
+  const handleRemoveExperience = (experienceId: string) => {
+    const target = experienceItems.find((item) => item.id === experienceId);
+
+    if (!target) {
+      warning({
+        title: "Experiencia indisponivel",
+        description: "Nao foi possivel localizar esta experiencia para remocao.",
+      });
+      return;
+    }
+
+    if (!confirmRemoval(`a experiencia ${target.title}`)) {
+      return;
+    }
+
+    setExperienceItems((previous) => previous.filter((item) => item.id !== experienceId));
+
+    if (editingExperienceId === experienceId) {
+      setEditingExperienceId(null);
+      setExperienceDraft(EXPERIENCE_DRAFT_INITIAL);
+    }
+
+    info({
+      title: "Experiencia removida",
+      description: "A experiencia foi removida da lista operacional do perfil.",
+    });
+  };
+
+  const handleSaveCertification = () => {
+    const title = certificationDraft.title.trim();
+    const institution = certificationDraft.institution.trim();
+    const validityLabel = certificationDraft.validityLabel.trim();
+
+    if (!title || !institution || !validityLabel) {
+      warning({
+        title: "Certificacao incompleta",
+        description: "Preencha titulo, instituicao e validade para salvar a certificacao.",
+      });
+      return;
+    }
+
+    if (editingCertificationId) {
+      setCertificationItems((previous) =>
+        previous.map((item) =>
+          item.id === editingCertificationId
+            ? {
+                ...item,
+                title,
+                institution,
+                validityLabel,
+                status: certificationDraft.status,
+              }
+            : item,
+        ),
+      );
+      success({
+        title: "Certificacao atualizada",
+        description: "A certificacao selecionada foi atualizada na lista atual.",
+      });
+    } else {
+      setCertificationItems((previous) => [
+        ...previous,
+        {
+          id: createLocalId("cert"),
+          title,
+          institution,
+          validityLabel,
+          status: certificationDraft.status,
+        },
+      ]);
+      success({
+        title: "Certificacao adicionada",
+        description: "Nova certificacao registrada no perfil operacional.",
+      });
+    }
+
+    setCertificationDraft(CERTIFICATION_DRAFT_INITIAL);
+    setEditingCertificationId(null);
+  };
+
+  const handleEditCertification = (item: ProfileCertificationItem) => {
+    setEditingCertificationId(item.id);
+    setCertificationDraft({
+      title: item.title,
+      institution: item.institution,
+      validityLabel: item.validityLabel,
+      status: item.status,
+    });
+  };
+
+  const handleRemoveCertification = (certificationId: string) => {
+    const target = certificationItems.find((item) => item.id === certificationId);
+
+    if (!target) {
+      warning({
+        title: "Certificacao indisponivel",
+        description: "Nao foi possivel localizar esta certificacao para remocao.",
+      });
+      return;
+    }
+
+    if (!confirmRemoval(`a certificacao ${target.title}`)) {
+      return;
+    }
+
+    setCertificationItems((previous) => previous.filter((item) => item.id !== certificationId));
+
+    if (editingCertificationId === certificationId) {
+      setEditingCertificationId(null);
+      setCertificationDraft(CERTIFICATION_DRAFT_INITIAL);
+    }
+
+    info({
+      title: "Certificacao removida",
+      description: "A certificacao foi removida da lista atual do perfil.",
+    });
+  };
+
+  const handleSaveGalleryItem = () => {
+    const image = galleryDraft.image.trim();
+    const description = galleryDraft.description.trim();
+
+    if (!description) {
+      warning({
+        title: "Galeria incompleta",
+        description: "Informe ao menos a descricao para salvar um item da galeria.",
+      });
+      return;
+    }
+
+    const resolvedImage = image || recreadorPerfilMock.gallery[0]?.image || "";
+
+    if (editingGalleryId) {
+      setGalleryItems((previous) =>
+        previous.map((item) =>
+          item.id === editingGalleryId
+            ? {
+                ...item,
+                image: resolvedImage,
+                description,
+              }
+            : item,
+        ),
+      );
+      success({
+        title: "Item da galeria atualizado",
+        description: "A imagem selecionada foi atualizada no portfolio.",
+      });
+    } else {
+      setGalleryItems((previous) => [
+        ...previous,
+        {
+          id: createLocalId("gal"),
+          image: resolvedImage,
+          description,
+        },
+      ]);
+      success({
+        title: "Item da galeria adicionado",
+        description: "Novo item incluido na galeria para o proximo salvamento do perfil.",
+      });
+    }
+
+    setGalleryDraft(GALLERY_DRAFT_INITIAL);
+    setEditingGalleryId(null);
+  };
+
+  const handleEditGalleryItem = (item: ProfileGalleryItem) => {
+    setEditingGalleryId(item.id);
+    setGalleryDraft({
+      image: item.image,
+      description: item.description,
+    });
+  };
+
+  const handleRemoveGalleryItem = (galleryId: string) => {
+    const target = galleryItems.find((item) => item.id === galleryId);
+
+    if (!target) {
+      warning({
+        title: "Item indisponivel",
+        description: "Nao foi possivel localizar este item da galeria para remocao.",
+      });
+      return;
+    }
+
+    if (!confirmRemoval(`o item da galeria \"${target.description}\"`)) {
+      return;
+    }
+
+    setGalleryItems((previous) => previous.filter((item) => item.id !== galleryId));
+
+    if (editingGalleryId === galleryId) {
+      setEditingGalleryId(null);
+      setGalleryDraft(GALLERY_DRAFT_INITIAL);
+    }
+
+    info({
+      title: "Item removido da galeria",
+      description: "O item foi removido da galeria operacional.",
+    });
   };
 
   const handleSalvarResposta = (reviewId: string) => {
     const response = reviewResponses[reviewId]?.trim();
 
     if (!response) {
-      setFeedback("Escreva uma resposta antes de salvar o comentario da avaliacao.");
+      warning({
+        title: "Resposta vazia",
+        description: "Escreva uma resposta antes de salvar o comentario da avaliacao.",
+      });
       return;
     }
 
-    dispatch(setLastVisualAction(`Resposta visual registrada para avaliacao ${reviewId}.`));
-    setFeedback("Resposta de avaliacao registrada na camada visual.");
+    dispatch(setLastVisualAction(`Resposta registrada para avaliacao ${reviewId}.`));
+    success({
+      title: "Resposta registrada",
+      description: "A resposta foi salva para este item de avaliacao.",
+    });
   };
 
   const renderStars = (rating: number, idPrefix: string) => (
@@ -253,11 +896,57 @@ export const RecreadorPerfilPage = () => {
               <span>
                 <Link2 size={16} /> Links do portfolio
               </span>
-              <textarea
-                value={links}
-                onChange={(event) => setLinks(event.target.value)}
-                placeholder={"https://instagram.com/...\nhttps://drive.google.com/..."}
-              />
+
+              <S.InlineRow>
+                <input
+                  value={linkDraft}
+                  onChange={(event) => setLinkDraft(event.target.value)}
+                  placeholder="https://instagram.com/seu-perfil"
+                />
+                <S.MinorButton type="button" onClick={handleSaveLink}>
+                  <Plus size={14} /> {editingLinkId ? "Atualizar" : "Adicionar"}
+                </S.MinorButton>
+                {editingLinkId ? (
+                  <S.MinorButton
+                    type="button"
+                    $tone="neutral"
+                    onClick={() => {
+                      setEditingLinkId(null);
+                      setLinkDraft("");
+                    }}
+                  >
+                    <X size={14} /> Cancelar
+                  </S.MinorButton>
+                ) : null}
+              </S.InlineRow>
+
+              {links.length === 0 ? (
+                <S.EmptyInlineList>
+                  Nenhum link cadastrado no portfolio. Adicione ao menos um canal para facilitar contato.
+                </S.EmptyInlineList>
+              ) : (
+                <S.ManagedList>
+                  {links.map((item) => (
+                    <S.ManagedItemCard key={item.id}>
+                      <S.ManagedItemHeader>
+                        <strong>{item.url}</strong>
+                        <S.ManagedItemActions>
+                          <S.MinorButton type="button" $tone="neutral" onClick={() => handleEditLink(item)}>
+                            <Pencil size={14} /> Editar
+                          </S.MinorButton>
+                          <S.MinorButton
+                            type="button"
+                            $tone="danger"
+                            onClick={() => handleRemoveLink(item.id)}
+                          >
+                            <Trash2 size={14} /> Remover
+                          </S.MinorButton>
+                        </S.ManagedItemActions>
+                      </S.ManagedItemHeader>
+                    </S.ManagedItemCard>
+                  ))}
+                </S.ManagedList>
+              )}
             </S.Field>
           </S.FormGrid>
         </S.SectionCard>
@@ -328,27 +1017,323 @@ export const RecreadorPerfilPage = () => {
             </S.Field>
           </S.FormGrid>
 
-          <S.ExperienceList>
-            {recreadorPerfilMock.experienceItems.map((item) => (
-              <li key={item.id}>
-                <strong>{item.title}</strong>
-                <span>{item.location}</span>
-                <small>{item.dateLabel}</small>
-                <p>{item.audienceLabel}</p>
-              </li>
-            ))}
-          </S.ExperienceList>
+          <S.SubsectionTitle>Experiencias</S.SubsectionTitle>
+          <S.FormGrid>
+            <S.FormColumns>
+              <S.Field>
+                <span>Titulo da experiencia</span>
+                <input
+                  value={experienceDraft.title}
+                  onChange={(event) =>
+                    setExperienceDraft((previous) => ({
+                      ...previous,
+                      title: event.target.value,
+                    }))
+                  }
+                />
+              </S.Field>
+
+              <S.Field>
+                <span>Local</span>
+                <input
+                  value={experienceDraft.location}
+                  onChange={(event) =>
+                    setExperienceDraft((previous) => ({
+                      ...previous,
+                      location: event.target.value,
+                    }))
+                  }
+                />
+              </S.Field>
+
+              <S.Field>
+                <span>Data</span>
+                <input
+                  value={experienceDraft.dateLabel}
+                  onChange={(event) =>
+                    setExperienceDraft((previous) => ({
+                      ...previous,
+                      dateLabel: event.target.value,
+                    }))
+                  }
+                  placeholder="10 Jan 2026"
+                />
+              </S.Field>
+
+              <S.Field>
+                <span>Publico</span>
+                <input
+                  value={experienceDraft.audienceLabel}
+                  onChange={(event) =>
+                    setExperienceDraft((previous) => ({
+                      ...previous,
+                      audienceLabel: event.target.value,
+                    }))
+                  }
+                  placeholder="40 participantes | 6 a 12 anos"
+                />
+              </S.Field>
+            </S.FormColumns>
+
+            <S.Field>
+              <span>Destaques (separar por virgula)</span>
+              <input
+                value={experienceDraft.highlights}
+                onChange={(event) =>
+                  setExperienceDraft((previous) => ({
+                    ...previous,
+                    highlights: event.target.value,
+                  }))
+                }
+                placeholder="Gincana aquatica, Oficina criativa, Apresentacao final"
+              />
+            </S.Field>
+
+            <S.InlineActions>
+              <S.MinorButton type="button" onClick={handleSaveExperience}>
+                <Plus size={14} /> {editingExperienceId ? "Atualizar experiencia" : "Adicionar experiencia"}
+              </S.MinorButton>
+              {editingExperienceId ? (
+                <S.MinorButton
+                  type="button"
+                  $tone="neutral"
+                  onClick={() => {
+                    setEditingExperienceId(null);
+                    setExperienceDraft(EXPERIENCE_DRAFT_INITIAL);
+                  }}
+                >
+                  <X size={14} /> Cancelar edicao
+                </S.MinorButton>
+              ) : null}
+            </S.InlineActions>
+
+            {experienceItems.length === 0 ? (
+              <S.EmptyInlineList>
+                Nenhuma experiencia cadastrada. Registre ao menos uma experiencia para fortalecer seu perfil.
+              </S.EmptyInlineList>
+            ) : (
+              <S.ManagedList>
+                {experienceItems.map((item) => (
+                  <S.ManagedItemCard key={item.id}>
+                    <S.ManagedItemHeader>
+                      <strong>{item.title}</strong>
+                      <S.ManagedItemActions>
+                        <S.MinorButton type="button" $tone="neutral" onClick={() => handleEditExperience(item)}>
+                          <Pencil size={14} /> Editar
+                        </S.MinorButton>
+                        <S.MinorButton
+                          type="button"
+                          $tone="danger"
+                          onClick={() => handleRemoveExperience(item.id)}
+                        >
+                          <Trash2 size={14} /> Remover
+                        </S.MinorButton>
+                      </S.ManagedItemActions>
+                    </S.ManagedItemHeader>
+                    <S.ManagedMeta>{item.location} · {item.dateLabel}</S.ManagedMeta>
+                    <S.ManagedMeta>{item.audienceLabel}</S.ManagedMeta>
+                    <S.Tags>
+                      {item.highlights.map((highlight) => (
+                        <span key={`${item.id}-${highlight}`}>{highlight}</span>
+                      ))}
+                    </S.Tags>
+                  </S.ManagedItemCard>
+                ))}
+              </S.ManagedList>
+            )}
+          </S.FormGrid>
+
+          <S.SubsectionTitle>Certificacoes</S.SubsectionTitle>
+          <S.FormGrid>
+            <S.FormColumns>
+              <S.Field>
+                <span>Titulo da certificacao</span>
+                <input
+                  value={certificationDraft.title}
+                  onChange={(event) =>
+                    setCertificationDraft((previous) => ({
+                      ...previous,
+                      title: event.target.value,
+                    }))
+                  }
+                />
+              </S.Field>
+
+              <S.Field>
+                <span>Instituicao</span>
+                <input
+                  value={certificationDraft.institution}
+                  onChange={(event) =>
+                    setCertificationDraft((previous) => ({
+                      ...previous,
+                      institution: event.target.value,
+                    }))
+                  }
+                />
+              </S.Field>
+
+              <S.Field>
+                <span>Validade</span>
+                <input
+                  value={certificationDraft.validityLabel}
+                  onChange={(event) =>
+                    setCertificationDraft((previous) => ({
+                      ...previous,
+                      validityLabel: event.target.value,
+                    }))
+                  }
+                  placeholder="Valido ate Dez 2026"
+                />
+              </S.Field>
+
+              <S.Field>
+                <span>Status</span>
+                <select
+                  value={certificationDraft.status}
+                  onChange={(event) =>
+                    setCertificationDraft((previous) => ({
+                      ...previous,
+                      status: event.target.value as ProfileCertificationItem["status"],
+                    }))
+                  }
+                >
+                  <option value="valido">Valido</option>
+                  <option value="atualizar">Atualizar</option>
+                </select>
+              </S.Field>
+            </S.FormColumns>
+
+            <S.InlineActions>
+              <S.MinorButton type="button" onClick={handleSaveCertification}>
+                <Plus size={14} /> {editingCertificationId ? "Atualizar certificacao" : "Adicionar certificacao"}
+              </S.MinorButton>
+              {editingCertificationId ? (
+                <S.MinorButton
+                  type="button"
+                  $tone="neutral"
+                  onClick={() => {
+                    setEditingCertificationId(null);
+                    setCertificationDraft(CERTIFICATION_DRAFT_INITIAL);
+                  }}
+                >
+                  <X size={14} /> Cancelar edicao
+                </S.MinorButton>
+              ) : null}
+            </S.InlineActions>
+
+            {certificationItems.length === 0 ? (
+              <S.EmptyInlineList>
+                Nenhuma certificacao cadastrada. Inclua certificacoes para apoiar sua credibilidade.
+              </S.EmptyInlineList>
+            ) : (
+              <S.ManagedList>
+                {certificationItems.map((item) => (
+                  <S.ManagedItemCard key={item.id}>
+                    <S.ManagedItemHeader>
+                      <strong>{item.title}</strong>
+                      <S.ManagedItemActions>
+                        <S.MinorButton
+                          type="button"
+                          $tone="neutral"
+                          onClick={() => handleEditCertification(item)}
+                        >
+                          <Pencil size={14} /> Editar
+                        </S.MinorButton>
+                        <S.MinorButton
+                          type="button"
+                          $tone="danger"
+                          onClick={() => handleRemoveCertification(item.id)}
+                        >
+                          <Trash2 size={14} /> Remover
+                        </S.MinorButton>
+                      </S.ManagedItemActions>
+                    </S.ManagedItemHeader>
+                    <S.ManagedMeta>{item.institution}</S.ManagedMeta>
+                    <S.ManagedMeta>{item.validityLabel}</S.ManagedMeta>
+                    <S.StatusChip $status={item.status}>
+                      {certificationStatusLabel[item.status]}
+                    </S.StatusChip>
+                  </S.ManagedItemCard>
+                ))}
+              </S.ManagedList>
+            )}
+          </S.FormGrid>
         </S.SectionCard>
 
         <S.SectionCard>
           <S.SectionTitle>
             <Image size={18} /> Galeria
           </S.SectionTitle>
+
+          <S.FormGrid>
+            <S.FormColumns>
+              <S.Field>
+                <span>URL da imagem</span>
+                <input
+                  value={galleryDraft.image}
+                  onChange={(event) =>
+                    setGalleryDraft((previous) => ({
+                      ...previous,
+                      image: event.target.value,
+                    }))
+                  }
+                  placeholder="https://images.unsplash.com/..."
+                />
+              </S.Field>
+
+              <S.Field>
+                <span>Descricao da imagem</span>
+                <input
+                  value={galleryDraft.description}
+                  onChange={(event) =>
+                    setGalleryDraft((previous) => ({
+                      ...previous,
+                      description: event.target.value,
+                    }))
+                  }
+                  placeholder="Atividade com familias em area externa"
+                />
+              </S.Field>
+            </S.FormColumns>
+
+            <S.InlineActions>
+              <S.MinorButton type="button" onClick={handleSaveGalleryItem}>
+                <Plus size={14} /> {editingGalleryId ? "Atualizar item" : "Adicionar item"}
+              </S.MinorButton>
+              {editingGalleryId ? (
+                <S.MinorButton
+                  type="button"
+                  $tone="neutral"
+                  onClick={() => {
+                    setEditingGalleryId(null);
+                    setGalleryDraft(GALLERY_DRAFT_INITIAL);
+                  }}
+                >
+                  <X size={14} /> Cancelar edicao
+                </S.MinorButton>
+              ) : null}
+            </S.InlineActions>
+          </S.FormGrid>
+
+          {galleryItems.length === 0 ? (
+            <S.EmptyInlineList>
+              Nenhum item na galeria. Inclua fotos ou descricoes para enriquecer sua apresentacao publica.
+            </S.EmptyInlineList>
+          ) : null}
+
           <S.GalleryGrid>
-            {recreadorPerfilMock.gallery.map((item) => (
+            {galleryItems.map((item) => (
               <S.GalleryCard key={item.id}>
                 <S.GalleryImage $image={item.image} />
                 <S.GalleryCaption>{item.description}</S.GalleryCaption>
+                <S.GalleryActions>
+                  <S.MinorButton type="button" $tone="neutral" onClick={() => handleEditGalleryItem(item)}>
+                    <Pencil size={14} /> Editar
+                  </S.MinorButton>
+                  <S.MinorButton type="button" $tone="danger" onClick={() => handleRemoveGalleryItem(item.id)}>
+                    <Trash2 size={14} /> Remover
+                  </S.MinorButton>
+                </S.GalleryActions>
               </S.GalleryCard>
             ))}
           </S.GalleryGrid>
@@ -396,12 +1381,12 @@ export const RecreadorPerfilPage = () => {
                 <S.ReviewText>{item.comment}</S.ReviewText>
 
                 <S.Field>
-                  <span>Resposta do recreador (futuro backend)</span>
+                  <span>Resposta do recreador</span>
                   <textarea
                     value={reviewResponses[item.id] ?? ""}
                     onChange={(event) =>
-                      setReviewResponses((prev) => ({
-                        ...prev,
+                      setReviewResponses((previous) => ({
+                        ...previous,
                         [item.id]: event.target.value,
                       }))
                     }
@@ -420,9 +1405,10 @@ export const RecreadorPerfilPage = () => {
           <S.PrimaryButton type="button" onClick={handleSalvar}>
             <Save size={15} /> Salvar perfil
           </S.PrimaryButton>
+          <S.SecondaryButton type="button" onClick={handleCancelarAlteracoes}>
+            <X size={15} /> Cancelar alteracoes
+          </S.SecondaryButton>
         </S.ActionsRow>
-
-        {feedback ? <S.Feedback>{feedback}</S.Feedback> : null}
       </S.Wrapper>
     </RecreadorDashboardShell>
   );

@@ -22,12 +22,12 @@ export const unifiedNotificationsPageByModule: Record<
 > = {
   recreador: {
     pageTitle: "Notificações do recreador",
-    pageDescription: "Central visual leve para alertas de oportunidades, mensagens e status operacional.",
+    pageDescription: "Central de alertas de oportunidades, mensagens e status operacional.",
     stats: [
       { title: "Alertas", value: "12", helper: "Total na caixa" },
       { title: "Não lidas", value: "05", helper: "Exigem atenção" },
       { title: "Hoje", value: "03", helper: "Atualizadas recentemente" },
-      { title: "Status", value: "Visual", helper: "Sem backend nesta etapa" },
+      { title: "Pendentes críticas", value: "02", helper: "Prioridade de tratativa" },
     ],
     templateData: {
       sectionTitle: "Notificações",
@@ -45,6 +45,8 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Cyan Resort abriu turno para recreação infantil neste fim de semana.",
           time: "Ha 12 min",
           read: false,
+          actionRoute: "/app/recreador/oportunidades?codigo=HTL-001",
+          actionLabel: "Abrir oportunidades",
         },
         {
           id: "n-2",
@@ -53,6 +55,8 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Ana Martins respondeu sobre sua disponibilidade para sabado.",
           time: "Ha 25 min",
           read: false,
+          actionRoute: "/app/recreador/chat",
+          actionLabel: "Abrir chat",
         },
         {
           id: "n-3",
@@ -61,14 +65,18 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Seus dados principais foram sincronizados no módulo do recreador.",
           time: "Hoje, 09:10",
           read: true,
+          actionRoute: "/app/recreador/perfil",
+          actionLabel: "Abrir perfil",
         },
         {
           id: "n-4",
           type: "sistema",
-          title: "Conflito visual na disponibilidade",
+          title: "Conflito na disponibilidade",
           description: "Revisar bloqueios sobrepostos antes de aceitar novos convites.",
           time: "Ontem",
           read: false,
+          actionRoute: "/app/recreador/disponibilidade",
+          actionLabel: "Abrir disponibilidade",
         },
         {
           id: "n-5",
@@ -77,6 +85,8 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Royal Palm enviou orientacoes da atividade de fim de semana.",
           time: "Ontem",
           read: true,
+          actionRoute: "/app/recreador/chat",
+          actionLabel: "Abrir chat",
         },
       ],
     },
