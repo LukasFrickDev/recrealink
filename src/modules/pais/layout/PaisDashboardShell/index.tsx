@@ -1,10 +1,13 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
+import { useAppSelector } from "@/app/store/hooks";
+import type { ChatVisiblePresence } from "@/app/store/slices/mockSlice";
 import {
   ModuleDashboardShell,
   type ModuleDashboardNavGroup,
   type ModuleDashboardQuickLink,
   type ModuleDashboardStatItem,
+  type ModuleDashboardUserPresence,
 } from "@/shared/layouts/ModuleDashboardShell";
 import {
   paisSidebarGroups,
@@ -12,6 +15,24 @@ import {
 } from "@/shared/config/moduleDashboardNavigation";
 
 export type PaisStatItem = ModuleDashboardStatItem;
+
+const mapChatPresenceToShellPresence = (
+  chatPresence: ChatVisiblePresence,
+): ModuleDashboardUserPresence => {
+  if (chatPresence === "online") {
+    return "ativo";
+  }
+
+  if (chatPresence === "away") {
+    return "ausente";
+  }
+
+  if (chatPresence === "busy") {
+    return "ocupado";
+  }
+
+  return "offline";
+};
 
 interface PaisDashboardShellProps {
   pageTitle: string;
@@ -31,6 +52,7 @@ export const PaisDashboardShell = ({
   children,
 }: PaisDashboardShellProps) => {
   const location = useLocation();
+  const chatVisiblePresence = useAppSelector((state) => state.mock.chatPresenceByModule.pais);
   const [searchValue, setSearchValue] = useState("");
 
   const searchPlaceholder = useMemo(() => {
@@ -76,6 +98,7 @@ export const PaisDashboardShell = ({
 
   return (
     <ModuleDashboardShell
+      moduleKey="pais"
       tone="pais"
       areaSubLabel="Área da família"
       pageTitle={pageTitle}
@@ -84,6 +107,7 @@ export const PaisDashboardShell = ({
       compactContent={compactContent}
       userName={userName}
       userRoleLabel="Responsável da família"
+      userPresence={mapChatPresenceToShellPresence(chatVisiblePresence)}
       profileActionLabel="Abrir perfil"
       profileActionRoute="/app/pais/perfil"
       profileActionTitle="Visualizar perfil da família"

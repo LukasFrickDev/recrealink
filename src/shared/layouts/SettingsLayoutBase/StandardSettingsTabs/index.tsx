@@ -1,4 +1,5 @@
-import { CheckCircle2, PencilLine, Save, Shield, UserCog, X } from "lucide-react";
+import { CheckCircle2, LogOut, PencilLine, Save, Shield, Trash2, UserCog, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { SettingsLayoutBase } from "@/shared/layouts/SettingsLayoutBase";
 import * as S from "./styles";
 
@@ -65,6 +66,10 @@ interface StandardSettingsTabsProps {
   onDataValueChange?: (label: string, value: string) => void;
   feedbackMessage?: string | null;
   feedbackSuccess?: boolean;
+  accountTabId?: string;
+  onRequestLogout?: () => void;
+  onRequestAccountDeletion?: () => void;
+  accountDeletionKeyword?: string;
 }
 
 const isDataTab = (tabId: string, hotelDataTabId?: string, adminDataTabId?: string) => {
@@ -111,8 +116,29 @@ export const StandardSettingsTabs = ({
   onDataValueChange,
   feedbackMessage,
   feedbackSuccess,
+  accountTabId,
+  onRequestLogout,
+  onRequestAccountDeletion,
+  accountDeletionKeyword = "EXCLUIR",
 }: StandardSettingsTabsProps) => {
   const currentIsDataTab = isDataTab(activeTab, hotelDataTabId, adminDataTabId);
+  const [isLogoutConfirming, setIsLogoutConfirming] = useState(false);
+  const [isDeletionConfirming, setIsDeletionConfirming] = useState(false);
+  const [deletionDraft, setDeletionDraft] = useState("");
+  const [accountFeedback, setAccountFeedback] = useState<{ message: string; success: boolean } | null>(null);
+
+  useEffect(() => {
+    if (!accountTabId || activeTab === accountTabId) {
+      return;
+    }
+
+    setIsLogoutConfirming(false);
+    setIsDeletionConfirming(false);
+    setDeletionDraft("");
+    setAccountFeedback(null);
+  }, [accountTabId, activeTab]);
+
+  const canConfirmDeletion = deletionDraft.trim().toUpperCase() === accountDeletionKeyword;
 
   const renderDataTopControl = () => {
     if (!currentIsDataTab) {
@@ -144,6 +170,33 @@ export const StandardSettingsTabs = ({
     }
 
     return <S.HeaderBadge $tone="warning">Somente administrador da conta</S.HeaderBadge>;
+  };
+
+  const handleConfirmLogout = () => {
+    onRequestLogout?.();
+    setIsLogoutConfirming(false);
+    setAccountFeedback({
+      message: "Sessão encerrada para esta conta.",
+      success: true,
+    });
+  };
+
+  const handleConfirmDeletion = () => {
+    if (!canConfirmDeletion) {
+      setAccountFeedback({
+        message: `Digite ${accountDeletionKeyword} para confirmar a exclusão da conta.`,
+        success: false,
+      });
+      return;
+    }
+
+    onRequestAccountDeletion?.();
+    setDeletionDraft("");
+    setIsDeletionConfirming(false);
+    setAccountFeedback({
+      message: "Solicitação de exclusão registrada para a próxima etapa funcional.",
+      success: true,
+    });
   };
 
   return (
@@ -286,6 +339,93 @@ export const StandardSettingsTabs = ({
           </S.ActionsRow>
         </S.Section>
       ) : null}
+
+      {accountTabId && activeTab === accountTabId ? (
+        <S.Section>
+          <S.AccountCard>
+            <S.AccountCardHeading>
+              <strong>Logout</strong>
+              <p>Encerre a sessão atual e retorne para a seleção de perfil.</p>
+            </S.AccountCardHeading>
+
+            {isLogoutConfirming ? (
+              <S.ActionsRow>
+                <S.OutlineButton type="button" onClick={() => setIsLogoutConfirming(false)}>
+                  <X size={14} /> Cancelar
+                </S.OutlineButton>
+                <S.PrimaryButton type="button" onClick={handleConfirmLogout}>
+                  <LogOut size={14} /> Confirmar logout
+                </S.PrimaryButton>
+              </S.ActionsRow>
+            ) : (
+              <S.ActionsRow>
+                <S.OutlineButton
+                  type="button"
+                  onClick={() => {
+                    setIsLogoutConfirming(true);
+                    setAccountFeedback(null);
+                  }}
+                >
+                  <LogOut size={14} /> Sair da conta
+                </S.OutlineButton>
+              </S.ActionsRow>
+            )}
+          </S.AccountCard>
+
+          <S.AccountCard $danger>
+            <S.AccountCardHeading>
+              <strong>Exclusão de conta</strong>
+              <p>Essa ação é irreversível quando integrada ao backend.</p>
+            </S.AccountCardHeading>
+
+            {isDeletionConfirming ? (
+              <>
+                <S.AccountDangerHint>
+                  Digite <strong>{accountDeletionKeyword}</strong> para confirmar.
+                </S.AccountDangerHint>
+
+                <S.Field>
+                  <span>Confirmação de exclusão</span>
+                  <input
+                    value={deletionDraft}
+                    onChange={(event) => setDeletionDraft(event.target.value)}
+                    placeholder={accountDeletionKeyword}
+                  />
+                </S.Field>
+
+                <S.ActionsRow>
+                  <S.OutlineButton
+                    type="button"
+                    onClick={() => {
+                      setIsDeletionConfirming(false);
+                      setDeletionDraft("");
+                    }}
+                  >
+                    <X size={14} /> Cancelar
+                  </S.OutlineButton>
+                  <S.DangerButton type="button" onClick={handleConfirmDeletion} disabled={!canConfirmDeletion}>
+                    <Trash2 size={14} /> Confirmar exclusão
+                  </S.DangerButton>
+                </S.ActionsRow>
+              </>
+            ) : (
+              <S.ActionsRow>
+                <S.DangerButton
+                  type="button"
+                  onClick={() => {
+                    setIsDeletionConfirming(true);
+                    setAccountFeedback(null);
+                  }}
+                >
+                  <Trash2 size={14} /> Solicitar exclusão da conta
+                </S.DangerButton>
+              </S.ActionsRow>
+            )}
+          </S.AccountCard>
+        </S.Section>
+      ) : null}
+
+      {accountFeedback ? <S.Feedback $success={accountFeedback.success}>{accountFeedback.message}</S.Feedback> : null}
 
       {feedbackMessage ? <S.Feedback $success={feedbackSuccess}>{feedbackMessage}</S.Feedback> : null}
     </SettingsLayoutBase>

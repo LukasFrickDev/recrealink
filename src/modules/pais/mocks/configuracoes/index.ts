@@ -16,11 +16,13 @@ export const paisSettingsMock: ModuleSettingsMockBase = {
     { id: "notificacoes", label: "Notificações", helper: "Alertas e comunicações" },
     { id: "usuarios", label: "Usuários", helper: "Acessos vinculados" },
     { id: "seguranca", label: "Segurança", helper: "Senha e proteção" },
+    { id: "conta", label: "Conta", helper: "Logout e exclusão" },
   ],
   defaultTabId: "dados-familia",
   notificationsTabId: moduleSettingsSectionIds.notificationsTabId,
   usersTabId: moduleSettingsSectionIds.usersTabId,
   securityTabId: moduleSettingsSectionIds.securityTabId,
+  accountTabId: moduleSettingsSectionIds.accountTabId,
   notificationPreferences: buildModuleNotificationPreferences(
     {
       oportunidades: "Receber alertas de novas empresas e propostas.",

@@ -107,6 +107,14 @@ export const hotelariaConfiguracoesFeatureMock: HotelariaFeatureMock = {
         editable: true,
         options: [],
       },
+      {
+        id: "conta",
+        title: "Conta",
+        helper: "Logout e exclusão",
+        description: "Ações de sessão e ciclo de vida da conta do contratante.",
+        editable: true,
+        options: [],
+      },
     ],
   },
 };

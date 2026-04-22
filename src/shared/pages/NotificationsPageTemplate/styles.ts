@@ -138,7 +138,7 @@ export const Wrapper = styled.section<{ $tone: "default" | "hotelaria" | "pais" 
   }};
 
   display: grid;
-  gap: 16px;
+  gap: 12px;
 
   button:focus-visible,
   input:focus-visible,
@@ -183,7 +183,7 @@ export const PanelHeader = styled.header`
 
 export const Heading = styled.div`
   display: grid;
-  gap: 5px;
+  gap: 4px;
 
   h3 {
     margin: 0;
@@ -200,7 +200,7 @@ export const Heading = styled.div`
 `;
 
 export const ActionButton = styled.button`
-  min-height: 32px;
+  min-height: 34px;
   border-radius: ${({ theme }) => theme.radii.md};
   border: ${({ theme }) => theme.borders.subtle};
   background: rgba(255, 255, 255, 0.94);
@@ -216,6 +216,17 @@ export const ActionButton = styled.button`
     color: var(--notifications-accent-color);
     transform: translateY(-1px);
   }
+`;
+
+export const UnreadSummary = styled.p`
+  margin: 0;
+  border: 1px solid var(--notifications-accent-border);
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: var(--notifications-accent-soft-light);
+  color: ${({ theme }) => theme.colors.textMuted};
+  padding: 8px 10px;
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  line-height: 1.45;
 `;
 
 export const FilterRow = styled.div`
@@ -281,22 +292,18 @@ export const SearchInput = styled.input`
 
 export const NotificationList = styled.div`
   display: grid;
-  gap: 9px;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  gap: 10px;
 `;
 
-export const NotificationCard = styled.article<{ $read: boolean }>`
+export const NotificationCard = styled.article<{ $read: boolean; $interactive?: boolean }>`
   border: ${({ theme }) => theme.borders.subtle};
+  border-left: 4px solid ${({ $read }) => ($read ? "transparent" : "var(--notifications-accent)")};
   border-radius: ${({ theme }) => theme.radii.md};
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.sm}`};
   display: grid;
   gap: ${({ theme }) => theme.spacing.xs};
-  transition: border-color 0.2s ease, transform 0.2s ease;
-  min-height: 152px;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 
   ${({ $read }) =>
     !$read
@@ -307,13 +314,18 @@ export const NotificationCard = styled.article<{ $read: boolean }>`
         `
       : null}
 
-  &:hover {
-    transform: translateY(-1px);
-  }
+  ${({ $interactive }) =>
+    $interactive
+      ? css`
+          cursor: pointer;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
-    min-height: auto;
-  }
+          &:hover {
+            transform: translateY(-1px);
+            border-color: var(--notifications-accent-border);
+            box-shadow: 0 10px 18px rgba(28, 38, 64, 0.1);
+          }
+        `
+      : null}
 `;
 
 export const NotificationTop = styled.div`
@@ -321,17 +333,87 @@ export const NotificationTop = styled.div`
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
+`;
+
+export const NotificationHeadline = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
 
   strong {
     font-size: ${({ theme }) => theme.typography.label};
     min-width: 0;
     line-height: 1.35;
   }
+`;
+
+export const UnreadDot = styled.i`
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--notifications-accent);
+  display: inline-flex;
+  flex-shrink: 0;
+`;
+
+export const NotificationStatusTag = styled.span<{ $read: boolean }>`
+  border-radius: ${({ theme }) => theme.radii.pill};
+  padding: 3px 8px;
+  font-size: ${({ theme }) => theme.typography.micro};
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: ${({ $read, theme }) => ($read ? theme.colors.textMuted : "var(--notifications-accent-color)")};
+  background: ${({ $read }) => ($read ? "rgba(101, 112, 138, 0.12)" : "var(--notifications-accent-soft)")};
+`;
+
+export const NotificationMetaRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+`;
+
+export const NotificationMetaGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+`;
+
+export const NotificationOriginTag = styled.span`
+  border-radius: ${({ theme }) => theme.radii.pill};
+  border: ${({ theme }) => theme.borders.subtle};
+  background: rgba(255, 255, 255, 0.92);
+  color: ${({ theme }) => theme.colors.textMuted};
+  font-size: ${({ theme }) => theme.typography.micro};
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 4px 8px;
+`;
+
+export const NotificationTimeStack = styled.div`
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+
+  strong {
+    font-size: ${({ theme }) => theme.typography.meta};
+    color: ${({ theme }) => theme.colors.text};
+  }
 
   span {
-    font-size: ${({ theme }) => theme.typography.meta};
+    font-size: ${({ theme }) => theme.typography.micro};
     color: ${({ theme }) => theme.colors.textMuted};
-    flex-shrink: 0;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    justify-items: start;
   }
 `;
 
@@ -372,6 +454,20 @@ export const NotificationDescription = styled.p`
   line-height: 1.5;
 `;
 
+export const NotificationDestination = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: ${({ theme }) => theme.typography.meta};
+  color: ${({ theme }) => theme.colors.textMuted};
+
+  strong {
+    color: ${({ theme }) => theme.colors.text};
+    font-size: ${({ theme }) => theme.typography.meta};
+  }
+`;
+
 export const CardActions = styled.div`
   display: flex;
   gap: 6px;
@@ -386,14 +482,14 @@ export const CardActions = styled.div`
 `;
 
 export const MiniButton = styled.button`
-  min-height: 28px;
+  min-height: 30px;
   border-radius: ${({ theme }) => theme.radii.md};
   border: ${({ theme }) => theme.borders.subtle};
   background: rgba(255, 255, 255, 0.92);
   color: ${({ theme }) => theme.colors.text};
   font-size: ${({ theme }) => theme.typography.meta};
   font-weight: 700;
-  padding: 0 9px;
+  padding: 0 10px;
   cursor: pointer;
   transition: border-color 0.2s ease, color 0.2s ease;
 

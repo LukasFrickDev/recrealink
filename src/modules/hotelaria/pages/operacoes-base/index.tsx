@@ -12,6 +12,7 @@ import {
   Share2,
   X,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { HotelariaDashboardShell } from "@/modules/hotelaria/layout/HotelariaDashboardShell";
 import { SettingsPageTemplate } from "@/shared/pages/SettingsPageTemplate";
 import { Badge, Card, Input, SectionHeader, Select } from "@/shared/ui";
@@ -110,6 +111,7 @@ const cloneHotelLayout = (layout: HotelariaMeuHotelLayout): HotelariaMeuHotelLay
 };
 
 export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFeaturePageProps) => {
+  const navigate = useNavigate();
   const pageMock = useMemo(() => getHotelariaFeatureMock(featureId), [featureId]);
 
   const initialMeuHotelLayout = useMemo(() => {
@@ -1302,6 +1304,8 @@ export const HotelariaOperacaoFeaturePage = ({ featureId }: HotelariaOperacaoFea
               userAccess={layout.userAccess}
               securityTabId="seguranca"
               securityTips={layout.securityTips}
+              accountTabId="conta"
+              onRequestLogout={() => navigate("/acesso/escolher-perfil")}
               dataTabs={dataTabs}
             />
           </S.SectionStack>

@@ -1,9 +1,12 @@
 import { useMemo, useState, type ReactNode } from "react";
+import { useAppSelector } from "@/app/store/hooks";
+import type { ChatVisiblePresence } from "@/app/store/slices/mockSlice";
 import {
   ModuleDashboardShell,
   type ModuleDashboardNavGroup,
   type ModuleDashboardQuickLink,
   type ModuleDashboardStatItem,
+  type ModuleDashboardUserPresence,
 } from "@/shared/layouts/ModuleDashboardShell";
 import {
   empresarioSidebarGroups,
@@ -19,6 +22,24 @@ interface EmpresarioDashboardShellProps {
   children: ReactNode;
 }
 
+const mapChatPresenceToShellPresence = (
+  chatPresence: ChatVisiblePresence,
+): ModuleDashboardUserPresence => {
+  if (chatPresence === "online") {
+    return "ativo";
+  }
+
+  if (chatPresence === "away") {
+    return "ausente";
+  }
+
+  if (chatPresence === "busy") {
+    return "ocupado";
+  }
+
+  return "offline";
+};
+
 export const EmpresarioDashboardShell = ({
   userName,
   pageTitle,
@@ -27,6 +48,7 @@ export const EmpresarioDashboardShell = ({
   compactContent,
   children,
 }: EmpresarioDashboardShellProps) => {
+  const chatVisiblePresence = useAppSelector((state) => state.mock.chatPresenceByModule.empresa);
   const [searchValue, setSearchValue] = useState("");
 
   const sidebarGroups: ModuleDashboardNavGroup[] = useMemo(
@@ -52,6 +74,7 @@ export const EmpresarioDashboardShell = ({
 
   return (
     <ModuleDashboardShell
+      moduleKey="empresa"
       tone="empresa"
       areaSubLabel="Área da empresa"
       pageTitle={pageTitle}
@@ -60,6 +83,7 @@ export const EmpresarioDashboardShell = ({
       compactContent={compactContent}
       userName={userName}
       userRoleLabel="Gestora da empresa"
+      userPresence={mapChatPresenceToShellPresence(chatVisiblePresence)}
       profileActionLabel="Editar perfil"
       profileActionRoute="/app/empresa/perfil"
       profileActionTitle="Editar perfil institucional"

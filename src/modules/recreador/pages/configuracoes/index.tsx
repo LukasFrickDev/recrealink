@@ -80,6 +80,7 @@ export const RecreadorConfiguracoesPage = () => {
           notificationsTabId={recreadorConfiguracoesMock.notificationsTabId}
           usersTabId={recreadorConfiguracoesMock.usersTabId}
           securityTabId={recreadorConfiguracoesMock.securityTabId}
+          accountTabId={recreadorConfiguracoesMock.accountTabId}
           notificationPreferences={recreadorConfiguracoesMock.notificationPreferences}
           userAccess={recreadorConfiguracoesMock.userAccess}
           securityTips={recreadorConfiguracoesMock.securityTips}
@@ -103,6 +104,17 @@ export const RecreadorConfiguracoesPage = () => {
             success({
               title: "Segurança atualizada",
               description: "Alteração de segurança registrada.",
+            });
+          }}
+          onRequestLogout={() => {
+            dispatch(setLastVisualAction("Logout confirmado em Configurações."));
+            navigate("/acesso/escolher-perfil");
+          }}
+          onRequestAccountDeletion={() => {
+            dispatch(setLastVisualAction("Solicitação de exclusão registrada em Configurações."));
+            success({
+              title: "Solicitação registrada",
+              description: "A exclusão será concluída quando houver backend real.",
             });
           }}
           profileTabId="perfil"

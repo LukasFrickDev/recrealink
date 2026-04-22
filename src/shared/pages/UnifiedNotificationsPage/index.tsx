@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useAppDispatch } from "@/app/store/hooks";
-import { setUnreadNotifications } from "@/app/store/slices/mockSlice";
+import { setUnreadNotificationsForModule } from "@/app/store/slices/mockSlice";
 import { NotificationsPageTemplate } from "@/shared/pages/NotificationsPageTemplate";
 import {
   renderSharedModuleShell,
@@ -18,11 +18,7 @@ export const UnifiedNotificationsPage = ({ moduleKey }: UnifiedNotificationsPage
 
   const handleUnreadCountChange = useCallback(
     (count: number) => {
-      if (moduleKey !== "recreador") {
-        return;
-      }
-
-      dispatch(setUnreadNotifications(count));
+      dispatch(setUnreadNotificationsForModule({ moduleKey, count }));
     },
     [dispatch, moduleKey],
   );
@@ -37,6 +33,7 @@ export const UnifiedNotificationsPage = ({ moduleKey }: UnifiedNotificationsPage
         data={pageConfig.templateData}
         tone={pageConfig.tone}
         onUnreadCountChange={handleUnreadCountChange}
+        persistenceKey={moduleKey}
       />
     ),
   });

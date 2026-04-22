@@ -308,7 +308,7 @@ export interface HotelariaSettingsLayout {
   }>;
   securityTips: string[];
   tabs: Array<{
-    id: "dados-hotel" | "dados-administrador" | "notificacoes" | "usuarios" | "seguranca";
+    id: "dados-hotel" | "dados-administrador" | "notificacoes" | "usuarios" | "seguranca" | "conta";
     title: string;
     helper: string;
     description: string;

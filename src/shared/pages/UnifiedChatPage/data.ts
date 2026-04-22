@@ -3,7 +3,11 @@ import {
   paisChatQuickReplies,
   recreadorChatQuickReplies,
 } from "@/shared/constants/chatQuickReplies";
-import type { ChatPageTemplateData } from "@/shared/pages/ChatPageTemplate/data";
+import type {
+  ChatPageTemplateData,
+  ChatTemplateConversation,
+  ChatTemplateMessage,
+} from "@/shared/pages/ChatPageTemplate/data";
 import type { ModuleDashboardStatItem } from "@/shared/layouts/ModuleDashboardShell";
 import type { SharedModuleKey } from "@/shared/pages/moduleSharedShell";
 
@@ -15,6 +19,80 @@ interface UnifiedChatModuleConfig {
   tone?: "default" | "hotelaria" | "pais" | "recreador";
 }
 
+const timelineReference = Date.parse("2026-04-21T12:00:00.000Z");
+
+const buildConversationParticipants = (
+  conversation: ChatTemplateConversation,
+): NonNullable<ChatTemplateConversation["participants"]> => {
+  return [
+    {
+      id: `self-${conversation.id}`,
+      name: "Você",
+      role: "Conta atual",
+    },
+    {
+      id: `contact-${conversation.id}`,
+      name: conversation.name,
+      role: conversation.subtitle,
+      organization: conversation.detail,
+    },
+  ];
+};
+
+const enrichMessagesByConversation = (
+  messagesByConversation: ChatPageTemplateData["messagesByConversation"],
+): Record<string, ChatTemplateMessage[]> => {
+  const entries = Object.entries(messagesByConversation);
+
+  return Object.fromEntries(
+    entries.map(([conversationId, messages], conversationIndex) => {
+      const enrichedMessages = messages.map((message, messageIndex) => {
+        const fallbackTimestamp = new Date(
+          timelineReference - conversationIndex * 50 * 60_000 - messageIndex * 8 * 60_000,
+        ).toISOString();
+
+        return {
+          ...message,
+          authorId: message.authorId ?? `${conversationId}-${message.mine ? "self" : "contact"}`,
+          readState: message.readState ?? (message.mine ? "read" : "unread"),
+          timestampIso: message.timestampIso ?? fallbackTimestamp,
+        };
+      });
+
+      return [conversationId, enrichedMessages];
+    }),
+  );
+};
+
+const enrichChatTemplateData = (templateData: ChatPageTemplateData): ChatPageTemplateData => {
+  const enrichedMessagesByConversation = enrichMessagesByConversation(templateData.messagesByConversation);
+
+  const enrichedConversations = templateData.conversations.map((conversation, index) => {
+    const messages = enrichedMessagesByConversation[conversation.id] ?? [];
+    const latestMessage = messages[messages.length - 1];
+    const fallbackTimestamp = new Date(timelineReference - index * 45 * 60_000).toISOString();
+    const lastTimestampIso = latestMessage?.timestampIso ?? fallbackTimestamp;
+
+    return {
+      ...conversation,
+      participants: conversation.participants ?? buildConversationParticipants(conversation),
+      updatedAtIso: conversation.updatedAtIso ?? lastTimestampIso,
+      lastMessageMeta: conversation.lastMessageMeta ?? {
+        messageId: latestMessage?.id ?? `${conversation.id}-preview`,
+        direction: latestMessage?.mine ? "self" : "other",
+        readState: conversation.unread > 0 ? "unread" : "read",
+        timestampIso: lastTimestampIso,
+      },
+    };
+  });
+
+  return {
+    ...templateData,
+    conversations: enrichedConversations,
+    messagesByConversation: enrichedMessagesByConversation,
+  };
+};
+
 export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleConfig> = {
   recreador: {
     pageTitle: "Chat do recreador",
@@ -25,7 +103,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
       { title: "Tempo médio", value: "7 min", helper: "Últimas 24h" },
       { title: "Com retorno pendente", value: "02", helper: "Aguardando resposta" },
     ],
-    templateData: {
+    templateData: enrichChatTemplateData({
       sectionTitle: "Conversas",
       sectionSubtitle: "Contatos e histórico recente do módulo",
       searchPlaceholder: "Buscar por contato ou empresa",
@@ -41,6 +119,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "10:24",
           unread: 2,
           online: true,
+          presence: "online",
+          lastSeenLabel: "Ativo agora",
         },
         {
           id: "conv-2",
@@ -51,6 +131,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "Ontem",
           unread: 0,
           online: false,
+          presence: "away",
+          lastSeenLabel: "Visto hoje, 08:16",
         },
         {
           id: "conv-3",
@@ -61,6 +143,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "Ontem",
           unread: 1,
           online: true,
+          presence: "busy",
+          lastSeenLabel: "Em atividade",
         },
         {
           id: "conv-4",
@@ -71,6 +155,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "2 dias",
           unread: 2,
           online: false,
+          presence: "offline",
+          lastSeenLabel: "Visto ontem",
         },
       ],
       messagesByConversation: {
@@ -119,7 +205,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
         ],
       },
       quickReplies: [...recreadorChatQuickReplies],
-    },
+    }),
     tone: "recreador",
   },
   hotelaria: {
@@ -131,7 +217,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
       { title: "Tempo de resposta", value: "7 min", helper: "Média de retorno" },
       { title: "Online agora", value: "14", helper: "Equipe conectada" },
     ],
-    templateData: {
+    templateData: enrichChatTemplateData({
       sectionTitle: "Canais da operação",
       sectionSubtitle: "Canal de comunicação em tempo real com 14 participantes online.",
       searchPlaceholder: "Buscar por canal ou membro",
@@ -147,6 +233,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "16:24",
           unread: 5,
           online: true,
+          presence: "busy",
+          lastSeenLabel: "Canal movimentado",
         },
         {
           id: "Escalas weekend",
@@ -157,6 +245,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "16:24",
           unread: 2,
           online: true,
+          presence: "online",
+          lastSeenLabel: "Ativo agora",
         },
         {
           id: "Programações kids",
@@ -167,6 +257,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "16:24",
           unread: 0,
           online: true,
+          presence: "away",
+          lastSeenLabel: "Sem novas mensagens",
         },
         {
           id: "Ocorrências",
@@ -177,6 +269,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "16:24",
           unread: 1,
           online: true,
+          presence: "offline",
+          lastSeenLabel: "Última atividade às 15:02",
         },
       ],
       messagesByConversation: {
@@ -194,6 +288,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
             content: "Troca confirmada com Ana e Marina, escala atualizada.",
             time: "16:24",
             mine: true,
+            deliveryState: "read",
           },
         ],
         "Escalas weekend": [
@@ -210,6 +305,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
             content: "Troca confirmada com Ana e Marina, escala atualizada.",
             time: "16:24",
             mine: true,
+            deliveryState: "delivered",
           },
         ],
         "Programações kids": [
@@ -226,6 +322,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
             content: "Troca confirmada com Ana e Marina, escala atualizada.",
             time: "16:24",
             mine: true,
+            deliveryState: "sent",
           },
         ],
         Ocorrências: [
@@ -242,11 +339,12 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
             content: "Troca confirmada com Ana e Marina, escala atualizada.",
             time: "16:24",
             mine: true,
+            deliveryState: "read",
           },
         ],
       },
       quickReplies: [...hotelariaChatQuickReplies],
-    },
+    }),
     tone: "hotelaria",
   },
   pais: {
@@ -258,7 +356,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
       { title: "Tempo médio", value: "11 min", helper: "Últimas 24h" },
       { title: "Status", value: "Visual", helper: "Sem backend nesta etapa" },
     ],
-    templateData: {
+    templateData: enrichChatTemplateData({
       sectionTitle: "Conversas da família",
       sectionSubtitle: "Fale com empresas e acompanhe retornos para decidir com mais segurança.",
       searchPlaceholder: "Buscar por empresa ou assunto",
@@ -274,6 +372,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "09:40",
           unread: 2,
           online: true,
+          presence: "online",
+          lastSeenLabel: "Ativo agora",
         },
         {
           id: "pais-conv-2",
@@ -284,6 +384,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "Ontem",
           unread: 1,
           online: false,
+          presence: "away",
+          lastSeenLabel: "Visto hoje, 11:05",
         },
         {
           id: "pais-conv-3",
@@ -294,6 +396,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "Ontem",
           unread: 1,
           online: true,
+          presence: "offline",
+          lastSeenLabel: "Visto ontem",
         },
       ],
       messagesByConversation: {
@@ -333,7 +437,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
         ],
       },
       quickReplies: [...paisChatQuickReplies],
-    },
+    }),
     tone: "pais",
   },
   empresa: {
@@ -345,7 +449,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
       { title: "Tempo de resposta", value: "9 min", helper: "Média semanal" },
       { title: "Clientes online", value: "11", helper: "No momento" },
     ],
-    templateData: {
+    templateData: enrichChatTemplateData({
       sectionTitle: "Conversas da operação",
       sectionSubtitle: "Acompanhe solicitações de clientes e alinhamentos da equipe em tempo real.",
       searchPlaceholder: "Buscar por cliente, assunto ou equipe",
@@ -361,6 +465,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "09:12",
           unread: 2,
           online: true,
+          presence: "online",
+          lastSeenLabel: "Ativo agora",
         },
         {
           id: "conv-2",
@@ -371,6 +477,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "Ontem",
           unread: 0,
           online: false,
+          presence: "away",
+          lastSeenLabel: "Visto hoje, 07:58",
         },
         {
           id: "conv-3",
@@ -381,6 +489,8 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
           lastTime: "Ontem",
           unread: 4,
           online: true,
+          presence: "busy",
+          lastSeenLabel: "Em atendimento",
         },
       ],
       messagesByConversation: {
@@ -398,6 +508,7 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
             content: "Perfeito, vou readequar a escala e confirmar em seguida.",
             time: "09:11",
             mine: true,
+            deliveryState: "read",
           },
         ],
         "conv-2": [
@@ -424,6 +535,6 @@ export const unifiedChatPageByModule: Record<SharedModuleKey, UnifiedChatModuleC
         "Consigo te retornar ainda hoje.",
         "Vamos seguir com essa atualização.",
       ],
-    },
+    }),
   },
 };

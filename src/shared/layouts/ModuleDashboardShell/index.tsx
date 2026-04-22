@@ -62,9 +62,14 @@ export interface ModuleDashboardProfileMode {
   options: [ModuleDashboardProfileModeOption, ModuleDashboardProfileModeOption];
 }
 
+type ModuleDashboardModuleKey = "recreador" | "hotelaria" | "empresa" | "pais";
+
+export type ModuleDashboardUserPresence = "ativo" | "ausente" | "ocupado" | "offline";
+
 export type ModuleDashboardHeaderMode = "hero" | "contextual";
 
 interface ModuleDashboardShellProps {
+  moduleKey: ModuleDashboardModuleKey;
   tone: ModuleDashboardTone;
   areaSubLabel: string;
   pageTitle: string;
@@ -74,6 +79,7 @@ interface ModuleDashboardShellProps {
   compactContent?: boolean;
   userName: string;
   userRoleLabel: string;
+  userPresence?: ModuleDashboardUserPresence;
   profileActionLabel: string;
   profileActionRoute: string;
   profileActionTitle?: string;
@@ -106,6 +112,7 @@ interface ModuleDashboardShellProps {
 }
 
 export const ModuleDashboardShell = ({
+  moduleKey,
   tone,
   areaSubLabel,
   pageTitle,
@@ -115,6 +122,7 @@ export const ModuleDashboardShell = ({
   compactContent = false,
   userName,
   userRoleLabel,
+  userPresence = "ativo",
   profileActionLabel,
   profileActionRoute,
   profileActionTitle,
@@ -147,7 +155,11 @@ export const ModuleDashboardShell = ({
   const location = useLocation();
 
   const { isSidebarCollapsed, isMobileMenuOpen } = useAppSelector((state) => state.ui);
-  const { unreadMessages, unreadNotifications } = useAppSelector((state) => state.mock);
+  const { unreadMessages, unreadNotifications, unreadMessagesByModule, unreadNotificationsByModule } =
+    useAppSelector((state) => state.mock);
+
+  const currentModuleUnreadMessages = unreadMessagesByModule[moduleKey] ?? unreadMessages;
+  const currentModuleUnreadNotifications = unreadNotificationsByModule[moduleKey] ?? unreadNotifications;
 
   useEffect(() => {
     dispatch(setMobileMenuOpen(false));
@@ -179,6 +191,15 @@ export const ModuleDashboardShell = ({
 
   const formatUnreadCount = (value: number) => (value > 99 ? "99+" : String(value));
 
+  const userPresenceLabel =
+    userPresence === "ativo"
+      ? "Ativo agora"
+      : userPresence === "ausente"
+        ? "Ausente"
+        : userPresence === "ocupado"
+          ? "Ocupado"
+          : "Offline";
+
   return (
     <S.Page
       $tone={tone}
@@ -199,10 +220,18 @@ export const ModuleDashboardShell = ({
     >
       <S.Sidebar $collapsed={isSidebarCollapsed} $mobileOpen={isMobileMenuOpen}>
         <S.SidebarTop $collapsed={isSidebarCollapsed}>
-          <S.BrandBlock $collapsed={isSidebarCollapsed}>
-            <strong>RecreaLink</strong>
-            <span>{areaSubLabel}</span>
-          </S.BrandBlock>
+          <S.BrandHomeButton
+            type="button"
+            $collapsed={isSidebarCollapsed}
+            onClick={() => navigateInsideModule(homeRoute)}
+            aria-label="Ir para o painel"
+          >
+            <S.BrandBlock $collapsed={isSidebarCollapsed}>
+              <strong>RecreaLink</strong>
+              <span>{areaSubLabel}</span>
+            </S.BrandBlock>
+            <S.BrandMark $collapsed={isSidebarCollapsed}>RL</S.BrandMark>
+          </S.BrandHomeButton>
 
           <S.DesktopCollapseButton
             type="button"
@@ -225,11 +254,15 @@ export const ModuleDashboardShell = ({
           <S.ProfileIdentity $collapsed={isSidebarCollapsed}>
             <S.ProfileAvatarWrap>
               <Avatar name={userName} size={isSidebarCollapsed ? "sm" : "md"} />
+              <S.ProfilePresenceDot $presence={userPresence} aria-hidden="true" />
             </S.ProfileAvatarWrap>
 
             <S.ProfileMeta $collapsed={isSidebarCollapsed}>
               <strong>{isSidebarCollapsed ? "Perfil" : userName}</strong>
               <p>{userRoleLabel}</p>
+              {!isSidebarCollapsed ? (
+                <S.ProfilePresenceBadge $presence={userPresence}>{userPresenceLabel}</S.ProfilePresenceBadge>
+              ) : null}
             </S.ProfileMeta>
           </S.ProfileIdentity>
 
@@ -354,7 +387,9 @@ export const ModuleDashboardShell = ({
             >
               <MessageCircle size={16} />
               <S.ActionLabel>Chat</S.ActionLabel>
-              {unreadMessages > 0 ? <S.ActionCount>{formatUnreadCount(unreadMessages)}</S.ActionCount> : null}
+              {currentModuleUnreadMessages > 0 ? (
+                <S.ActionCount>{formatUnreadCount(currentModuleUnreadMessages)}</S.ActionCount>
+              ) : null}
             </S.ActionButton>
 
             <S.ActionButton
@@ -364,8 +399,8 @@ export const ModuleDashboardShell = ({
             >
               <Bell size={16} />
               <S.ActionLabel>Notificações</S.ActionLabel>
-              {unreadNotifications > 0 ? (
-                <S.ActionCount>{formatUnreadCount(unreadNotifications)}</S.ActionCount>
+              {currentModuleUnreadNotifications > 0 ? (
+                <S.ActionCount>{formatUnreadCount(currentModuleUnreadNotifications)}</S.ActionCount>
               ) : null}
             </S.ActionButton>
 

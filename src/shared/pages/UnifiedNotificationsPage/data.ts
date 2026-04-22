@@ -5,7 +5,10 @@ import {
 } from "@/shared/constants/notificationFilters";
 import { uiMessages } from "@/shared/constants/uiMessages";
 import type { ModuleDashboardStatItem } from "@/shared/layouts/ModuleDashboardShell";
-import type { NotificationsPageTemplateData } from "@/shared/pages/NotificationsPageTemplate/data";
+import type {
+  NotificationsPageTemplateData,
+  NotificationsTemplateItem,
+} from "@/shared/pages/NotificationsPageTemplate/data";
 import type { SharedModuleKey } from "@/shared/pages/moduleSharedShell";
 
 interface UnifiedNotificationsModuleConfig {
@@ -15,6 +18,50 @@ interface UnifiedNotificationsModuleConfig {
   templateData: NotificationsPageTemplateData;
   tone?: "default" | "hotelaria" | "pais" | "recreador";
 }
+
+const notificationsTimelineReference = Date.parse("2026-04-21T12:00:00.000Z");
+
+const moduleLabelByKey: Record<SharedModuleKey, string> = {
+  recreador: "Recreador",
+  hotelaria: "Hotelaria",
+  empresa: "Empresa",
+  pais: "Família",
+};
+
+const enrichNotificationItems = (
+  moduleKey: SharedModuleKey,
+  items: NotificationsTemplateItem[],
+): NotificationsTemplateItem[] => {
+  return items.map((item, index) => {
+    const fallbackTimestamp = new Date(notificationsTimelineReference - index * 18 * 60_000).toISOString();
+
+    return {
+      ...item,
+      timestampIso: item.timestampIso ?? fallbackTimestamp,
+      status: item.status ?? (item.read ? "lido" : "novo"),
+      origin: item.origin ?? {
+        module: moduleKey,
+        entityType: item.type,
+        entityId: item.id,
+        label: `${moduleLabelByKey[moduleKey]} • ${item.type}`,
+      },
+      destination: item.destination ?? {
+        route: item.actionRoute,
+        label: item.actionLabel ?? "Abrir detalhe",
+      },
+    };
+  });
+};
+
+const enrichNotificationsTemplateData = (
+  moduleKey: SharedModuleKey,
+  templateData: NotificationsPageTemplateData,
+): NotificationsPageTemplateData => {
+  return {
+    ...templateData,
+    items: enrichNotificationItems(moduleKey, templateData.items),
+  };
+};
 
 export const unifiedNotificationsPageByModule: Record<
   SharedModuleKey,
@@ -29,7 +76,7 @@ export const unifiedNotificationsPageByModule: Record<
       { title: "Hoje", value: "03", helper: "Atualizadas recentemente" },
       { title: "Pendentes críticas", value: "02", helper: "Prioridade de tratativa" },
     ],
-    templateData: {
+    templateData: enrichNotificationsTemplateData("recreador", {
       sectionTitle: "Notificações",
       sectionSubtitle: "Filtre alertas por tipo e mantenha a caixa organizada",
       markAllLabel: "Marcar tudo como lido",
@@ -47,6 +94,16 @@ export const unifiedNotificationsPageByModule: Record<
           read: false,
           actionRoute: "/app/recreador/oportunidades?codigo=HTL-001",
           actionLabel: "Abrir oportunidades",
+          origin: {
+            module: "hotelaria",
+            entityType: "oportunidade",
+            entityId: "HTL-001",
+            label: "Cyan Resort • vaga HTL-001",
+          },
+          destination: {
+            route: "/app/recreador/oportunidades?codigo=HTL-001",
+            label: "Oportunidade HTL-001",
+          },
         },
         {
           id: "n-2",
@@ -55,8 +112,20 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Ana Martins respondeu sobre sua disponibilidade para sábado.",
           time: "Há 25 min",
           read: false,
-          actionRoute: "/app/recreador/chat",
-          actionLabel: "Abrir chat",
+          actionRoute:
+            "/app/recreador/chat?conversa=conv-1&contato=Ana%20Martins&codigo=HTL-001&origem=notificacoes",
+          actionLabel: "Abrir conversa com Ana",
+          origin: {
+            module: "hotelaria",
+            entityType: "chat",
+            entityId: "conv-1",
+            label: "Ana Martins • Cyan Resort",
+          },
+          destination: {
+            route:
+              "/app/recreador/chat?conversa=conv-1&contato=Ana%20Martins&codigo=HTL-001&origem=notificacoes",
+            label: "Chat com Ana Martins",
+          },
         },
         {
           id: "n-3",
@@ -85,11 +154,23 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Royal Palm enviou orientações da atividade de fim de semana.",
           time: "Ontem",
           read: true,
-          actionRoute: "/app/recreador/chat",
-          actionLabel: "Abrir chat",
+          actionRoute:
+            "/app/recreador/chat?conversa=conv-2&contato=Lucas%20Pereira&origem=notificacoes",
+          actionLabel: "Abrir briefing no chat",
+          origin: {
+            module: "hotelaria",
+            entityType: "chat",
+            entityId: "conv-2",
+            label: "Royal Palm • briefing operacional",
+          },
+          destination: {
+            route:
+              "/app/recreador/chat?conversa=conv-2&contato=Lucas%20Pereira&origem=notificacoes",
+            label: "Conversa com Royal Palm",
+          },
         },
       ],
-    },
+    }),
     tone: "recreador",
   },
   hotelaria: {
@@ -101,7 +182,7 @@ export const unifiedNotificationsPageByModule: Record<
       { title: "Informativas", value: "14", helper: "Histórico recente" },
       { title: "Resolvidas", value: "64", helper: "Últimos 7 dias" },
     ],
-    templateData: {
+    templateData: enrichNotificationsTemplateData("hotelaria", {
       sectionTitle: "Central de notificações",
       sectionSubtitle: "Fila por prioridade com ação recomendada para resposta mais rápida.",
       markAllLabel: "Marcar todas como lidas",
@@ -117,6 +198,8 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Escalas: reforçar líder kids para o turno da tarde",
           time: "Agora",
           read: false,
+          actionRoute: "/app/hotelaria/escalas",
+          actionLabel: "Abrir escalas",
         },
         {
           id: "hotelaria-notification-2",
@@ -125,6 +208,8 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Feedback: Agendar devolutiva com recreador",
           time: "15 min",
           read: false,
+          actionRoute: "/app/hotelaria/feedback",
+          actionLabel: "Abrir feedback",
         },
         {
           id: "hotelaria-notification-3",
@@ -133,9 +218,11 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Meu hotel: Confirmar leitura no canal de operação",
           time: "2h",
           read: false,
+          actionRoute: "/app/hotelaria/hotel",
+          actionLabel: "Abrir protocolo",
         },
       ],
-    },
+    }),
     tone: "hotelaria",
   },
   pais: {
@@ -147,7 +234,7 @@ export const unifiedNotificationsPageByModule: Record<
       { title: "Hoje", value: "03", helper: "Atualizadas recentemente" },
       { title: "Status", value: "Visual", helper: "Sem backend nesta etapa" },
     ],
-    templateData: {
+    templateData: enrichNotificationsTemplateData("pais", {
       sectionTitle: "Notificações",
       sectionSubtitle: "Acompanhe respostas de empresas e movimentos importantes da sua conta.",
       markAllLabel: "Marcar tudo como lido",
@@ -163,6 +250,9 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Recreação Diversão Total enviou proposta para sábado à tarde.",
           time: "Agora",
           read: false,
+          actionRoute:
+            "/app/pais/chat?conversa=pais-conv-1&contato=Recrea%C3%A7%C3%A3o%20Divers%C3%A3o%20Total&origem=notificacoes",
+          actionLabel: "Abrir proposta no chat",
         },
         {
           id: "pais-not-2",
@@ -171,6 +261,9 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Alegria & Cia pediu confirmação de faixa etária do evento.",
           time: "Há 25 min",
           read: false,
+          actionRoute:
+            "/app/pais/chat?conversa=pais-conv-2&contato=Alegria%20%26%20Cia&origem=notificacoes",
+          actionLabel: "Abrir conversa com Alegria & Cia",
         },
         {
           id: "pais-not-3",
@@ -179,6 +272,8 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Show Kids Experience publicou novos serviços para festas de 4 a 8 anos.",
           time: "Hoje, 09:15",
           read: true,
+          actionRoute: "/app/pais/favoritos",
+          actionLabel: "Abrir favoritos",
         },
         {
           id: "pais-not-4",
@@ -187,9 +282,11 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Agendamento com equipe comercial da Diversão Total em 2 horas.",
           time: "Hoje",
           read: false,
+          actionRoute: "/app/pais/agenda",
+          actionLabel: "Abrir agenda",
         },
       ],
-    },
+    }),
     tone: "pais",
   },
   empresa: {
@@ -201,7 +298,7 @@ export const unifiedNotificationsPageByModule: Record<
       { title: "Comerciais", value: "11", helper: "Orçamentos e leads" },
       { title: "Operacionais", value: "09", helper: "Agenda e equipe" },
     ],
-    templateData: {
+    templateData: enrichNotificationsTemplateData("empresa", {
       sectionTitle: "Central de alertas",
       sectionSubtitle: "Monitore os avisos que impactam vendas, agenda e execução.",
       markAllLabel: "Marcar tudo como lido",
@@ -224,6 +321,9 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Clube Estação Kids solicitou ajustes no pacote premium.",
           time: "Agora",
           read: false,
+          actionRoute:
+            "/app/empresa/chat?conversa=conv-1&contato=Clube%20Esta%C3%A7%C3%A3o%20Kids&origem=notificacoes",
+          actionLabel: "Abrir orçamento no chat",
         },
         {
           id: "n-2",
@@ -232,6 +332,8 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Evento corporativo foi antecipado para 13h.",
           time: "Hoje",
           read: false,
+          actionRoute: "/app/empresa/agenda",
+          actionLabel: "Abrir agenda",
         },
         {
           id: "n-3",
@@ -240,6 +342,8 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Lucas Nunes confirmou presença para sábado.",
           time: "Hoje",
           read: true,
+          actionRoute: "/app/empresa/equipe",
+          actionLabel: "Abrir equipe",
         },
         {
           id: "n-4",
@@ -248,8 +352,10 @@ export const unifiedNotificationsPageByModule: Record<
           description: "Recomendação de atualização de senha da conta principal.",
           time: "Ontem",
           read: true,
+          actionRoute: "/app/empresa/configuracoes",
+          actionLabel: "Abrir configurações",
         },
       ],
-    },
+    }),
   },
 };

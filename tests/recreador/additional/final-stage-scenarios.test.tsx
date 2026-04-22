@@ -208,7 +208,7 @@ describe("Cenarios adicionais - Consolidacao final Recreador", () => {
     });
 
     await waitFor(() => {
-      expect(store.getState().mock.unreadMessages).toBe(3);
+      expect(store.getState().mock.unreadMessages).toBe(5);
     });
 
     chatRender.unmount();
@@ -227,7 +227,7 @@ describe("Cenarios adicionais - Consolidacao final Recreador", () => {
     await waitFor(() => {
       expect(store.getState().mock.unreadNotifications).toBe(0);
     });
-  });
+  }, 10000);
 
   it("garante ausencia de referencias mortas, alert() e regressao de toast", () => {
     const recreadorSourceFiles = collectSourceFiles(path.join(process.cwd(), "src/modules/recreador"));

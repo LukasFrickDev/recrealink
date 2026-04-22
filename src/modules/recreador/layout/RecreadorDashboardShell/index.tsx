@@ -2,9 +2,11 @@ import { useMemo, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { setLastVisualAction, setTopbarSearch } from "@/app/store/slices/recreadorSlice";
+import type { ChatVisiblePresence } from "@/app/store/slices/mockSlice";
 import {
   ModuleDashboardShell,
   type ModuleDashboardNavGroup,
+  type ModuleDashboardUserPresence,
   type ModuleDashboardQuickLink,
   type ModuleDashboardStatItem,
 } from "@/shared/layouts/ModuleDashboardShell";
@@ -32,6 +34,24 @@ const normalize = (value: string) =>
 
 const opportunityCodeRegex = /(HTL|EVT)-\d{3}/i;
 
+const mapChatPresenceToShellPresence = (
+  chatPresence: ChatVisiblePresence,
+): ModuleDashboardUserPresence => {
+  if (chatPresence === "online") {
+    return "ativo";
+  }
+
+  if (chatPresence === "away") {
+    return "ausente";
+  }
+
+  if (chatPresence === "busy") {
+    return "ocupado";
+  }
+
+  return "offline";
+};
+
 export const RecreadorDashboardShell = ({
   pageTitle,
   pageDescription,
@@ -44,6 +64,7 @@ export const RecreadorDashboardShell = ({
   const location = useLocation();
 
   const { profile, ui } = useAppSelector((state) => state.recreador);
+  const chatVisiblePresence = useAppSelector((state) => state.mock.chatPresenceByModule.recreador);
 
   const isHomePage = location.pathname === "/app/recreador";
   const isOpportunitiesPage =
@@ -144,6 +165,7 @@ export const RecreadorDashboardShell = ({
 
   return (
     <ModuleDashboardShell
+      moduleKey="recreador"
       tone="recreador"
       areaSubLabel="Recreador"
       pageTitle={pageTitle}
@@ -153,6 +175,7 @@ export const RecreadorDashboardShell = ({
       compactContent={shellCompactContent}
       userName={profile.fullName}
       userRoleLabel={profile.roleTitle}
+      userPresence={mapChatPresenceToShellPresence(chatVisiblePresence)}
       profileActionLabel="Editar perfil"
       profileActionRoute="/app/recreador/perfil"
       profileActionTitle="Editar perfil"

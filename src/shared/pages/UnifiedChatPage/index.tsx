@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAppDispatch } from "@/app/store/hooks";
-import { setUnreadMessages } from "@/app/store/slices/mockSlice";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { setChatVisiblePresence, setUnreadMessagesForModule } from "@/app/store/slices/mockSlice";
 import { ChatPageTemplate } from "@/shared/pages/ChatPageTemplate";
 import {
   renderSharedModuleShell,
@@ -15,6 +15,7 @@ interface UnifiedChatPageProps {
 
 export const UnifiedChatPage = ({ moduleKey }: UnifiedChatPageProps) => {
   const dispatch = useAppDispatch();
+  const ownPresence = useAppSelector((state) => state.mock.chatPresenceByModule[moduleKey]);
   const [searchParams] = useSearchParams();
   const pageConfig = unifiedChatPageByModule[moduleKey];
 
@@ -33,11 +34,14 @@ export const UnifiedChatPage = ({ moduleKey }: UnifiedChatPageProps) => {
 
   const handleUnreadCountChange = useCallback(
     (count: number) => {
-      if (moduleKey !== "recreador") {
-        return;
-      }
+      dispatch(setUnreadMessagesForModule({ moduleKey, count }));
+    },
+    [dispatch, moduleKey],
+  );
 
-      dispatch(setUnreadMessages(count));
+  const handleOwnPresenceChange = useCallback(
+    (presence: "online" | "away" | "busy" | "offline") => {
+      dispatch(setChatVisiblePresence({ moduleKey, presence }));
     },
     [dispatch, moduleKey],
   );
@@ -53,6 +57,9 @@ export const UnifiedChatPage = ({ moduleKey }: UnifiedChatPageProps) => {
         tone={pageConfig.tone}
         onUnreadCountChange={handleUnreadCountChange}
         externalContext={chatContext}
+        persistenceKey={moduleKey}
+        ownPresence={ownPresence}
+        onOwnPresenceChange={handleOwnPresenceChange}
       />
     ),
   });

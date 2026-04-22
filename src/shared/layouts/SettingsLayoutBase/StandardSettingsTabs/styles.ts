@@ -227,6 +227,69 @@ export const Feedback = styled.p<{ $success?: boolean }>`
   color: ${({ $success, theme }) => ($success ? theme.colors.success : theme.colors.brandOrange)};
 `;
 
+export const AccountCard = styled.article<{ $danger?: boolean }>`
+  border-radius: ${({ theme }) => theme.radii.md};
+  border: ${({ $danger, theme }) =>
+    $danger ? "1px solid rgba(211, 77, 98, 0.32)" : theme.borders.subtle};
+  background: ${({ $danger }) => ($danger ? "rgba(211, 77, 98, 0.08)" : "rgba(255, 255, 255, 0.92)")};
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.sm}`};
+  display: grid;
+  gap: 9px;
+  box-shadow: ${({ theme }) => theme.shadows.sm};
+`;
+
+export const AccountCardHeading = styled.div`
+  display: grid;
+  gap: 2px;
+
+  strong {
+    font-size: ${({ theme }) => theme.typography.label};
+  }
+
+  p {
+    margin: 0;
+    font-size: ${({ theme }) => theme.typography.bodySm};
+    color: ${({ theme }) => theme.colors.textMuted};
+    line-height: 1.45;
+  }
+`;
+
+export const AccountDangerHint = styled.p`
+  margin: 0;
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  color: ${({ theme }) => theme.colors.text};
+
+  strong {
+    color: ${({ theme }) => theme.colors.danger};
+  }
+`;
+
+export const DangerButton = styled.button`
+  min-height: 38px;
+  border-radius: ${({ theme }) => theme.radii.md};
+  border: 1px solid rgba(211, 77, 98, 0.36);
+  background: rgba(211, 77, 98, 0.12);
+  color: ${({ theme }) => theme.colors.danger};
+  font-size: ${({ theme }) => theme.typography.bodySm};
+  font-weight: 700;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: rgba(211, 77, 98, 0.18);
+  }
+
+  &:disabled {
+    opacity: 0.56;
+    cursor: not-allowed;
+  }
+`;
+
 export const RestrictedNotice = styled.p`
   margin: 0;
   border: 1px solid var(--settings-warning-border, rgba(249, 111, 38, 0.35));

@@ -31,6 +31,7 @@ interface SettingsPageTemplateProps {
   notificationPreferences: SettingsNotificationPreference[];
   userAccess: SettingsUserAccess[];
   securityTips: string[];
+  accountTabId?: string;
   profileTabId?: string;
   profileContent?: ReactNode;
   dataTabs?: SettingsTemplateDataTabConfig[];
@@ -38,6 +39,9 @@ interface SettingsPageTemplateProps {
   onSaveNotifications?: () => void;
   onSaveUsers?: () => void;
   onSaveSecurity?: () => void;
+  onRequestLogout?: () => void;
+  onRequestAccountDeletion?: () => void;
+  accountDeletionKeyword?: string;
 }
 
 export const SettingsPageTemplate = ({
@@ -51,6 +55,7 @@ export const SettingsPageTemplate = ({
   notificationPreferences,
   userAccess,
   securityTips,
+  accountTabId,
   profileTabId,
   profileContent,
   dataTabs = [],
@@ -58,6 +63,9 @@ export const SettingsPageTemplate = ({
   onSaveNotifications,
   onSaveUsers,
   onSaveSecurity,
+  onRequestLogout,
+  onRequestAccountDeletion,
+  accountDeletionKeyword,
 }: SettingsPageTemplateProps) => {
   const messages = {
     ...defaultSettingsTemplateFeedbackMessages,
@@ -196,6 +204,10 @@ export const SettingsPageTemplate = ({
         onNewPasswordChange={setNewPassword}
         onConfirmPasswordChange={setConfirmPassword}
         onSaveSecurity={handleSaveSecurity}
+        accountTabId={accountTabId}
+        onRequestLogout={onRequestLogout}
+        onRequestAccountDeletion={onRequestAccountDeletion}
+        accountDeletionKeyword={accountDeletionKeyword}
         hotelDataTabId={dataTabs[0]?.id}
         adminDataTabId={dataTabs[1]?.id}
         dataOptions={selectedDataOptions}

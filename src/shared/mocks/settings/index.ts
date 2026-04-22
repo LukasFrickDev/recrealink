@@ -28,6 +28,7 @@ export interface ModuleSettingsMockBase {
   notificationsTabId: string;
   usersTabId: string;
   securityTabId: string;
+  accountTabId?: string;
   notificationPreferences: SettingsNotificationPreference[];
   userAccess: SettingsUserAccess[];
   securityTips: string[];
@@ -39,6 +40,7 @@ export const moduleSettingsSectionIds = {
   notificationsTabId: "notificacoes",
   usersTabId: "usuarios",
   securityTabId: "seguranca",
+  accountTabId: "conta",
 } as const;
 
 export const buildModuleNotificationPreferences = (

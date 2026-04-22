@@ -158,9 +158,14 @@ export const Content = styled.article`
   gap: ${({ theme }) => theme.spacing.sm};
   min-height: 320px;
   box-shadow: ${({ theme }) => theme.shadows.sm};
+  width: 100%;
+  max-width: 1080px;
+  justify-self: start;
+  align-self: start;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     padding: ${({ theme }) => theme.spacing.sm};
     min-height: 0;
+    max-width: none;
   }
 `;

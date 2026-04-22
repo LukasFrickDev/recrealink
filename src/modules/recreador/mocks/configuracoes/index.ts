@@ -5,7 +5,7 @@ import {
   type ModuleSettingsMockBase,
 } from "@/shared/mocks/settings";
 
-export type RecreadorSettingsTabId = "perfil" | "notificacoes" | "usuarios" | "seguranca";
+export type RecreadorSettingsTabId = "perfil" | "notificacoes" | "usuarios" | "seguranca" | "conta";
 
 export interface RecreadorSettingsTab {
   id: RecreadorSettingsTabId;
@@ -44,11 +44,13 @@ export const recreadorConfiguracoesMock: ModuleSettingsMockBase = {
     { id: "notificacoes", label: "Notificações", helper: "Preferências de alertas" },
     { id: "usuarios", label: "Usuários", helper: "Acesso e permissões" },
     { id: "seguranca", label: "Segurança", helper: "Senha e sessão" },
+    { id: "conta", label: "Conta", helper: "Logout e exclusão" },
   ] as RecreadorSettingsTab[],
   defaultTabId: "perfil",
   notificationsTabId: moduleSettingsSectionIds.notificationsTabId,
   usersTabId: moduleSettingsSectionIds.usersTabId,
   securityTabId: moduleSettingsSectionIds.securityTabId,
+  accountTabId: moduleSettingsSectionIds.accountTabId,
   notificationPreferences: buildModuleNotificationPreferences({
     oportunidades: "Avisos de vagas e convites alinhados ao seu perfil.",
     mensagens: "Receba alerta quando chegar uma nova conversa.",

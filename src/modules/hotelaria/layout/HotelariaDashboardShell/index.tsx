@@ -1,11 +1,14 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
+import { useAppSelector } from "@/app/store/hooks";
+import type { ChatVisiblePresence } from "@/app/store/slices/mockSlice";
 import {
   ModuleDashboardShell,
   type ModuleDashboardNavGroup,
   type ModuleDashboardProfileMode,
   type ModuleDashboardQuickLink,
   type ModuleDashboardStatItem,
+  type ModuleDashboardUserPresence,
 } from "@/shared/layouts/ModuleDashboardShell";
 import {
   hotelariaSidebarGroups,
@@ -13,6 +16,24 @@ import {
 } from "@/shared/config/moduleDashboardNavigation";
 
 export type HotelariaStatItem = ModuleDashboardStatItem;
+
+const mapChatPresenceToShellPresence = (
+  chatPresence: ChatVisiblePresence,
+): ModuleDashboardUserPresence => {
+  if (chatPresence === "online") {
+    return "ativo";
+  }
+
+  if (chatPresence === "away") {
+    return "ausente";
+  }
+
+  if (chatPresence === "busy") {
+    return "ocupado";
+  }
+
+  return "offline";
+};
 
 interface HotelariaDashboardShellProps {
   pageTitle: string;
@@ -34,6 +55,7 @@ export const HotelariaDashboardShell = ({
   children,
 }: HotelariaDashboardShellProps) => {
   const location = useLocation();
+  const chatVisiblePresence = useAppSelector((state) => state.mock.chatPresenceByModule.hotelaria);
 
   const [searchValue, setSearchValue] = useState("");
   const [profileMode, setProfileMode] = useState<"hotel" | "contratante">("contratante");
@@ -83,6 +105,7 @@ export const HotelariaDashboardShell = ({
 
   return (
     <ModuleDashboardShell
+      moduleKey="hotelaria"
       tone="hotelaria"
       areaSubLabel="Área da hotelaria"
       pageTitle={pageTitle}
@@ -91,6 +114,7 @@ export const HotelariaDashboardShell = ({
       compactContent={compactContent}
       userName={userName}
       userRoleLabel="Contratante responsável"
+      userPresence={mapChatPresenceToShellPresence(chatVisiblePresence)}
       profileActionLabel="Ver perfil"
       profileActionRoute="/app/hotelaria/perfil"
       profileActionTitle="Abrir perfil do contratante"

@@ -7,16 +7,21 @@ export const Wrapper = styled.div`
 
   display: grid;
   gap: ${({ theme }) => theme.spacing.md};
+  width: 100%;
 `;
 
 export const ProfileGrid = styled.div`
   display: grid;
   gap: ${({ theme }) => theme.spacing.sm};
-  grid-template-columns: minmax(250px, 0.62fr) minmax(0, 1.38fr);
+  grid-template-columns: minmax(230px, 270px) minmax(0, 760px);
   align-items: start;
+  width: 100%;
+  max-width: 1060px;
+  justify-self: start;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.desktop}) {
     grid-template-columns: minmax(0, 1fr);
+    max-width: 760px;
   }
 `;
 
@@ -30,18 +35,12 @@ export const ProfileAside = styled.aside`
   padding: ${({ theme }) => theme.spacing.md};
   display: grid;
   grid-auto-flow: row;
-  gap: 10px;
+  gap: 9px;
   justify-items: center;
-  justify-self: stretch;
-  align-self: stretch;
-  min-height: 100%;
+  justify-self: start;
+  align-self: start;
   text-align: center;
   box-shadow: ${({ theme }) => theme.shadows.sm};
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.desktop}) {
-    position: sticky;
-    top: 94px;
-  }
 `;
 
 export const AvatarPreview = styled.div`
@@ -80,6 +79,7 @@ export const OutlineButton = styled.button`
   padding: 0 12px;
   cursor: pointer;
   width: 100%;
+  max-width: 220px;
   transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 
   &:hover {
@@ -93,10 +93,13 @@ export const ProfileForm = styled.div`
   border: ${({ theme }) => theme.borders.subtle};
   border-radius: ${({ theme }) => theme.radii.md};
   background: ${({ theme }) => theme.surfaces.panelElevated};
-  padding: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.sm};
   display: grid;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spacing.xs};
   box-shadow: ${({ theme }) => theme.shadows.sm};
+  width: 100%;
+  max-width: 760px;
+  justify-self: start;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     padding: ${({ theme }) => theme.spacing.sm};
@@ -106,7 +109,7 @@ export const ProfileForm = styled.div`
 export const InputRow = styled.div`
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: ${({ theme }) => theme.spacing.xs};
+  gap: 8px;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     grid-template-columns: minmax(0, 1fr);
@@ -144,7 +147,7 @@ export const Field = styled.label`
   }
 
   textarea {
-    min-height: 92px;
+    min-height: 82px;
     resize: vertical;
   }
 `;

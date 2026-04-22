@@ -123,6 +123,20 @@ export const SidebarTop = styled.div<{ $collapsed: boolean }>`
   padding-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
+export const BrandHomeButton = styled.button<{ $collapsed: boolean }>`
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: ${({ $collapsed }) => ($collapsed ? "center" : "flex-start")};
+  min-height: 36px;
+  width: ${({ $collapsed }) => ($collapsed ? "100%" : "auto")};
+`;
+
 export const BrandBlock = styled.div<{ $collapsed: boolean }>`
   display: grid;
   gap: 3px;
@@ -146,6 +160,22 @@ export const BrandBlock = styled.div<{ $collapsed: boolean }>`
     font-weight: 800;
     display: ${({ $collapsed }) => ($collapsed ? "none" : "block")};
   }
+`;
+
+export const BrandMark = styled.span<{ $collapsed: boolean }>`
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--shell-accent-border);
+  background: linear-gradient(145deg, var(--shell-accent-soft), rgba(255, 255, 255, 0.92));
+  color: var(--shell-accent);
+  display: ${({ $collapsed }) => ($collapsed ? "inline-flex" : "none")};
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  font-weight: 800;
+  text-transform: uppercase;
 `;
 
 export const IconButton = styled.button`
@@ -197,16 +227,18 @@ export const ProfileCard = styled.section<{ $collapsed: boolean }>`
   padding: ${({ $collapsed, theme }) => ($collapsed ? "0" : theme.spacing.md)};
   display: grid;
   gap: ${({ $collapsed }) => ($collapsed ? "8px" : "12px")};
+  box-shadow: ${({ $collapsed }) => ($collapsed ? "none" : "0 10px 20px rgba(28, 38, 64, 0.08)")};
 `;
 
 export const ProfileIdentity = styled.div<{ $collapsed: boolean }>`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: ${({ $collapsed }) => ($collapsed ? "center" : "flex-start")};
   gap: ${({ $collapsed }) => ($collapsed ? "0" : "10px")};
 `;
 
 export const ProfileAvatarWrap = styled.div`
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -219,9 +251,44 @@ export const ProfileAvatarWrap = styled.div`
   );
 `;
 
+const profilePresencePalette = {
+  ativo: {
+    color: "#17a766",
+    bg: "rgba(23, 167, 102, 0.14)",
+    border: "rgba(23, 167, 102, 0.35)",
+  },
+  ausente: {
+    color: "#d0911e",
+    bg: "rgba(227, 154, 18, 0.14)",
+    border: "rgba(227, 154, 18, 0.34)",
+  },
+  ocupado: {
+    color: "#c44d5e",
+    bg: "rgba(211, 77, 98, 0.16)",
+    border: "rgba(211, 77, 98, 0.38)",
+  },
+  offline: {
+    color: "#64738f",
+    bg: "rgba(101, 112, 138, 0.14)",
+    border: "rgba(101, 112, 138, 0.3)",
+  },
+} as const;
+
+export const ProfilePresenceDot = styled.i<{ $presence: "ativo" | "ausente" | "ocupado" | "offline" }>`
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: ${({ $presence }) => profilePresencePalette[$presence].color};
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(28, 38, 64, 0.16);
+`;
+
 export const ProfileMeta = styled.div<{ $collapsed: boolean }>`
   display: grid;
-  gap: 2px;
+  gap: 4px;
   justify-items: ${({ $collapsed }) => ($collapsed ? "center" : "start")};
 
   strong {
@@ -237,6 +304,108 @@ export const ProfileMeta = styled.div<{ $collapsed: boolean }>`
     color: ${({ theme }) => theme.colors.textMuted};
     display: ${({ $collapsed }) => ($collapsed ? "none" : "block")};
   }
+`;
+
+export const ProfilePresenceBadge = styled.span<{ $presence: "ativo" | "ausente" | "ocupado" | "offline" }>`
+  border-radius: ${({ theme }) => theme.radii.pill};
+  border: 1px solid ${({ $presence }) => profilePresencePalette[$presence].border};
+  background: ${({ $presence }) => profilePresencePalette[$presence].bg};
+  color: ${({ $presence }) => profilePresencePalette[$presence].color};
+  padding: 6px 12px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1;
+`;
+
+export const ProfilePresenceWrap = styled.div`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+`;
+
+export const ProfilePresenceButton = styled.button<{
+  $presence: "ativo" | "ausente" | "ocupado" | "offline";
+  $open: boolean;
+}>`
+  min-height: 34px;
+  border-radius: ${({ theme }) => theme.radii.pill};
+  border: 1px solid transparent;
+  background: transparent;
+  color: ${({ $presence }) => profilePresencePalette[$presence].color};
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  max-width: 100%;
+
+  ${ProfilePresenceBadge} {
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
+export const ProfilePresenceMenu = styled.div`
+  position: absolute;
+  top: calc(100% - 4px);
+  left: 0;
+  z-index: 8;
+  min-width: 182px;
+  border: ${({ theme }) => theme.borders.subtle};
+  border-radius: ${({ theme }) => theme.radii.md};
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 18px 30px rgba(28, 38, 64, 0.16);
+  padding: 6px;
+  display: grid;
+  gap: 4px;
+`;
+
+export const ProfilePresenceMenuItem = styled.button<{ $active: boolean }>`
+  width: 100%;
+  min-height: 38px;
+  border-radius: ${({ theme }) => theme.radii.md};
+  border: 1px solid ${({ $active }) => ($active ? "var(--shell-accent-border)" : "transparent")};
+  background: ${({ $active }) => ($active ? "var(--shell-accent-soft)" : "transparent")};
+  color: ${({ $active, theme }) => ($active ? "var(--shell-accent)" : theme.colors.text)};
+  font-size: ${({ theme }) => theme.typography.meta};
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--shell-accent-border);
+    background: var(--shell-accent-soft);
+    color: var(--shell-accent);
+  }
+`;
+
+export const ProfilePresenceDotMini = styled.i<{
+  $presence: "ativo" | "ausente" | "ocupado" | "offline";
+}>`
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: ${({ $presence }) => profilePresencePalette[$presence].color};
+  display: inline-flex;
+  flex-shrink: 0;
 `;
 
 export const ProfileAction = styled.button<{ $collapsed: boolean }>`

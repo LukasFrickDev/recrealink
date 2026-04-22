@@ -23,11 +23,13 @@ export const empresarioSettingsPageMock: ModuleSettingsMockBase = {
     { id: "notificacoes", label: "Notificações", helper: "Preferências de alertas" },
     { id: "usuarios", label: "Usuários", helper: "Acessos vinculados" },
     { id: "seguranca", label: "Segurança", helper: "Senha e boas práticas" },
+    { id: "conta", label: "Conta", helper: "Logout e exclusão" },
   ],
   defaultTabId: "dados-empresa",
   notificationsTabId: moduleSettingsSectionIds.notificationsTabId,
   usersTabId: moduleSettingsSectionIds.usersTabId,
   securityTabId: moduleSettingsSectionIds.securityTabId,
+  accountTabId: moduleSettingsSectionIds.accountTabId,
   notificationPreferences: [
     {
       id: "orcamentos",

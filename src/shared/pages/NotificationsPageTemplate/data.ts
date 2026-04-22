@@ -3,13 +3,31 @@ export interface NotificationsTemplateFilter {
   label: string;
 }
 
+export interface NotificationsTemplateOrigin {
+  module: "recreador" | "hotelaria" | "empresa" | "pais";
+  entityType: string;
+  entityId: string;
+  label: string;
+}
+
+export interface NotificationsTemplateDestination {
+  route?: string;
+  label: string;
+}
+
+export type NotificationsTemplateStatus = "novo" | "lido" | "arquivado";
+
 export interface NotificationsTemplateItem {
   id: string;
   type: string;
   title: string;
   description: string;
   time: string;
+  timestampIso?: string;
   read: boolean;
+  status?: NotificationsTemplateStatus;
+  origin?: NotificationsTemplateOrigin;
+  destination?: NotificationsTemplateDestination;
   actionRoute?: string;
   actionLabel?: string;
 }
